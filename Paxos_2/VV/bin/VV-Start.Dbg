@@ -1,0 +1,40 @@
+#!/bin/sh
+
+if [ $# -lt 4 ]
+then
+echo "USAGE:vv_start.sh service id CSS DB"
+exit 1
+fi
+
+service=$1
+conf=_$service.conf
+
+CSS=$3
+DB=$4
+
+while read id host bin root
+do
+if [ ! $id ]; then break; fi	
+if [ $id = "#" ]; then continue; fi
+
+eval bin=$bin
+eval root=$root
+
+if [ $id = $2 ]; then break; fi	
+
+done < $conf
+
+echo [$host $bin $root]
+
+LOG_SIZE=0
+
+TGTD=$bin/tgtdDbg
+
+#ssh -t $host "bash<<_EOF_
+
+export CSS=$CSS
+export DB=$DB
+export LOG_SIZE=0
+$TGTD -f
+
+#_EOF_"

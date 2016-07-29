@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ $# -lt 2 ]
+then
+echo "USAGE:vv_stop.sh service id"
+exit 1
+fi
+
+service=$1
+conf=_$service.conf
+
+while read id host bin root
+do
+if [ ! $id ]; then break; fi	
+if [ $id = "#" ]; then continue; fi
+
+if [ $id = $2 ]; then break; fi	
+
+done < $conf
+
+echo [$host $bin $root]
+
+eval bin=$bin
+eval root=$root
+
+ADM=tgtadmDbg
+eval ADM=$bin/$ADM
+
+ssh -t $host "$ADM --op delete --mode system"

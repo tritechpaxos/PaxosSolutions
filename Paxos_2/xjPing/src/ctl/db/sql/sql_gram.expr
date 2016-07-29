@@ -1,0 +1,1277 @@
+%{
+/*
+ *  このソースは、sql_gram.expr から、yacc によって生成されます。
+ *  _Rdb_yyreturn は、正常に sqlparse() が終了した時に、解析木のルートへの
+ *  ポインタが設定されます。
+ *  sqlparse() のリターン値は、正常時は 0 、異常時は 1 です。
+ */
+
+#include    <ctype.h>
+#include    "neo_db.h"
+#include    "sql.h"
+/** 2011/05 */
+#include	"NWGadget.h"
+
+r_expr_t    *SQLreturn = 0; /* 解析木のルートへのポインタ */
+
+r_expr_t    *sql_sname();
+r_expr_t    *sql_bin();
+r_expr_t    *sql_long();
+r_expr_t    *sql_float();
+r_expr_t    *sql_minus();
+r_expr_t    *sql_tree();
+r_expr_t    *sql_getnode();
+r_expr_t    *sql_findnode();
+r_expr_t    *sql_param();
+extern	void	sql_free();
+
+struct r_key {
+    char    *k_name;
+    int k_value;
+} sql_key[] = {
+    { "CREATE", SCREATE},
+    { "DROP",   SDROP},
+    { "VIEW",   SVIEW},
+    { "TABLE",  STABLE},
+    { "AS",     SAS},
+    { "SELECT", SSELECT},
+    { "FROM",   SFROM},
+    { "WHERE",  SWHERE},
+    { "DELETE", SDELETE},
+    { "INSERT", SINSERT},
+    { "INTO",   SINTO},
+    { "VALUES", SVALUES},
+    { "UPDATE", SUPDATE},
+    { "SET",    SSET},
+
+    { "AND",    SAND},
+    { "OR",     SOR},
+
+    { "BEGIN",  SBEGIN},
+    { "COMMIT", SCOMMIT},
+    { "ROLLBACK",   SROLLBACK},
+
+    { "ORDER",  SORDER},
+    { "BY",     SBY},
+    { "ASC",    SASC},
+    { "DESC",   SDESC},
+
+    { "PRIMARY",    SPRIMARY},
+    { "KEY",    SKEY},
+
+    { "UNION",  SUNION},
+    { "ALL",    SALL},
+
+    { "LIKE",   SLIKE},
+    { "NOT",    SNOT},
+    { "ESCAPE", SESCAPE},
+
+    { 0,}
+};  
+
+int
+sqlkey( key ) 
+    char *key;
+{
+    struct r_key *t = sql_key;
+    int i;
+    char    buf[NEO_NAME_MAX];
+
+    for( i = 0; i < strlen(key) && i < sizeof(buf); i++ ) {
+        buf[i] = toupper( (int)key[i] );
+    }
+    buf[i] = 0;
+    for( t = sql_key; t->k_name; t++ ) {
+        if( !strcmp( t->k_name, buf ) ) {
+            return( t->k_value );
+        }
+    }
+    return( 0 );
+}
+
+%}
+
+/***
+%pure_parser
+***/
+/* Specify precedences and associativities. */
+
+%union  {
+    char        *s;
+    int     i;
+    long long   l;
+    double      f;
+    r_expr_t    *p;
+    }
+
+%token <i> TLEAF
+%token <i> VITEM
+%token <i> VITEM_ALLOC
+%token <i> VSTRING
+%token <i> VSTRING_ALLOC
+%token <i> VBIN
+%token <i> VINT
+%token <i> VUINT
+%token <i> VLONG
+%token <i> VULONG
+%token <i> VFLOAT
+%token <i> VBOOL
+%token <i> VPARAM
+
+%token <s> SNAME
+%token <s> SSTRING
+%token <l> SNUM
+%token <f> SFLOAT
+%token <i> SOR
+%token <i> SAND
+%token <i> SLT
+%token <i> SGT
+%token <i> SLE
+%token <i> SGE
+%token <i> SEQ
+%token <i> SNE
+%token <i> '='
+%token <i> '?'
+
+%token <i> STR_EQ
+%token <i> STR_NE
+%token <i> STR_GT
+%token <i> STR_LT
+%token <i> STR_GE
+%token <i> STR_LE
+
+%left SOR
+%left SAND
+%nonassoc SLT SGT SLE SGE SEQ SNE
+
+%token <i> SCREATE
+%token <i> SDROP
+%token <i> STABLE
+%token <i> SVIEW
+%token <i> SAS
+%token <i> SSELECT
+%token <i> SFROM
+%token <i> SWHERE
+%token <i> SDELETE
+%token <i> SINSERT
+%token <i> SINTO
+%token <i> SVALUES
+%token <i> SUPDATE
+%token <i> SSET
+
+%token <i> SNODE
+%token <i> SDROP_TABLE
+%token <i> SDROP_VIEW
+%token <i> SCREATE_TABLE
+%token <i> SCREATE_VIEW
+
+%token <i> SSTATEMENT
+
+%token <i> SBEGIN
+%token <i> SCOMMIT
+%token <i> SROLLBACK
+
+%token <i> SORDER
+%token <i> SBY
+%token <i> SASC
+%token <i> SDESC
+
+%token <i> SPRIMARY
+%token <i> SKEY
+
+%token <i> SUNION
+%token <i> SALL
+
+%token <i> SLIKE
+%token <i> SNOT
+%token <i> SNOTLIKE
+%token <i> SESCAPE
+
+%start start
+
+%type <p>   column_name 
+%type <p>   select_sublist 
+%type <p>   select_sublists 
+%type <p>   select_list
+%type <p>   query_expr
+%type <p>   from_clause
+%type <p>   where_clause
+%type <p>   order_by_clause
+%type <p>   order_lists
+%type <p>   order_column
+%type <p>   schema_statement
+%type <p>   transaction_statement
+%type <p>   data_statement
+%type <p>   pstatement
+%type <p>   statement
+%type <p>   statements
+%type <p>   tables
+%type <p>   table
+%type <p>   search_condition
+%type <p>   delete_statement
+%type <p>   param
+%type <p>   value
+%type <p>   value_list
+%type <p>   table_element_list
+%type <p>   table_element
+%type <p>   insert_statement
+%type <p>   name_list
+%type <p>   update_statement
+%type <p>   set_list
+%type <p>   union
+
+%type <i>   table_element_restriction
+
+%type <p>   expr uexpr
+
+%type <i>   relop
+
+%left   '+' '-'
+%left   '*' '/'
+
+%type <p>   arith_expr
+%type <s>   sname
+
+%token START_program
+%token START_pstatement
+
+%%
+
+start:
+      START_program program
+    | START_pstatement pstatement
+    ;
+
+program:        { YYABORT; /** empty **/ }
+    | statements    { SQLreturn = $1;YYACCEPT;}
+    ;
+statements
+    : statement { if(!($$ = sql_tree( $1, SSTATEMENT, 0)))YYABORT;}
+    | statements statement  
+        {r_expr_t *sp;
+            if(!(sp = sql_tree( $2, SSTATEMENT, 0)))YYABORT;
+            if(!( $$ = sql_tree( $1, SNODE, sp)))YYABORT;
+        }
+    ;
+statement
+    : schema_statement ';'      { $$ = $1;}
+    | data_statement ';'        { $$ = $1;}
+    | transaction_statement ';' { $$ = $1;}
+/***
+    | connection_statement ';'  {;}
+***/
+    ;
+pstatement
+    : schema_statement      { SQLreturn = $1;YYACCEPT; }
+    | data_statement        { SQLreturn = $1;YYACCEPT; }
+    | transaction_statement { SQLreturn = $1;YYACCEPT; }
+    ;
+transaction_statement
+    : SBEGIN
+        {if(!($$ = sql_tree( 0, SBEGIN, 0 )))YYABORT;}
+    | SCOMMIT
+        {if(!($$ = sql_tree( 0, SCOMMIT, 0 )))YYABORT;}
+    | SROLLBACK
+        {if(!($$ = sql_tree( 0, SROLLBACK, 0 )))YYABORT;}
+    ;
+schema_statement
+    : SCREATE STABLE sname '(' table_element_list ')'
+        {if(!($$ = sql_tree(sql_sname($3),SCREATE_TABLE,$5)))YYABORT;}
+    | SCREATE SVIEW sname SAS query_expr
+        {r_expr_t *view, *node;
+            if(!(view = sql_sname( $3 )))YYABORT;
+            if(!(node = sql_tree( view, SVIEW, 0 )))YYABORT;
+            if(!($$ = sql_tree( node, SCREATE_VIEW, $5 )))YYABORT;
+        }
+    | SCREATE SVIEW sname SAS query_expr union
+        {r_expr_t *view, *node, *u;
+            if(!(view = sql_sname( $3 )))YYABORT;
+            if(!(node = sql_tree( view, SVIEW, 0 )))YYABORT;
+            if(!(u = sql_tree( $5, SUNION, $6 )))YYABORT;
+            if(!($$ = sql_tree( node, SCREATE_VIEW, u )))YYABORT;
+        }
+    | SDROP STABLE sname
+        {if(!($$ = sql_tree( sql_sname($3), SDROP_TABLE, 0 )))YYABORT;}
+    | SDROP SVIEW sname
+        {if(!($$ = sql_tree( sql_sname($3), SDROP_VIEW, 0 )))YYABORT;}
+    ;
+union
+    : SUNION SALL query_expr
+        { $$= $3;}
+    | union SUNION SALL query_expr
+        { if(!($$ = sql_tree( $1, SUNION, $4 )))YYABORT; }
+    ;
+
+table_element_list
+    : table_element { $$ = $1;}
+    | table_element_list ',' table_element  {;}
+        {if(!($$ = sql_tree( $1, SNODE, $3 )))YYABORT;}
+    ;
+table_element
+    : sname SNAME '(' SNUM ')' table_element_restriction
+        {r_expr_t *name, *type, *value, *nd;
+            if(!(name = sql_sname( $1 )))YYABORT;
+            if(!(type = sql_sname( $2 )))YYABORT;
+            if(!(value = sql_bin( $4 )))YYABORT;
+            if(!(nd = sql_tree( type, 'T', value )))YYABORT;
+            if(!($$ = sql_tree( name, 'E', nd )))YYABORT;
+        }
+    | sname SNAME '(' SNUM ',' SNUM ')' table_element_restriction
+        {r_expr_t *name, *type, *value, *nd;
+            if(!(name = sql_sname( $1 )))YYABORT;
+            if(!(type = sql_sname( $2 )))YYABORT;
+            if(!(value = sql_bin( $4 )))YYABORT;
+            if(!(nd = sql_tree( type, 'T', value )))YYABORT;
+            if(!($$ = sql_tree( name, 'E', nd )))YYABORT;
+        }
+    | sname SNAME table_element_restriction
+        {r_expr_t *name, *type, *nd;
+            if(!(name = sql_sname( $1 )))YYABORT;
+            if(!(type = sql_sname( $2 )))YYABORT;
+            if(!(nd = sql_tree( type, 'T', 0 )))YYABORT;
+            if(!($$ = sql_tree( name, 'E', nd )))YYABORT;
+        }
+    ;
+
+table_element_restriction
+    :   {$$=0;} 
+    | SPRIMARY SKEY
+        { $$ = SPRIMARY;}
+    ;
+
+data_statement
+    : delete_statement  {$$ = $1;}
+    | insert_statement  {$$ = $1;}
+    | update_statement  {$$ = $1;}
+    | query_expr        {$$ = $1;}
+    ;
+
+delete_statement
+    : SDELETE SFROM sname
+        {r_expr_t *table;
+            if( !(table = sql_sname( $3 )))YYABORT;
+            if( !($$ = sql_tree( table, SDELETE, 0 )))YYABORT;
+        }
+    | SDELETE SFROM sname where_clause
+        {r_expr_t *table;
+            if( !(table = sql_sname( $3 )))YYABORT;
+            if( !($$ = sql_tree( table, SDELETE, $4 )))YYABORT;
+        }
+    ;
+
+insert_statement
+    : SINSERT SINTO sname SVALUES '(' value_list ')'
+        {r_expr_t *table;
+            if( !(table = sql_sname( $3 )))YYABORT;
+            if( !($$ = sql_tree( table, SINSERT, $6 )))YYABORT;
+        }
+    | SINSERT SINTO sname '(' name_list ')' SVALUES '(' value_list ')'
+        {r_expr_t *table, *value;
+            if( !(table = sql_sname( $3 )))YYABORT;
+            if( !(value = sql_tree( $5, SVALUES, $9 )))YYABORT;
+            if( !($$ = sql_tree( table, SINSERT, value )))YYABORT;
+        }
+    ;
+
+value_list
+    : value {$$ = $1;}
+    | value_list ',' value
+        {if(!($$ = sql_tree( $1, SNODE, $3)))YYABORT;}
+    ;
+/***
+value
+    : SNUM  {if(!($$ = sql_long( $1 )))YYABORT;}
+    | SSTRING {if(!($$ = sql_sname($1)))YYABORT;}
+    | SNUM '.' SNUM {if(!($$ = sql_float($1, $3)))YYABORT;}
+    | SNUM '.' {if(!($$ = sql_float($1, 0LL )))YYABORT;}
+    | '.' SNUM {if(!($$ = sql_float( 0LL, $2)))YYABORT;}
+    | '-' value { $$ = sql_minus( $2 );}
+    ;
+***/
+value
+    : SNUM  {if(!($$ = sql_long( $1 )))YYABORT;}
+    | SSTRING {if(!($$ = sql_sname($1)))YYABORT;}
+    | SFLOAT {if(!($$ = sql_float($1)))YYABORT;}
+    | '-' value { $$ = sql_minus( $2 );}
+    | param {$$ = $1;}
+    ;
+
+param
+    : '?' {if(!($$ = sql_param()))YYABORT;}
+    ;
+
+name_list
+    : sname 
+        {if(!($$ = sql_sname( $1 )))YYABORT;}
+    | name_list ',' sname
+        {r_expr_t *name;
+            if(!(name = sql_sname( $3 )))YYABORT;
+            if(!($$ = sql_tree( $1, SNODE, name )))YYABORT;
+        }
+    ;
+
+update_statement
+    : SUPDATE sname SSET set_list
+        {r_expr_t *table;
+            if(!(table = sql_sname( $2 )))YYABORT;
+            if(!($$ = sql_tree( table, SUPDATE, $4)))YYABORT;
+        }
+    | SUPDATE sname SSET set_list where_clause
+        {r_expr_t *table, *node;
+            if(!(table = sql_sname( $2 )))YYABORT;
+            if(!(node = sql_tree( $4, SNODE, $5)))YYABORT;
+            if(!($$ = sql_tree( table, SUPDATE, node )))YYABORT;
+        }
+    ;
+
+set_list
+    : sname '=' arith_expr
+        {r_expr_t *name;
+            if(!(name = sql_sname( $1 )))YYABORT;
+            if(!($$ = sql_tree( name, SSET, $3)))YYABORT;
+        }
+    | set_list ',' sname '=' arith_expr
+        {r_expr_t *name, *node;
+            if(!(name = sql_sname( $3 )))YYABORT;
+            if(!(node = sql_tree( name, SSET, $5)))YYABORT;
+            if(!($$ = sql_tree( $1, SNODE, node)))YYABORT;
+        }
+    ;
+
+query_expr
+    : SSELECT select_list from_clause 
+        {if(!($$ = sql_tree( $2, SSELECT, $3 )))YYABORT;}
+    | SSELECT select_list from_clause where_clause
+        {r_expr_t *node;
+            if(!(node = sql_tree($3,SNODE,$4)))YYABORT;
+            if(!($$ = sql_tree($2,SSELECT, node)))YYABORT;
+        }
+    | SSELECT select_list from_clause order_by_clause
+        {r_expr_t *node;
+            if(!(node = sql_tree($3,SNODE,$4)))YYABORT;
+            if(!($$ = sql_tree($2,SSELECT, node)))YYABORT;
+        }
+    | SSELECT select_list from_clause where_clause order_by_clause
+        {r_expr_t *node;
+            if(!(node = sql_tree($4,SNODE,$5)))YYABORT;
+            if(!(node = sql_tree($3,SNODE,node)))YYABORT;
+            if(!($$ = sql_tree($2,SSELECT, node)))YYABORT;
+        }
+    ;
+
+select_list
+    : '*'   {if(!($$ = sql_tree( 0, '*', 0 )))YYABORT;}
+    | select_sublists
+        {if(!($$ = sql_tree( $1, '*', 0 )))YYABORT;}
+    ;
+select_sublists
+    : select_sublist    {$$ = $1;}
+    | select_sublists ',' select_sublist
+        {if(!($$ = sql_tree( $1, SNODE, $3 )))YYABORT;}
+    ; 
+select_sublist
+    : column_name
+        {r_expr_t *pp, *cp;
+            if( (pp = sql_getnode( $1, 0, '.' )) ) {
+                if(!(cp = sql_sname(
+                    pp->e_tree.t_binary.b_r->
+                    e_tree.t_unary.v_value.v_str.s_str ))
+                )YYABORT;
+                if(!($$ = sql_tree( $1, SAS, cp )))YYABORT;
+            } else {
+                YYABORT;
+            }
+        }
+    | column_name SAS sname
+        {r_expr_t *s;
+            if(!(s = sql_sname($3)))YYABORT;
+            if(!($$ = sql_tree( $1, SAS, s)))YYABORT;
+        }
+    | column_name sname
+        {r_expr_t *s;
+            if(!(s = sql_sname($2)))YYABORT;
+            if(!($$ = sql_tree( $1, SAS, s)))YYABORT;
+        }
+    ;
+
+column_name
+    : sname
+        {r_expr_t *s;
+            if(!(s = sql_sname($1)))YYABORT;
+            if(!($$ = sql_tree( 0,'.',s)))YYABORT;
+        }
+    | sname '.' sname 
+        {r_expr_t *s1, *s2;
+            if(!(s1 = sql_sname($1)))YYABORT;
+            if(!(s2 = sql_sname($3)))YYABORT;
+            if(!($$ = sql_tree(s1,'.',s2)))YYABORT;
+        }
+    ;
+
+from_clause
+    : SFROM tables
+        {if(!($$ = sql_tree( $2, SFROM, 0)))YYABORT;}
+    ;
+tables
+    : table 
+        {if(!($$ = $1))YYABORT;}
+    | tables ',' table
+        {if(!($$ = sql_tree( $1, SNODE, $3 )))YYABORT;}
+    ;
+table
+    : sname
+        {r_expr_t *s;
+            if(!(s = sql_sname($1)))YYABORT;
+            if(!($$ = sql_tree(s,'T',0)))YYABORT;
+        }
+    | sname sname
+        {r_expr_t *s1, *s2;
+            if(!(s1 = sql_sname($1)))YYABORT;
+            if(!(s2 = sql_sname($2)))YYABORT;
+            if(!($$ = sql_tree(s1,'T',s2)))YYABORT;
+        }
+    ;
+
+where_clause
+    : SWHERE search_condition
+        {if(!($$= sql_tree( $2, SWHERE, 0 )))YYABORT;}
+    ;
+
+order_by_clause
+    : SORDER SBY order_lists
+        {if(!($$ = sql_tree( $3, SORDER, 0 )))YYABORT;}
+    ;
+
+order_lists
+    : order_column  {$$ = $1;}
+    | order_lists ',' order_column
+        {if(!($$ = sql_tree( $1, SNODE, $3 )))YYABORT;}
+    ; 
+order_column
+    : column_name
+        {r_expr_t *a;
+            if(!(a = sql_bin( SASC )))YYABORT;
+            if(!($$ = sql_tree( $1, 'O', a )))YYABORT;
+        }
+    | column_name SASC
+        {r_expr_t *a;
+            if(!(a = sql_bin( SASC )))YYABORT;
+            if(!($$ = sql_tree( $1, 'O', a )))YYABORT;
+        }
+    | column_name SDESC
+        {r_expr_t *a;
+            if(!(a = sql_bin( SDESC )))YYABORT;
+            if(!($$ = sql_tree( $1, 'O', a )))YYABORT;
+        }
+    ;
+
+search_condition
+    : expr  { $$ = $1;}
+    ;
+
+expr:     uexpr     { $$ = $1; }
+    | '(' expr ')'  { $$ = $2; }
+    ;
+
+uexpr
+    : expr SOR expr
+        {if(!($$ = sql_tree( $1, SOR, $3)))YYABORT;}
+    | expr SAND expr
+        {if(!($$ = sql_tree( $1, SAND, $3)))YYABORT;}
+    | column_name relop column_name
+        {if(!($$ = sql_tree( $1, $2, $3)))YYABORT;}
+    | column_name relop value
+        {if(!($$ = sql_tree( $1, $2, $3)))YYABORT;}
+    | value relop column_name
+        {if(!($$ = sql_tree( $1, $2, $3)))YYABORT;}
+    | value relop value
+        {if(!($$ = sql_tree( $1, $2, $3)))YYABORT;}
+    | column_name SLIKE SSTRING
+        {r_expr_t *s1, *s2;
+            if(!(s1 = sql_sname($3)))YYABORT;
+            if(!(s2 = sql_tree(s1,SESCAPE,0)))YYABORT;
+            if(!($$ = sql_tree( $1, SLIKE, s2)))YYABORT;
+        }
+    | column_name SNOT SLIKE SSTRING
+        {r_expr_t *s1, *s2;
+            if(!(s1 = sql_sname($4)))YYABORT;
+            if(!(s2 = sql_tree(s1,SESCAPE,0)))YYABORT;
+            if(!($$ = sql_tree( $1, SNOTLIKE, s2)))YYABORT;
+        }
+    | column_name SLIKE SSTRING SESCAPE SSTRING
+        {r_expr_t *s1, *s2, *s3;
+            if(!(s1 = sql_sname($3)))YYABORT;
+            if(!(s2 = sql_sname($5)))YYABORT;
+            if(!(s3 = sql_tree(s1,SESCAPE,s2)))YYABORT;
+            if(!($$ = sql_tree( $1, SLIKE, s3)))YYABORT;
+        }
+    | column_name SNOT SLIKE SSTRING SESCAPE SSTRING
+        {r_expr_t *s1, *s2, *s3;
+            if(!(s1 = sql_sname($4)))YYABORT;
+            if(!(s2 = sql_sname($6)))YYABORT;
+            if(!(s3 = sql_tree(s1,SESCAPE,s2)))YYABORT;
+            if(!($$ = sql_tree( $1, SNOTLIKE, s3)))YYABORT;
+        }
+    ;
+
+relop:    SEQ
+    | SGT
+    | SLT
+    | SGE
+    | SLE
+    | SNE
+    | '='   { $$ = SEQ;}
+    ;
+
+arith_expr
+    : '(' arith_expr ')'
+        { $$ = $2;}
+    | arith_expr '+' arith_expr
+        {if(!($$ = sql_tree( $1, '+', $3 )))YYABORT;}
+    | arith_expr '-' arith_expr
+        {if(!($$ = sql_tree( $1, '-', $3 )))YYABORT;}
+    | arith_expr '*' arith_expr
+        {if(!($$ = sql_tree( $1, '*', $3 )))YYABORT;}
+    | arith_expr '/' arith_expr
+        {if(!($$ = sql_tree( $1, '/', $3 )))YYABORT;}
+    | '-' arith_expr    %prec '-'
+        {if(!($$ = sql_tree( 0, '-', $2 )))YYABORT;}
+    | value
+        { $$ = $1;}
+    | column_name
+        { $$ = $1;}
+    ;
+
+sname
+	:	SNAME	{ $$=$1;}
+	|	SSTRING	{ $$=$1;}
+	;
+
+%%
+
+r_expr_t*
+sql_sname( sname )
+    char    *sname;
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_RDB,"sql_sname");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc(sizeof(r_expr_t)) ) ) {
+        goto err;
+    }
+    ep->e_op            = TLEAF;
+    ep->e_tree.t_unary.v_type   = VSTRING;
+/***  strlen(sname) -> strlen(sname) + 1 2005/04/07 ***/
+    ep->e_tree.t_unary.v_value.v_str.s_len  = strlen(sname) + 1;
+    ep->e_tree.t_unary.v_value.v_str.s_str  = sname;
+
+    DBG_EXIT( ep );
+    return( ep );
+err:
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+r_expr_t*
+sql_bin( v )
+    long long   v;
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_SQL,"sql_bin");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc(sizeof(r_expr_t)) ) ) {
+        goto err;
+    }
+    ep->e_op                = TLEAF;
+    ep->e_tree.t_unary.v_type       = VBIN;
+    ep->e_tree.t_unary.v_value.v_int    = v;
+
+    DBG_EXIT( ep );
+    return( ep );
+err:
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+r_expr_t*
+sql_long( v )
+    long long   v;
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_SQL,"sql_long");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc(sizeof(r_expr_t)) ) ) {
+        goto err;
+    }
+    ep->e_op                = TLEAF;
+    ep->e_tree.t_unary.v_type       = VLONG;
+    ep->e_tree.t_unary.v_value.v_long   = v;
+
+    DBG_EXIT( ep );
+    return( ep );
+err:
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+r_expr_t*
+sql_float( f ) 
+    double      f;
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_SQL,"sql_float");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc(sizeof(r_expr_t)) ) ) {
+        goto err;
+    }
+
+    ep->e_op                = TLEAF;
+    ep->e_tree.t_unary.v_type       = VFLOAT;
+    ep->e_tree.t_unary.v_value.v_float  = f;
+
+    DBG_EXIT( ep );
+    return( ep );
+err:
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+r_expr_t*
+sql_param() 
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_SQL,"sql_param");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc(sizeof(r_expr_t)) ) ) {
+        goto err;
+    }
+
+    ep->e_op                = TLEAF;
+    ep->e_tree.t_unary.v_type       = VPARAM;
+
+    DBG_EXIT( ep );
+    return( ep );
+err:
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+r_expr_t*
+sql_minus( ep )
+    r_expr_t    *ep;
+{
+    DBG_ENT(M_SQL,"sql_minus");
+
+    switch( ep->e_tree.t_unary.v_type ) {
+        case VFLOAT:    
+            ep->e_tree.t_unary.v_value.v_float =
+                - ep->e_tree.t_unary.v_value.v_float;
+            break;
+        case VLONG: 
+            ep->e_tree.t_unary.v_value.v_long =
+                - ep->e_tree.t_unary.v_value.v_long;
+            break;
+        case VBIN:  
+            ep->e_tree.t_unary.v_value.v_int =
+                - ep->e_tree.t_unary.v_value.v_int;
+            break;
+    }
+
+    DBG_EXIT( ep );
+    return( ep );
+}
+
+
+r_expr_t*
+sql_tree( left, op, right )
+    r_expr_t    *left;
+    int     op;
+    r_expr_t    *right;
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_SQL,"sql_tree");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc(sizeof(r_expr_t)) ) ) {
+        goto err;
+    }
+    ep->e_op        = op;
+    ep->e_tree.t_binary.b_l = left;
+    ep->e_tree.t_binary.b_r = right;
+
+    DBG_EXIT( ep );
+    return( ep );
+err:
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+/*
+ *  Free except me
+ */
+void
+sql_free1( ep )
+    r_expr_t    *ep;
+{
+    DBG_ENT(M_SQL,"sql_free1");
+
+    if( ep->e_op == TLEAF ) {
+    	switch( ep->e_tree.t_unary.v_type ) {
+        	case VBIN:
+            case VSTRING:
+       		case VITEM:
+              	break;
+            case VSTRING_ALLOC:
+           		sql_mem_free(ep->e_tree.t_unary.v_value.v_str.s_str);
+      			 break;
+       		case VITEM_ALLOC:
+                 sql_mem_free(ep->e_tree.t_unary.v_value.v_item);
+           		break;
+        }
+        DBG_EXIT( 0 );
+        return;
+    }
+
+    if( ep->e_tree.t_binary.b_l ) { 
+        sql_free( ep->e_tree.t_binary.b_l );
+    }
+    if( ep->e_tree.t_binary.b_r ) { 
+        sql_free( ep->e_tree.t_binary.b_r );
+    }
+    DBG_EXIT( 0 );
+    return;
+}
+
+/*
+ *  Free including me
+ */
+void
+sql_free( ep )
+    r_expr_t    *ep;
+{
+    DBG_ENT(M_SQL,"sql_free");
+
+    sql_free1( ep );
+
+    sql_mem_free( ep );
+
+    DBG_EXIT( 0 );
+    return;
+}
+
+static int  getnode_flag;
+
+r_expr_t*
+sql_getnode( ep, current, op )
+    r_expr_t    *ep;
+    r_expr_t    *current;
+    int     op;
+{
+    r_expr_t    *retp;
+
+    DBG_ENT(M_SQL,"sql_getnode");
+
+    getnode_flag = 0;
+
+    retp = sql_findnode( ep, current, op );
+
+    DBG_EXIT( retp );
+    return( retp );
+}
+
+r_expr_t*
+sql_findnode( ep, current, op )
+    r_expr_t    *ep;
+    r_expr_t    *current;
+    int     op;
+{
+    r_expr_t    *retp;
+
+    DBG_ENT(M_SQL,"sql_findnode");
+
+    if( (!current || getnode_flag) && (ep->e_op == op) ) return( ep );
+
+    if( ep == current ) getnode_flag = 1;
+
+    if( ep->e_op == TLEAF )     return( 0 );
+
+    if( ep->e_tree.t_binary.b_l ) { 
+        if( (retp = sql_findnode( ep->e_tree.t_binary.b_l, 
+                    current, op )) ) {
+            return( retp );
+        } 
+    }
+    if( ep->e_tree.t_binary.b_r ) { 
+        if( (retp = sql_findnode( ep->e_tree.t_binary.b_r, 
+                    current, op )) ) {
+            return( retp );
+        } 
+    }
+    DBG_EXIT( 0 );
+    return( 0 );
+}
+
+int
+sql_write_tree( fd, ep )    /* serialize write */
+    int     fd;
+    r_expr_t    *ep;
+{
+    DBG_ENT(M_SQL,"sql_write_tree");
+
+    if( write( fd, ep, sizeof(*ep) ) < 0 ) {
+        goto err;
+    }
+    if( ep->e_op == TLEAF ) {
+                switch( ep->e_tree.t_unary.v_type ) {
+                        case VBIN:
+            case VBOOL:
+                /* Already written */
+                                break;
+                        case VSTRING:
+                        case VSTRING_ALLOC:
+                if( write( fd,
+                                ep->e_tree.t_unary.v_value.v_str.s_str,
+                                ep->e_tree.t_unary.v_value.v_str.s_len+1 )<0 ) {
+                    goto err;
+                }
+                break;
+            case VITEM:
+            case VITEM_ALLOC:
+                if( write( fd,
+                                ep->e_tree.t_unary.v_value.v_item,
+                sizeof(r_item_t))<0 ) {
+                    goto err;
+                }
+                break;
+        }
+        DBG_EXIT( 0 );
+        return( 0 );
+    }
+        if( ep->e_tree.t_binary.b_l ) {
+                sql_write_tree( fd, ep->e_tree.t_binary.b_l );
+    }
+        if( ep->e_tree.t_binary.b_r ) {
+                sql_write_tree( fd, ep->e_tree.t_binary.b_r );
+    }
+
+    DBG_EXIT( 0 );
+    return( 0 );
+
+err:    DBG_EXIT( neo_errno );
+    return( neo_errno );
+}
+
+r_expr_t*
+sql_read_tree( fd ) /* serialize read */
+    int     fd;
+{
+    r_expr_t    *ep;
+
+    DBG_ENT(M_SQL,"sql_read_tree");
+
+    if( !(ep = (r_expr_t*)sql_mem_zalloc( sizeof(r_expr_t) ))) {
+        goto err1;
+    }
+    if( read( fd, ep, sizeof(*ep) ) < 0 ) {
+        goto err2;
+    }
+    if( ep->e_op == TLEAF ) {
+                switch( ep->e_tree.t_unary.v_type ) {
+            default:
+                /* Already read */
+                                break;
+                        case VSTRING:
+                        case VSTRING_ALLOC:
+                                if( !(ep->e_tree.t_unary.v_value.v_str.s_str
+                    = (char*)sql_mem_malloc(
+                                        ep->e_tree.t_unary.
+                        v_value.v_str.s_len+1 ) )) {
+                    goto err2;
+                }
+                                ep->e_tree.t_unary.v_type = VSTRING_ALLOC;
+
+                if( read( fd,
+                                ep->e_tree.t_unary.v_value.v_str.s_str,
+                                ep->e_tree.t_unary.v_value.v_str.s_len+1 )<0) {
+                                    sql_mem_free( ep->e_tree.t_unary.
+                        v_value.v_str.s_str );
+                    goto err2;
+                }
+                break;
+            case VITEM:
+            case VITEM_ALLOC:
+                                if( !(ep->e_tree.t_unary.v_value.v_item
+                = (r_item_t*)sql_mem_malloc(sizeof(r_item_t)))){
+                    goto err2;
+                }
+                                ep->e_tree.t_unary.v_type = VITEM_ALLOC;
+                if( read( fd, ep->e_tree.t_unary.v_value.v_item,
+                        sizeof(r_item_t) )<0) {
+                                    sql_mem_free( ep->e_tree.t_unary.
+                            v_value.v_item );
+                    goto err2;
+                }
+                break;
+        }
+        DBG_EXIT( ep );
+        return( ep );
+    }
+        if( ep->e_tree.t_binary.b_l ) {
+        if( !(ep->e_tree.t_binary.b_l = sql_read_tree( fd ) )) {
+            goto err2;
+        }
+    }
+        if( ep->e_tree.t_binary.b_r ) {
+        if( !(ep->e_tree.t_binary.b_r = sql_read_tree( fd ) )) {
+            goto err2;
+        }
+    }
+
+    DBG_EXIT( ep );
+    return( ep );
+
+err2:   sql_mem_free( ep );
+err1:   DBG_EXIT( 0 );
+    return( 0 );
+}
+
+#define SQL_MEM_POOL    0
+
+#ifdef xjpDUMMY
+extern char*    xj_pool_malloc();
+extern char*    xj_pool_zalloc();
+#endif
+
+int
+sql_mem_init()
+{
+    /* 2011/05 return( xj_pool_init( SQL_MEM_POOL ) ); */
+    return( 0 );
+}
+
+void *
+sql_mem_malloc( size )
+    size_t size;
+{
+    /* 2011/05 return( xj_pool_malloc( SQL_MEM_POOL, size ) ); */
+    return( neo_malloc( size ) );
+}
+
+void *
+sql_mem_zalloc( size )
+    size_t size;
+{
+    /* 2011/05 return( xj_pool_zalloc( SQL_MEM_POOL, size ) ); */
+    return( neo_zalloc( size ) );
+}
+
+void
+sql_mem_free( cp )
+    void *cp;
+{
+    /* 2011/05 return( xj_pool_free( cp ) ); */
+    neo_free( cp );
+    return ;
+}
+
+
+#ifdef xjpDUMMY
+/* 2011/05 */
+sql_mem_halloc()
+{
+    return( xj_pool_mem_halloc( SQL_MEM_POOL ) );
+}
+
+sql_mem_hfree()
+{
+    return( xj_pool_mem_hfree( SQL_MEM_POOL ) );
+}
+#endif //xjpDUMMY
+
+
+//#ifdef DEBUG
+#ifndef DEBUG
+
+static struct {
+    int op;
+    char    *s;
+} op_string[] = {
+    { SSELECT,  "SELECT"},  
+    { SFROM,    "FROM"},    
+    { SNODE,    "node"},    
+    { SAS,      "AS"},  
+    { SWHERE,   "WHERE"},   
+    { SOR,      "OR"},  
+    { SAND,     "AND"}, 
+    { SEQ,      "EQ"},  
+    { SNE,      "NE"},  
+    { SLT,      "LT"},  
+    { SLE,      "LE"},  
+    { SGT,      "GT"},  
+    { SGE,      "GE"},  
+
+    { SDROP_TABLE,  "DROP_TABLE"},
+    { SDROP_VIEW,   "DROP_VIEW"},
+    { SCREATE_TABLE,"CREATE_TABLE"},
+    { SCREATE_VIEW, "CREATE_VIEW"},
+    { SDELETE,  "DELETE"},
+    { SINSERT,  "INSERT"},
+    { SVALUES,  "VALUES"},
+    { SUPDATE,  "UPDATE"},
+    { SSET,     "SET"},
+    { SVIEW,    "VIEW"},
+    { SSTATEMENT,   "STATEMENT"},
+    { SBEGIN,   "BEGIN"},
+    { SCOMMIT,  "COMMIT"},
+    { SROLLBACK,    "ROLLBACK"},
+    { SORDER,   "ORDER"},
+    { SBY,      "BY"},
+    { SASC,     "ASC"},
+    { SDESC,        "DESC"},
+    { SUNION,       "UNION"},
+    { SALL,     "ALL"},
+
+    { SLIKE,    "LIKE"},
+    { SNOTLIKE, "NOT_LIKE"},
+    { SESCAPE,  "ESCAPE"},
+};
+
+
+static struct {
+    int flag;
+    char    buf[128];
+} pbuf[20];
+
+void	sqlprint1( r_expr_t*, int );
+void	sqlprintbuf( int );
+
+void
+sqlprint( ep )
+    r_expr_t    *ep;
+{
+    sqlprint1( ep, 0 );
+}
+
+void
+sqlprint1( ep, n )
+    r_expr_t    *ep;
+    int     n;
+{
+    char    buf[128];
+    int i;
+
+    if( !ep ) return;
+    pbuf[n].flag    = 1;
+
+    if( ep->e_op == TLEAF ) {
+        pbuf[n].buf[0] = 0;
+        switch( ep->e_tree.t_unary.v_type ) {
+            case VBIN:
+            case VBOOL:
+                sprintf( buf, "[B:%d-0x%x]",
+                ep->e_tree.t_unary.v_value.v_int,
+                ep->e_tree.t_unary.v_value.v_int );
+                break;
+            case VSTRING:
+            case VSTRING_ALLOC:
+                sprintf( buf, "[S:%s(%d)]",
+                ep->e_tree.t_unary.v_value.v_str.s_str,
+                ep->e_tree.t_unary.v_value.v_str.s_len );
+                break;
+            case VITEM:
+            case VITEM_ALLOC:
+                sprintf( buf, "[V:%s]", ep->e_tree.t_unary.
+                        v_value.v_item->i_name);
+                break;
+            case VLONG:
+            case VULONG:
+                sprintf( buf, "[L:%lld-0x%llx]",
+                ep->e_tree.t_unary.v_value.v_long,
+                ep->e_tree.t_unary.v_value.v_long );
+                break;
+            case VFLOAT:
+                sprintf( buf, "[F:%f]",
+                ep->e_tree.t_unary.v_value.v_float );
+                break;
+            case VPARAM:
+                sprintf( buf, "[?]");
+                break;
+            default:
+                sprintf( buf, "[Unknown leaf type]");
+                break;
+        }
+        strcat( pbuf[n].buf, buf );
+
+        sqlprintbuf( n );
+
+        return;
+    }
+    for( i = 0; i < sizeof(op_string)/sizeof(op_string[0]); i++ ) {
+        if( ep->e_op == op_string[i].op ) {
+            sprintf( pbuf[n].buf, "<%s>", op_string[i].s );
+            goto found;
+        }
+    }
+    sprintf( pbuf[n].buf, "<%c>", ep->e_op );
+found:
+    if( ep->e_tree.t_binary.b_l ) { 
+        sqlprint1( ep->e_tree.t_binary.b_l, n+1 );
+    } else {
+        sqlprintbuf( n );
+    }
+    if( ep->e_tree.t_binary.b_r )   
+        sqlprint1( ep->e_tree.t_binary.b_r, n+1 );
+}
+
+void
+sqlprintbuf( n )
+    int n;
+{
+    int i;
+
+    for( i = 0; i <= n; i++ ) {
+        if( pbuf[i].flag ) {
+            printf("%-12s", pbuf[i].buf );
+            pbuf[i].flag = 0;
+        } else {
+            printf("            ");
+        } 
+    }
+    printf("\n");
+}
+
+int
+sql_not_inner_join( r_expr_t *ep )
+{
+	int	Ret;
+
+	switch( ep->e_op ) {
+		default:
+			return( 1 );
+		case '.':
+		case TLEAF:
+			return( 0 );
+		case SWHERE:
+		case SAND:
+		case SEQ:
+			break;
+	}
+    if( ep->e_tree.t_binary.b_l ) { 
+        Ret = sql_not_inner_join( ep->e_tree.t_binary.b_l );
+		if( Ret )	goto ret;
+    }
+    if( ep->e_tree.t_binary.b_r ) {
+        Ret = sql_not_inner_join( ep->e_tree.t_binary.b_r );
+		if( Ret )	goto ret;
+	}
+ret:
+	return( Ret );
+}
+
+#endif //DEBUG
+

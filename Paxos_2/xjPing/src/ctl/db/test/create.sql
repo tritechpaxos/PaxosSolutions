@@ -1,0 +1,10 @@
+drop view A_B;
+create view A_B as select B.NAME B_NAME, A.INT A_INT from A,B where A.NAME=B.NAME;
+drop table TABLE1;
+create table TABLE1 ( name char(10) , day date, i int);
+drop table XJ_LOCK;
+create table XJ_LOCK ( NAME char(32));
+insert into XJ_LOCK values('XJ_SEQUENCE');
+commit;
+drop table XJ_SEQUENCE;
+create table XJ_SEQUENCE ( NAME char(32), SEQ number);

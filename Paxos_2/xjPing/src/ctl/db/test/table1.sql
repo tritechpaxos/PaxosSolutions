@@ -1,0 +1,11 @@
+drop table TABLE1;
+create table TABLE1 ( name char(10), day date, i int);
+insert into TABLE1 values('1234567890', 0, 0);
+insert into TABLE1 values('1234567891', 1, 1);
+insert into TABLE1 values('1234567892', 2, 2);
+insert into TABLE1 values('1234567893', 3, 3);
+insert into TABLE1 values('1234567894', 4, 4);
+insert into TABLE1 values('1234567895', 5, 5);
+insert into TABLE1 values('1234567896', 6, 6);
+insert into TABLE1 values('1234567897', 7, 7);
+commit;

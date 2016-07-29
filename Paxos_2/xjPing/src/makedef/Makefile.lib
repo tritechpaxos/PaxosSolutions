@@ -1,0 +1,17 @@
+#
+#	Makefile for XXXXlibrary
+#
+
+TOP	= XXXXXXXXXXXX	### ホームディレクトリ
+
+OPT	= 		### コンパイルオプション
+DEBUG	= -DDEBUG	### デバッグフラグ
+
+LIBNAME	= XXXXXXXXXX	### ライブラリ名
+LCFLGS	= XXXXXXXXXX	### 固有のヘッダディレクトリ
+
+SRC	= XXX.c 	### ソースファイル
+HEAD    = XXX.h		### ヘッダファイル
+
+### Do not change under this line.
+include	$(TOP)/makedef/makelib

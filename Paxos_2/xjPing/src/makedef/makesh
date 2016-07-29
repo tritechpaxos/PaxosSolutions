@@ -1,0 +1,37 @@
+#
+#	Makefile for all NEO SH
+#
+
+.KEEP_STATE:
+
+all:
+
+procc:
+
+libc:
+
+install: $(INSDIR)/$(LOAD)
+$(INSDIR)/$(LOAD): $(LOAD)
+	install $(LOAD) $(INSDIR)
+
+clean:
+	rm -f core a.out
+
+libclean:
+
+proclean:
+
+allclean:
+
+liballclean:
+
+procallclean:
+
+catsrc:
+	cat $(SRC) >> $(CATSRC)
+
+wc: $(LOAD)
+	pwd
+	wc $(LOAD)
+
+fn:

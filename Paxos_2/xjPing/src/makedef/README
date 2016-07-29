@@ -1,0 +1,142 @@
+< Makefileについて >
+
+
+    ＮＥＯでは、Makefileを、ターゲットに依存するマクロ記述部と、システム共通のコ
+  マンド記述部に分けて管理する。
+
+    ユーザが使用する各ＡＰ、ライブラリ用の標準Makefile（マクロ記述部）として、以
+  下のMakefile.*を用意する。使用目的にあった Makefile を、各自 copy して、使用す
+  る。
+
+  ・Makefile.proc	//ＡＰ用Makefile
+  ・Makefile.lib	//共通ライブラリ用Makefile
+  ・Makefile.subdir	//ディレクトリ用Makefile
+  ・Makefile.sh		//シェルスクリプト用Makefile
+
+    Makefileは、crc/sefXX/src/makedef/にある、それぞれに対応するmakefile(コマン
+  ド記述部)をincludeすることで動作する。
+    makeproc と makelib は、SunOS4.1.xx(BSD) 用と Solaris 2.x(SYSTEM V) 用がある
+  ので、必要なほうをマシンインストール時にコピーして使用する。(Makefile有り)
+    なお、SunOS4.1.xxでは _NEO_BSD_ が、Solaris 2.xでは _NEO_SYSV_ が自動で 
+  define される。
+
+    コマンドとしては、デフォルトのコンパイル、install でのインストール、clean
+  でのオブジェクトの削除、allclean でのライブラリも含めた削除等がある。
+  ( 詳細は、コマンド記述部を参照 )
+
+
+  注意：ユーザが記述するマクロには、ターゲットは１つしか記述できない。従って、複
+        数のＡＰで共通のソースを利用するようなケースでは、共通部を、ＡＰ固有ライ
+	ブラリとして独立させること。
+
+	但し、テストコマンド用に コンパイル と クリーン の機能のみを持つ、複数
+	ターゲット用のメイクファイル Makefile.nproc も提供するが、一般ユーザは
+	これを使用してはいけない。
+
+
+  以下のディレクトリ構成を例に、使用例を示す。
+
+  1 :+-------neo2/
+  2 :        +-------bin/	インストールディレクトリ
+  3 :        +-------makedef/	makefile（コマンド記述部 ）
+  4 :        +-------h/		システム共通ヘッダが存在
+  5 :        +-------lib/	システム共通ライブラリ libneo.a が存在
+  6 :        +-------src/
+  7 :                +-------ap/
+  8 :                        +-------ap1/
+  9 :                        +-------ap2/
+  10:                        +-------ap3/
+  11:                                +-------ap3-1/
+  12:                                +-------ap3-2/
+  13:                                +-------ap3h/
+  14:                                +-------ap3lib/
+  15:                                        +-------ap3lib1/
+  16:                                        +-------ap3lib2/
+
+
+  (1) Makefile.procの使用例
+      ap3-1/ の下で、ソース ap311.c, ap312.c, ap31.h と、ap3h/ にある ap3/ に共
+    通のヘッダ、ap3lib/ にある ap3/ に共通のライブラリ libap.aから、ロードモジュ
+    ール ap31 を作成する場合。
+      libneo.a は、デフォルトで インクルードされる。
+
+	#
+	#	Makefile for ap31
+	#
+
+	TOP	= ../../../.. 		### ホームディレクトリ
+
+	OPT	=  			### コンパイルオプション
+	DEBUG	= 	 		### デバッグフラグ
+
+	SRC	= ap311.c ap312.c	### ソースファイル 
+	HEAD	= ap31.h 		### ヘッダファイル
+
+	LOAD	= ap31	 		### ロードモジュール名 
+
+	LIBFLGS	= 			### リンクオプション 
+	LCFLGS	= -I../ap3h		### ローカルヘッダのディレクトリ 
+	LCLIBS	= ../ap3lib/libap.a	### ローカルライブラリ
+
+	INSDIR	= $(TOP)/bin		### インストールディレクトリ
+
+	### Do not change under this line.
+	include	$(TOP)/makedef/makeproc
+
+
+  (2) Makefile.libの使用例
+      ap3lib1/ の下で、ソース aplib1.c, aplib2.c, aplib.h と、 ap3h/ にある ap3/
+    に共通のヘッダから、ライブラリ libap.a を ap3lib の下に作成する場合。
+
+	#
+	#	Makefile for libap
+	#
+
+	TOP	= ../../../../..	### ホームディレクトリ
+
+	OPT	= 			### コンパイルオプション
+	DEBUG	= 			### デバッグフラグ
+
+	LIBNAME	= ../libap		### ライブラリ名
+	LCFLGS	= -I../../ap3h		### 固有のヘッダディレクトリ
+
+	SRC	= aplib1.c aplib2.c 	### ソースファイル
+	HEAD    = aplib.h		### ヘッダファイル
+
+	### Do not change under this line.
+	include	$(TOP)/makedef/makelib
+
+
+  (3) Makefile.shの使用例
+      ap1/ の下にあるターゲット ap1 が、シェルスクリプトであった時。 
+
+	#
+	#	Makefile for ap1
+	#
+
+	TOP     = ../../..      ### ホームディレクトリ
+
+	LOAD    = ap1           ### ターゲットスクリプト名
+
+	INSDIR  = $(TOP)/bin    ### インストールディレクトリ
+
+	### Do not change under this line.
+	include	$(TOP)/makedef/makesh
+
+
+  (4) Makefile.subdirの使用例
+      ap3/ の下に置く Makefile は、以下のようになる。
+
+	#
+	#	Makefile for ap3/
+	#
+
+	TOP	= ../../..	### ホームディレクトリ
+
+	SUBPROC = ap3-1 ap3-2 	### サブディレクトリ（ＡＰ）
+
+	SUBLIBS = ap3lib 	### サブディレクトリ（ライブラリ）
+
+	### Do not change under this line.
+	include	$(TOP)/makedef/makesubdir
+

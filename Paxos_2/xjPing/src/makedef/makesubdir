@@ -1,0 +1,117 @@
+################################################################################
+#
+# makesubdir --- Common makefile of xjPing (On Memory DB) Sub Directories
+#
+# Copyright (C) 2010 triTech Inc. All Rights Reserved.
+#
+# See GPL-LICENSE.txt for copyright and license details.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version. 
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+
+FLAGS   =
+MFLAGS  =
+
+all:  libc procc
+
+libc:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="libc" subdirlib
+
+procc:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="procc" subdirproc
+
+clean: libclean proclean
+
+libclean:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="libclean" subdirlib
+
+proclean:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="proclean" subdirproc
+
+allclean: liballclean procallclean
+
+liballclean:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="liballclean" subdirlib
+
+procallclean:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="procallclean" subdirproc
+
+install:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)"  DO="install" subdirproc
+
+tinstall:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="tinstall" subdirproc
+
+test:
+	make MFLAGS="$(MFLAGS) $(FLAGS)" DO="test" subdir
+
+mtest:
+	make MFLAGS="$(MFLAGS) $(FLAGS)" DO="mtest" subdir
+
+lint:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="lint" subdir 
+
+wc:
+	if [ "$(DIRFLAGS)" = "PROCDIR" ]; then \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="wc" subdirproc; \
+	elif [ "$(DIRFLAGS)" = "LIBDIR" ]; then \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="wc" subdirlib; \
+	elif [ -z "$(DIRFLAGS)" ]; then \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="wc" subdirlib; \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="wc" subdirproc; \
+	fi
+
+tags:
+	if [ "$(DIRFLAGS)" = "PROCDIR" ]; then \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="tags" subdirproc; \
+	elif [ "$(DIRFLAGS)" = "LIBDIR" ]; then \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="tags" subdirlib; \
+	elif [ -z "$(DIRFLAGS)" ]; then \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="tags" subdirlib; \
+		make $(MFLAGS) MFLAGS="$(MFLAGS)" DO="tags" subdirproc; \
+	fi
+
+index:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="index" subdir 
+
+count:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="count" subdir 
+
+create:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="create" subdir 
+
+get:
+	make $(MFLAGS) MFLAGS="$(MFLAGS) $(FLAGS)" DO="get" subdir 
+
+subdir: subdirlib subdirproc
+
+subdirlib:
+	if test -n "$(SUBLIBS)"; then \
+		make sublib; \
+	fi
+
+subdirproc:
+	if test -n "$(SUBPROC)"; then \
+		make  subproc; \
+	fi
+
+sublib:
+	for i in $(SUBLIBS); do \
+		cd $$i; make DIRFLAGS="LIBDIR" $(MFLAGS) $(DO); cd ..; \
+	done
+
+subproc:
+	for i in $(SUBPROC); do \
+		cd $$i; make DIRFLAGS="PROCDIR" $(MFLAGS) $(DO); cd ..; \
+	done

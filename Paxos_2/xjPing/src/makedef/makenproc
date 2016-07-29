@@ -1,0 +1,117 @@
+################################################################################
+#
+# makenproc --- Makefile of xjPing (On Memory DB) AP programs
+#               for test nproc
+#
+# Copyright (C) 2010 triTech Inc. All Rights Reserved.
+#
+# See GPL-LICENSE.txt for copyright and license details.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version. 
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+
+INCDIRC	= $(TOP)/h
+INCDIRA	= $(TOP)/ap_h
+
+LIBDIR	= $(TOP)/lib
+LIB	= $(LIBDIR)/libneo.a
+#CC	= cc -D_NEO_BSD_
+CC	= cc -g
+
+OPT	= -Wall -fPIC
+
+DEF	= $(DEBUG) -D_FILE_OFFSET_BITS=64
+INC	= -I. -I$(INCDIRC) -I$(INCDIRA)
+CFLAGS	= $(OPT) $(DEF) $(INC)
+
+OBJ1	= $(SRC1:.c=.o)
+OBJ2	= $(SRC2:.c=.o)
+OBJ3	= $(SRC3:.c=.o)
+OBJ4	= $(SRC4:.c=.o)
+OBJ5	= $(SRC5:.c=.o)
+OBJ6	= $(SRC6:.c=.o)
+OBJ7	= $(SRC7:.c=.o)
+OBJ8	= $(SRC8:.c=.o)
+
+SRCS	= $(SRC1) $(SRC2) $(SRC3) $(SRC4) $(SRC5) $(SRC6) $(SRC7) $(SRC8)
+OBJS	= $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) $(OBJ8)
+LOADS	= $(LOAD1) $(LOAD2) $(LOAD3) $(LOAD4) $(LOAD5) $(LOAD6) $(LOAD7) $(LOAD8)
+CLEAN   = $(LLNS) $(TLOAD) DBG.* core a.out $(OBJS) $(LOADS)
+
+.KEEP_STATE:
+
+.c.o:
+	$(CC) -c $(CFLAGS) $(LCFLGS) $<
+
+all: procc
+procc: $(LOADS)
+
+$(LOAD1): $(OBJ1) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ1) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD2): $(OBJ2) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ2) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD3): $(OBJ3) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ3) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD4): $(OBJ4) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ4) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD5): $(OBJ5) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ5) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD6): $(OBJ6) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ6) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD7): $(OBJ7) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ7) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+$(LOAD8): $(OBJ8) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ8) $(LCLIBS) $(LIBFLGS) $(LIB) 
+
+clean: proclean
+proclean:
+	rm -f $(CLEAN)
+
+allclean: procallclean
+procallclean: proclean
+	if test -d SCCS; then sccs clean; rm -f ,*; fi
+
+install:
+	if test -d $(INSDIR); then install $(LOADS) $(INSDIR); fi
+
+libc:
+
+libclean:
+
+liballclean:
+
+wc: $(SRCS) $(HEAD)
+	@for i in $(SRCS) $(HEAD); do \
+		wc $$i; \
+		grep -v include $$i | /lib/cpp -P | \
+			grep -v "^[ 	]*$$"  |wc; \
+	done > wc.tmp
+	@echo ""
+	@echo ""
+	@pwd
+	@echo ""
+	@awk -f $(TOP)/makedef/wc.awk wc.tmp
+	@echo ""
+	@rm  wc.tmp
+
+count:
+	cntline $(CFLAGS) $(LCFLGS) $(SRCS)
+

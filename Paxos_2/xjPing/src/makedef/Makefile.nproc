@@ -1,0 +1,50 @@
+#
+#	Makefile for XXXXXprogram
+#
+
+TOP	= XXXXX 	### ホームディレクトリ
+
+OPT	=  		### コンパイルオプション
+DEBUG	= -DDEBUG 	### デバッグフラグ
+
+SRC1	= XXXXX.c 	### ソースファイル 
+HEAD1	= XXXXX.h 	### ヘッダファイル
+
+SRC2	= 		### ソースファイル 
+HEAD2	= 		### ヘッダファイル
+
+SRC3	= 		### ソースファイル 
+HEAD3	=		### ヘッダファイル
+
+SRC4	= 		### ソースファイル 
+HEAD4	= 		### ヘッダファイル
+
+SRC5	= 		### ソースファイル 
+HEAD5	= 		### ヘッダファイル
+
+SRC6	= 		### ソースファイル 
+HEAD6	= 		### ヘッダファイル
+
+SRC7	= 		### ソースファイル 
+HEAD7	= 		### ヘッダファイル
+
+SRC8	= 		### ソースファイル 
+HEAD8	= 		### ヘッダファイル
+
+LOAD1	= XXXXX 	### ロードモジュール名 
+LOAD2	= 		### ロードモジュール名 
+LOAD3	= 		### ロードモジュール名 
+LOAD4	= 		### ロードモジュール名 
+LOAD5	= 	 	### ロードモジュール名 
+LOAD6	= 		### ロードモジュール名 
+LOAD7	= 		### ロードモジュール名 
+LOAD8	= 		### ロードモジュール名 
+
+LIBFLGS	= 		### リンクオプション 
+LCFLGS	= XXXXX		### ローカルヘッダのディレクトリ 
+LCLIBS	= 		### ローカルライブラリ
+
+INSDIR	= XXXX		### インストールディレクトリ
+
+### Do not change under this line.
+include	$(TOP)/makedef/makenproc

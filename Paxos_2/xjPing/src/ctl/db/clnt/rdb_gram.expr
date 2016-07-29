@@ -1,0 +1,112 @@
+%{
+/******************************************************************************
+ *
+ *         
+ *	rdb_gram.c
+ *
+ *	説明	library 	検索条件の設定( 構文解析 )
+ * 
+ ******************************************************************************/
+/*
+ *  このソースは、rdb_gram.expr から、yacc によって生成されます。
+ *  _Rdb_yyreturn は、正常に yyparse() が終了した時に、解析木のルートへの
+ *  ポインタが設定されます。
+ *  yyparse() のリターン値は、正常時は 0 、異常時は 1 です。
+ */
+
+#include	"neo_db.h"
+
+#ifdef	_NEO_SYSV_
+#define	_MALLOC_H
+#endif
+
+r_expr_t	*_Rdb_yyreturn;	/* 解析木のルートへのポインタ */
+char*	rdb_string_op();
+char*	rdb_numerical_op();
+char*	rdb_logical_op();
+int	yylex();
+int	yyerror();
+
+%}
+
+/* Specify precedences and associativities. */
+
+%union	{
+	char	*s;
+	long long	i;
+	}
+
+%token <i> TLEAF
+%token <i> VITEM
+%token <i> VSTRING
+%token <i> VBIN
+%token <i> VBOOL
+
+%token <s> SNAME
+%token <s> SSTRING
+%token <i> SNUM
+%token <i> SOR
+%token <i> SAND
+%token <i> SLT
+%token <i> SGT
+%token <i> SLE
+%token <i> SGE
+%token <i> SEQ
+%token <i> SNE
+
+%token <i> STR_EQ
+%token <i> STR_NE
+%token <i> STR_GT
+%token <i> STR_LT
+%token <i> STR_GE
+%token <i> STR_LE
+
+%left SOR
+%left SAND
+%nonassoc SLT SGT SLE SGE SEQ SNE
+
+%start program
+
+%type <i>   relop str_op
+%type <s>   expr uexpr
+
+%%
+
+program:		{ YYABORT; /* empty */ }
+	| expr		{ _Rdb_yyreturn = (r_expr_t*)($1); YYACCEPT; /* ok */ }
+	;
+expr:	  uexpr		{ $$ = $1; }
+	| '(' expr ')'	{ $$ = $2; }
+	;
+
+uexpr	
+	: SNAME str_op SSTRING  %prec SEQ
+		{ if(!($$ = rdb_string_op( $1, $2, $3 ))) YYABORT; }
+	| SNAME relop SNUM  %prec SEQ
+		{ if(!($$ = rdb_numerical_op( $1, $2, $3 ))) YYABORT; }
+	| SNAME relop '-' SNUM  %prec SEQ
+		{ if(!($$ = rdb_numerical_op( $1, $2, -$4 ))) YYABORT; }
+	| SNAME relop '~' SNUM  %prec SEQ
+		{ if(!($$ = rdb_numerical_op( $1, $2, ~$4 ))) YYABORT; }
+	| expr SOR expr		{ $$ = rdb_logical_op($1, $2, $3); }
+	| expr SAND expr	{ $$ = rdb_logical_op($1, $2, $3); }
+	;
+
+relop:	  SEQ
+	| SGT
+	| SLT
+	| SGE
+	| SLE
+	| SNE
+	| '='	{ $$ = SEQ;}
+	;
+
+str_op:   SEQ	{ $$ = STR_EQ; }
+	| SGT	{ $$ = STR_GT; }
+	| SLT	{ $$ = STR_LT; }
+	| SGE	{ $$ = STR_GE; }
+	| SLE	{ $$ = STR_LE; }
+	| SNE	{ $$ = STR_NE; }
+	;
+
+%%

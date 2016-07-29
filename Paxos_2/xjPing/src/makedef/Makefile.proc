@@ -1,0 +1,22 @@
+#
+#	Makefile for XXXXXprogram
+#
+
+TOP	= XXXXX 	### ホームディレクトリ
+
+OPT	=  		### コンパイルオプション
+DEBUG	= -DDEBUG 	### デバッグフラグ
+
+SRC	= XXXXX.c 	### ソースファイル 
+HEAD	= XXXXX.h 	### ヘッダファイル
+
+LOAD	= XXXXX 	### ロードモジュール名 
+
+LIBFLGS	= 		### リンクオプション 
+LCFLGS	= XXXXX		### ローカルヘッダのディレクトリ 
+LCLIBS	= 		### ローカルライブラリ
+
+INSDIR	= XXXX		### インストールディレクトリ
+
+### Do not change under this line.
+include	$(TOP)/makedef/makeproc

@@ -1,0 +1,35 @@
+#
+#	Makefile for all NEO neo_*.db: wc information
+#
+
+.KEEP_STATE:
+
+all:
+
+procc:
+
+libc:
+
+install:
+
+clean:
+	rm -f core a.out
+
+libclean:
+
+proclean:
+
+allclean:
+
+liballclean:
+
+procallclean:
+
+catsrc:
+	cat $(SRC) >> $(CATSRC)
+
+wc: $(LOAD)
+	pwd
+	wc $(LOAD)
+
+fn:

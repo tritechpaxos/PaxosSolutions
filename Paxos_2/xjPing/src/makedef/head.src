@@ -1,0 +1,14 @@
+/******************************************************************************
+ *
+ *	NEO -  Node integrated Engineering Operation system
+ *         
+ *	xx_xxx.c
+ *
+ *	¿‚Ã¿	xxxxxxxxxxxx
+ * 
+ *			Copyright (C) NTT
+ ******************************************************************************/
+#ifndef lint
+static char     sccsid[] = "@(#) xx_xxx.c       1.0     93/7/31";
+#endif
+

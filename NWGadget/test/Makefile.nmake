@@ -1,0 +1,133 @@
+################################################################################
+#
+# Makefile.nmake --- Makefile of test programs of NWGadget library
+#
+# Copyright (C) 2010-2015 triTech Inc. All Rights Reserved.
+#
+# See GPL-LICENSE.txt for copyright and license details.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version. 
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+
+H=..\h\     
+LB=..\lib\   
+BIN = ..\bin\ 
+
+PTHREAD=\Users\paxos\Desktop\pthreads-w32-2-9-1-release\Pre-built.2
+LIBEVENT=\Users\paxos\Desktop\libevent-2.0.22-stable
+
+# Needed for correctness
+CFLAGS_PTHREAD=/DHAVE_STRUCT_TIMESPEC /I$(PTHREAD)\include 
+CFLAGS_LIBEVENT=/I$(LIBEVENT) /I$(LIBEVENT)\WIN32-Code /I$(LIBEVENT)\include /I$(LIBEVENT)\compat /DHAVE_CONFIG_H    
+
+CFLAGS=/TP /DVISUAL_CPP /DWIN32 /I$(H) $(CFLAGS_LIBEVENT) $(CFLAGS_PTHREAD) 
+
+# For optimization and warnings
+CFLAGS=$(CFLAGS) /Ox /W3 /wd4996 /nologo
+
+LIBFLAGS=/nologo
+
+H_NWGADGET=$(H)\NWGadget.h
+
+LIB_NWGADGET=$(LB)\NWGadget.lib
+LIB_WIN=ws2_32.lib shell32.lib advapi32.lib
+LIB_PTHREAD=$(PTHREAD)\lib\x64\pthreadVC2.lib 
+LIB_LIBEVENT=$(LIBEVENT)\libevent.lib 
+
+LIBS=$(LIB_NWGADGET) $(LIB_LIBEVENT) $(LIB_PTHREAD) $(LIB_WIN)
+
+all: $(BIN)skl_mem.exe $(BIN)skl_mem_best.exe $(BIN)Hash.exe $(BIN)timer.exe \
+	$(BIN)Queue.exe $(BIN)BTree.exe $(BIN)BTree1.exe $(BIN)BTree2.exe \
+	$(BIN)Msg.exe $(BIN)GurdedElementNew.exe $(BIN)Cksum.exe $(BIN)DHash.exe \
+	$(BIN)FdEvent.exe \
+	$(BIN)LogPrint.exe $(BIN)LogFiles.exe
+
+$(BIN)skl_mem.exe: skl_mem.obj $(LIB_NWGADGET)
+	link $(LIBS) skl_mem.obj /OUT:$(BIN)skl_mem.exe
+skl_mem.obj: skl_mem.c $(H_NWGADGET)
+	cl /c $(CFLAGS) skl_mem.c
+
+$(BIN)skl_mem_best.exe: skl_mem_best.obj $(LIB_NWGADGET)
+	link $(LIBS) skl_mem_best.obj /OUT:$(BIN)skl_mem_best.exe
+skl_mem_best.obj: skl_mem_best.c $(H_NWGADGET)
+	cl /c $(CFLAGS) skl_mem_best.c
+
+$(BIN)Hash.exe: Hash.obj $(LIBNWGADET)
+	link $(LIBS) Hash.obj /OUT:$(BIN)Hash.exe
+Hash.obj: Hash.c $(H_NWGADGET)
+	cl /c $(CFLAGS) Hash.c
+
+$(BIN)timer.exe: timer.obj $(LIBNWGADGET)
+	link $(LIBS) timer.obj /OUT:$(BIN)timer.exe
+timer.obj: timer.c $(H_NWGADGET)
+	cl /c $(CFLAGS) timer.c
+
+$(BIN)Queue.exe: Queue.obj $(LIBNWGADET)
+	link $(LIBS) Queue.obj /OUT:$(BIN)Queue.exe
+Queue.obj: Queue.c $(H_NWGADGET)
+	cl /c $(CFLAGS) Queue.c
+
+$(BIN)BTree.exe: BTree.obj $(LIBNWGADET)
+	link $(LIBS) BTree.obj /OUT:$(BIN)BTree.exe
+BTree.obj: BTree.c $(H_NWGADGET)
+	cl /c $(CFLAGS) BTree.c
+
+$(BIN)BTree1.exe: BTree1.obj $(LIBNWGADET)
+	link $(LIBS) BTree1.obj /OUT:$(BIN)BTree1.exe
+BTree1.obj: BTree1.c $(H_NWGADGET)
+	cl /c $(CFLAGS) BTree1.c
+
+$(BIN)BTree2.exe: BTree2.obj $(LIBNWGADET)
+	link $(LIBS) BTree2.obj /OUT:$(BIN)BTree2.exe
+BTree2.obj: BTree2.c $(H_NWGADGET)
+	cl /c $(CFLAGS) BTree2.c
+
+$(BIN)Msg.exe: Msg.obj $(LIBNWGADET)
+	link $(LIBS) Msg.obj /OUT:$(BIN)Msg.exe
+Msg.obj: Msg.c $(H_NWGADGET)
+	cl /c $(CFLAGS) Msg.c
+
+$(BIN)GurdedElementNew.exe: GurdedElementNew.obj $(LIBNWGADET)
+	link $(LIBS) GurdedElementNew.obj /OUT:$(BIN)GurdedElementNew.exe
+GurdedElementNew.obj: GurdedElementNew.c $(H_NWGADGET)
+	cl /c $(CFLAGS) GurdedElementNew.c
+
+$(BIN)Cksum.exe: Cksum.obj $(LIBNWGADET)
+	link $(LIBS) Cksum.obj /OUT:$(BIN)Cksum.exe
+Cksum.obj: Cksum.c $(H_NWGADGET)
+	cl /c $(CFLAGS) Cksum.c
+
+$(BIN)DHash.exe: DHash.obj $(LIBNWGADET)
+	link $(LIBS) DHash.obj /OUT:$(BIN)DHash.exe
+DHash.obj: DHash.c $(H_NWGADGET)
+	cl /c $(CFLAGS) DHash.c
+
+$(BIN)FdEvent.exe: FdEvent.obj $(LIBNWGADET)
+	link $(LIBS) FdEvent.obj /OUT:$(BIN)FdEvent.exe
+FdEvent.obj: FdEvent.c $(H_NWGADGET)
+	cl /c $(CFLAGS) FdEvent.c
+
+$(BIN)LogPrint.exe: LogPrint.obj $(LIBNWGADET)
+	link $(LIBS) LogPrint.obj /OUT:$(BIN)LogPrint.exe
+LogPrint.obj: LogPrint.c $(H_NWGADGET)
+	cl /c $(CFLAGS) LogPrint.c
+
+$(BIN)LogFiles.exe: LogFiles.obj $(LIBNWGADET)
+	link $(LIBS) LogFiles.obj /OUT:$(BIN)LogFiles.exe
+LogFiles.obj: LogFiles.c $(H_NWGADGET)
+	cl /c $(CFLAGS) LogFiles.c
+
+clean:
+	del *.obj *.exe
+	del $(BIN)*.exe

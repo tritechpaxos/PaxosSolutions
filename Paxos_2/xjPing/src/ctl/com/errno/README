@@ -1,0 +1,46 @@
+	<< neo_errno について >>
+
+　neo_errno に関して、以下の関数を用意する。
+
+
+  #include "neo_errno.h"	( neo_system.h の中で include されている )
+
+
+  #define	NEO_ERRCLASS(n)	(((n)>>24)&0xff)
+    neo_errno のクラスを返す
+
+
+  int	unixerr2neo()
+    errno から、対応する neo_errno を返す
+    対応する番号が見つからないときは、０を返す
+
+
+  int	neoerr2unix()
+    neo_errno(M_UNIX) から、対応する errno を返す
+    対応する番号が見つからないときは、０を返す
+
+
+  char    *neo_errsym()
+    neo_errno から、対応するエラーメッセージへのポインタを返す
+    メッセージが見つからないときは、"unknow error(neo_errno)" を返す
+
+
+
+	<< エラーメッセージについて >>
+
+   エラーメッセージは、各クラスの neo_errno を定義したヘッダファイル( neo_errno.
+  h の中で include される neo_*_err.h )から、自動的に生成される。
+
+
+  例えば、neo_skl_err.h の中に、以下のように定義してある時、
+
+  #define E_SKL_INVARG    (M_SKL<<24|1)      /* Invalid argument */
+  #define E_SKL_NOMEM     (M_SKL<<24|2)
+
+    E_SKL_INVARG のエラーメッセージは、"Invalid argument(E_SKL_INVARG)" になり、
+    E_SKL_NOMEM のエラーメッセージは、"E_SKL_NOMEM(E_SKL_NOMEM)" になる。
+
+
+   エラー番号の登録／削除を行なったときは、src/ctl/com/errno で make を行なうこ
+  とで変更の結果が反映される。
+

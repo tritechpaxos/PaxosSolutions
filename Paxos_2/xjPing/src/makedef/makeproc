@@ -1,0 +1,132 @@
+################################################################################
+#
+# makeproc --- Common makefile of xjPing (On Memory DB) AP programs
+#
+# Copyright (C) 2011 triTech Inc. All Rights Reserved.
+#
+# See GPL-LICENSE.txt for copyright and license details.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version. 
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+
+INCDIRC	= $(TOP)/../h
+INCDIRA	= $(TOP)/../../../NWGadget/h
+
+LIBDIR	= $(TOP)/../lib
+LIB	= $(LIBDIR)/libneo.a -lpthread
+GADGETLIB	= $(TOP)/../../../NWGadget/lib/libNWGadget.a
+#CC	= gcc -D_NEO_BSD_
+CC	= gcc -Wall -g -fPIC
+DEF	= $(DEBUG) -D_FILE_OFFSET_BITS=64
+INC	= -I. -I$(INCDIRC) -I$(INCDIRA) -I$(TOP)/../../../NWGadget/h
+CFLAGS	= $(OPT) $(DEF) $(INC)
+
+OBJ	= $(SRC:.c=.o)
+CLEAN   = $(LOAD) $(OBJ) $(LLNS) $(TLOAD) $(Y) DBG.* core a.out
+
+.KEEP_STATE:
+
+.c.o:
+	$(CC) -c $(CFLAGS) $(LCFLGS) $<
+
+all: procc
+procc: $(LOAD)
+$(LOAD): $(OBJ) $(LIB) $(LCLIBS)
+	$(CC) -o $@ $(OBJ) $(LCLIBS) $(LIBFLGS) $(LIB) $(GADGETLIB)
+
+install:
+	if test -n "$(INSDIR)"; then install $(LOAD) $(INSDIR); fi
+
+clean: proclean
+proclean:
+	rm -f $(CLEAN)
+
+libclean:
+
+allclean: procallclean
+procallclean: proclean
+	if test -d SCCS; then sccs clean; rm -f ,*; fi
+
+liballclean:
+
+libc:
+
+#
+#	for test
+#
+TESTLIB	= $(LIBDIR)/tlibneo.a
+
+TLOAD	= t_$(LOAD)
+
+mtest:=	DEBUG	+= -DMTEST
+mtest: ttest
+
+ttest: $(TLOAD) 
+$(TLOAD): $(OBJ) $(TESTLIB) $(LCLIBS)
+	$(CC) -o $(TLOAD) $(OBJ) $(LCLIBS) $(TESTLIB) $(LIBFLGS)
+
+tinstall: $(INSDIR)/$(TLOAD)
+$(INSDIR)/$(TLOAD): $(TLOAD)
+	install $(TLOAD) $(INSDIR)/$(LOAD)
+
+#
+#	for lint
+#
+LINTLIB	= $(LIBDIR)/*.ln
+LLNS	= $(SRC:.c=.ln)
+.c.ln:
+	lint $(INC) $(DEF) $(LCFLGS) -hbi $<
+lint: $(LLNS)
+	lint *.ln $(LINTLIB)
+
+#
+#	for source file administration
+#
+catsrc:
+	cat $(SRC) >> $(CATSRC)
+
+wc: $(SRC) $(HEAD)
+	@for i in $(SRC) $(HEAD); do \
+		wc $$i; \
+		grep -v include $$i | /lib/cpp -P | \
+			grep -v "^[ 	]*$$"  |wc; \
+	done > wc.tmp
+	@echo ""
+	@echo ""
+	@pwd
+	@echo ""
+	@awk -f $(TOP)/makedef/wc.awk wc.tmp
+	@echo ""
+	@rm  wc.tmp
+
+tags:	TAGS
+
+TAGS:	$(SRC) $(HEAD)
+	ctags $(SRC) $(HEAD)
+
+index:	$(SRC)
+	/usr/ucb/ctags -x $(SRC) |\
+		/usr/bin/awk '{print $$4 "\t" $$5 "\t" $$6}' > $@
+
+count:
+	cntline $(CFLAGS) $(LCFLGS) $(SRC)
+
+create:
+	sccs create $(SRC) $(HEAD)
+
+get: $(SRC) $(HEAD)
+
+alledit:
+	sccs edit $(SRC) $(HEAD)
+

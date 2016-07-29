@@ -1,0 +1,12 @@
+#
+#	Makefile for XXXXXXX
+#
+
+TOP	= XXXXXX	### ホームディレクトリ
+
+SUBPROC = XXXXXX	### サブディレクトリ（ＡＰ）
+
+SUBLIBS = XXXXX		### サブディレクトリ（ライブラリ）
+
+### Do not change under this line.
+include	$(TOP)/makedef/makesubdir
