@@ -1,0 +1,10 @@
+.python-version
+*.pyc
+*~
+.*.swp
+*.egg-info
+*.log
+rasevth-logger.cfg
+pip-selfcheck.json
+build/
+dist/

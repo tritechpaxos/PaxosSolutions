@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>監視状態一覧</title>
+{% endblock title %}
+
+{% block content %}
+<div class="btn-toolbar" role="toolbar">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rascell_list') }}" class="btn btn-default btn-sm" role="button" data-toggle="tooltip" title="RASセル">RASセル一覧</a>
+</div>
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rasgrp_create') }}" class="btn btn-default btn-sm" role="button" data-toggle="tooltip" title="クラスタ登録">新規登録</a>
+</div>
+</div>
+<h2>監視状態一覧</h2>
+
+{% if groups |length > 0 %}
+{% for group in groups %}
+<div class="panel panel-default">
+<div class="panel-heading">
+クラスタ名: <a href="{{ url_for('rasgrp_detail', id=group.id) }}">
+{{ group.name }}</a>
+{#
+<div class="btn-toolbar" role="toolbar">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rasgrp_delete', id=group.id) }}" class="btn btn-sm btn-default" role="button" data-toggle="tooltip" title="クラスタ削除"><span class="glyphicon glyphicon-trash" aria-label="クラスタ削除"></span></a>
+</div>
+</div>
+#}
+</div>
+<table class="table" id="ras-target">
+<thead><tr><th>監視対象名</th><th>対象種別</th><th>状態（正常／総数）</th></tr></thead>
+<tbody>
+{% for tgt in group.targets %}
+<tr id="tgt-{{ tgt.id }}">
+<td><a href="{{ url_for('rastgt_detail', grpid=group.id, tgtid=tgt.id) }}">{{ tgt.name }}</a></td>
+<td>
+{% if tgt.type == 'cell' %}
+セル
+{% elif tgt.type == 'ras' %}
+監視クラスタ
+{% elif tgt.type == 'app' %}
+アプリケーション
+{% endif %}
+</td>
+<td id="tgt-status-{{ tgt.id }}"></td>
+</tr>
+{% endfor %}
+</tbody></table>
+</div>
+{% endfor %}
+{% else %}
+登録されている監視クラスタはありません。
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/ras/grp_show.js') }}">
+</script>
+{% endblock scripts %}

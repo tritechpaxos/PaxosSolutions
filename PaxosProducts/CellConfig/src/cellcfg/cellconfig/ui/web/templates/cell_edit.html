@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% from "_formhelpers.html" import render_field, render_checkbox %}
+    <h2>{% block heading %}{% endblock %}</h2>
+    <form method=post action="{% block action %}{% endblock %}">
+        <fieldset>
+            {% for field in form %}
+                {% if field.name != 'nodes' %}
+                {{ render_field(field) }}
+                {% endif %}
+            {% endfor %}
+            <div class="row">
+            {% for node in form['nodes'] %}
+            <div class="col-md-6 col-sm-12">
+            <div class="panel panel-default" id="nodes-{{ loop.index0 }}-pnl">
+            <div class="panel-heading">
+              <h3 class="panel-title">server {{ loop.index }}</h3>
+            </div>
+            <div class="panel-body">
+            {% for field in node %}
+              {% if field.name.endswith('-node_id') %}
+                {% block nodeid %}{% endblock %}
+              {% else %}
+                {{ render_field(field) }}
+              {% endif %}
+            {% endfor %}
+            </div>
+            </div>
+            </div>
+            {% endfor %}
+            </div>
+            <div>
+                {% block submit_button %}{% endblock %}
+            </div>
+        </fieldset>
+    </form>
+{% endblock content %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='scripts/parsley.js') }}"></script>
+    <script>$('form').parsley({ successClass: 'success', errorClass: 'error',
+        errors: {
+            classHandler: function (element) {
+                return $(element).parent().parent();
+            },
+            container: function (element) {
+                var $container = element.parent().find(".help-inline");
+                if ($container.length === 0) {
+                    $container = $("<span class='help-inline'></span>").insertAfter(element);
+                };
+                return $container;
+            },
+            errorsWrapper: '<ul class="unstyled"></ul>'
+        }});
+    </script>
+    <script src="{{ url_for('static', filename='scripts/cell_edit.js') }}?date=081300"></script>
+{% endblock scripts %}

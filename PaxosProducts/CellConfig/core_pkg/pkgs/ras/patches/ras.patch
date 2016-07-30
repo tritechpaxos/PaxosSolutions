@@ -1,0 +1,30 @@
+Index: Paxos_2/RAS/adm/RasEyeAdm.c
+===================================================================
+--- Paxos_2/RAS/adm/RasEyeAdm.c	(リビジョン 451)
++++ Paxos_2/RAS/adm/RasEyeAdm.c	(作業コピー)
+@@ -176,7 +176,7 @@
+ 						sizeof(Req.s_RasKey.rk_CellName) );
+ 	snprintf( Req.s_RasKey.rk_EventDir, 
+ 				sizeof(Req.s_RasKey.rk_EventDir), "RAS/%s", pEventDir );
+-	if( pMail )			strncpy( Req.s_Mail, pMail, sizeof(Req.s_Mail) );
++	if( pMail && strcmp("-", pMail))	strncpy( Req.s_Mail, pMail, sizeof(Req.s_Mail) );
+ 	if( pAutonomic )	strncpy( Req.s_Autonomic, pAutonomic, 
+ 										sizeof(Req.s_Autonomic) );
+ 
+Index: Paxos_2/RAS/src/RasEye.c
+===================================================================
+--- Paxos_2/RAS/src/RasEye.c	(リビジョン 451)
++++ Paxos_2/RAS/src/RasEye.c	(作業コピー)
+@@ -180,9 +180,10 @@
+ 	if( DIR_ENTRY_DELETE == pE->ed_Mode
+ 			&& pRas->r_Autonomic[0] != 0 ) {
+ 
+-		sprintf( buff, "%s %s -i %s -r %s -s %u -m %d >/dev/null 2>&1",
++		sprintf( buff, "%s %s -i %s -r %s -s %u -m %d -p %s -t %lu -C %s -I %s >/dev/null 2>&1",
+ 			pRas->r_Autonomic, Cell, pE->ed_Entry, pRas->r_RasKey.rk_CellName,
+-			pE->ed_EventSeq, pE->ed_Mode );
++			pE->ed_EventSeq, pE->ed_Mode, pE->ed_Name, pE->ed_Time,
++			RasEyeCtrl.rmc_Cluster, RasEyeCtrl.rmc_Id );
+ 		LOG(pLog, LogINF, "Autonomic[%s]", buff );
+ 		Ret = system( buff );
+ 		if( Ret ) {

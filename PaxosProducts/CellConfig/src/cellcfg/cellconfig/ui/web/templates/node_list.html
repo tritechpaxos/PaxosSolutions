@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>サーバ一覧</title>
+{% endblock title %}
+{% block content %}
+<div class="btn-toolbar" role="toolbar">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('node_create') }}" class="btn btn-sm btn-default" role="button">新規登録</a>
+</div></div>
+
+<h2>サーバ一覧</h2>
+<div id="messages">
+</div>
+<table class="table">
+<thead>
+<tr><th>サーバ</th><th>OS</th><th>arch</th><th></th></tr>
+</thead>
+<tbody>
+{% for node in nodes %}
+<tr>
+<td id="node-label-{{ node.id }}">{{ node }}</td>
+<td id="node-os_str-{{ node.id }}">{{ node.os_str() }}</td>
+<td id="node-os_str-{{ node.id }}">{{ node.machine_str() }}</td>
+<td>
+<div class="btn-group">
+<a href="{{ url_for('node_update', id=node.id) }}"
+   class="btn btn-default btn-sm" role="button" data-toggle="tooltip" title="サーバ編集">編集</a>
+<a href="{{ url_for('node_delete', id=node.id) }}"
+   class="btn btn-default btn-sm
+{% if node.cells|length > 0 %}disabled{% endif %}"
+ role="button" data-toggle="tooltip" title="サーバ削除">削除</a>
+</div>
+<div class="btn-group">
+<button id="btn-deploy-{{ node.id }}" class="btn btn-default btn-sm"
+	role="button">バイナリ配布</button>
+</div>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/node_list.js') }}">
+</script>
+{% endblock scripts %}

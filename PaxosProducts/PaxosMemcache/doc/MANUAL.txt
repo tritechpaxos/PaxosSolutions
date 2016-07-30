@@ -1,0 +1,764 @@
+[1.はじめに]
+この文書では管理コマンドの使用方法について記す。
+
+[2.動作モード]
+管理コマンドは起動方法の違いによりインタラクティブモードとコマンドライ
+ンモードの２つのモードがある。
+
+管理コマンド $HOME/bin/paxos を引数なしで実行するとインタラクティブモー
+ドで起動される。このモードでは(paxos)というプロンプトが表示され各プロ
+ンプト表示毎に一つの操作コマンドを実行することができる。
+
+例:---------------------------------------------
+ $ paxos
+ (paxos) show memcache
+ ---
+ id: 0
+ css: css0
+ name space: space0
+ pair:
+     - ["127.0.0.1", 11211, "192.168.1.200", 11211]
+ (paxos) help start
+ usage:  start [-h] {memcache,css} ...
+ 
+ positional arguments:
+   {memcache,css}
+     memcache      start the PAXOS memcache
+     css           start the PAXOS CSS
+ 
+ optional arguments:
+   -h, --help      show this help message and exit
+ (paxos) quit
+ $
+例:---------------------------------------------
+
+インタラクティブモードの管理コマンドを終了するには quit または Ctrl-D
+をキー入力すればよい。またhelpコマンド用いることで各操作コマンドの簡単
+な使用方法が表示される。
+
+管理コマンド$HOME/bin/paxos の引数に操作コマンドを指定して起動するとコ
+マンドラインモードで起動される。このモードでは指定された一つの操作コマ
+ンドを実行して管理コマンドは終了する。
+
+例:---------------------------------------------
+ $ paxos show memcache
+ ---
+ id: 0
+ css: css0
+ name space: space0
+ pair:
+     - ["127.0.0.1", 11211, "192.168.1.200", 11211]
+ $
+例:---------------------------------------------
+
+管理コマンドでは他ホストに対して操作を行うことがある。このような操作
+をおこなう場合、管理コマンドはssh経由で操作を行う。他ホストにsshでロ
+グインする際にパスワードが必要な場合は、パスワード入力を促すプロンプ
+トが表示される場合がある。パスワード入力は必要となった際にホスト毎に
+１度だけ要求される。
+
+[3.登録コマンド]
+(使用方法)
+register {memcache,pair,css,host} ...
+
+（説明）
+登録処理を行う。登録対象となる種別を最初の引数に指定する。指定できる種
+別は以下の通り。
+
+  memcache	PAXOS memcacheの登録
+  pair		PAXOS memcache/memcachedペアの登録
+  css		CSSの登録
+  host		ホスト名の登録
+
+各種別毎の詳細については以下の節に記す。
+
+[3-1.PAXOS memcache 登録コマンド]
+（使用方法）
+register memcache --css cell [--id id] [--name-space space]
+              [--max-cache-item max] [--disable-checksum | --enable-checksum]
+              [--checksum-interval sec] [--expire-interval sec] [--worker num]
+ 
+（引数）
+  --css cell, -c cell			PAXOS CSSのセル名（必須）
+  --id id, -i id			PAXOS memcacheのID番号
+  --name-space space, -N space		PAXOS memcacheの名前空間
+  --max-cache-item max, -I max		キャッシュ化アイテム最大数
+  --disable-checksum, -s		チェックサムの無効化
+  --enable-checksum, -S			チェックサムの有効化
+  --checksum-interval sec, -C sec	チェックサムインターバル
+  --expire-interval sec, -E sec		エクスパイアチェックインターバル
+  --worker num, -W num			ワーカー数
+
+（説明）
+　　PAXOS memcache インスタンスを登録する。PAXOS memcacheから使用する
+    CSS名を--css引数に指定する。未登録のCSS名を--cssに指定した場合は
+    エラーとなる。
+    PAXOS memcache インスタンスは他と区別するためのIDが登録時に割り当
+    てられる。IDの値は非負の整数値で0から順に若番が割り当てられる。ただ
+    し--idオプションでIDの値が指定された場合はその番号が割り当てられる。
+    --idをでIDの値を指定した場合、次に割り当てられるIDは--idで指定した
+    次の番号からとなる。--idに指定した値に既に割り当て済の値が指定された
+    場合、登録処理はエラーとなる。
+    割り当てられたIDはPAXOS memcacheの登録削除、変更等の操作を行う際に
+    PAXOS memcache インスタンスを特定するのに利用する。
+
+（使用例）
+    register memcache --css css0
+
+[3-2.PAXOS memcache/memcachedペアの登録コマンド]
+（使用方法）
+register pair --id id --server-address address [--server-port port]
+              [--client-address address] [--client-port port]
+
+（引数）
+  --id id, -i id			PAXOS memcacheのID番号（必須）
+  --server-address address, -a address	memcachedサーバのIPv4アドレス（必須）
+  --server-port port, -p port		memcachedサーバのポート番号
+  --client-address address, -A address	クライアントに公開するIPv4アドレス
+  --client-port port, -P port		クライアントに公開するポート番号
+
+（説明）
+　　PAXOS memcache/memcachedペアを登録する。登録対象のPAXOS memcache
+    インスタンスのIDを--id引数に指定する。未登録のIDを指定した場合は
+    エラーとなる。
+    --server-addressにはPAXOS memcacheが接続するmemcachedのIPアドレス
+    を指定する。--server-portにはmemcachedのポート番号を指定する。
+    省略した場合はデフォルト値 11211 が使用される。--client-addressには
+    PAXOS memcacheが待ち受けるIPアドレスを指定する。省略した場合にはデ
+    フォルト値127.0.0.1が使用される。--client-portにはPAXOS memcacheが
+    ポート番号を指定する。省略した場合にはデフォルト値 11211 が使用され
+    る。待ち受けアドレス、ポート番号が既に登録済の値と重複した場合はエ
+    ラーとなる。
+
+    実行中のPAXOS memcacheインスタンスに対してペアの登録を行っても、変
+    更内容は即座には反映されない。実行中のインスタンスに対して変更を反
+    映するには apply pair コマンド（13-1.参照)を用いる必要がある。
+
+（使用例）
+    register pair --id 0 --server-address 192.168.1.200
+    register pair --id 0 -a 192.168.1.201 -P 11212
+
+[3-3.CSS登録コマンド]
+（使用方法）
+register css --name cell udp_addr0:port0 tcp_addr0:port0
+             udp_addr1:port1 tcp_addr1:port1 udp_addr2:port2 tcp_addr2:port2
+
+（引数）
+  --name cell, -n cell		CSSのセル名
+  udp_addr0:port0		CSSサーバ#0 UDPのIPアドレス、ポート番号
+  tcp_addr0:port0		CSSサーバ#0 TCPのIPアドレス、ポート番号
+  udp_addr1:port1		CSSサーバ#1 UDPのIPアドレス、ポート番号
+  tcp_addr1:port1		CSSサーバ#1 TCPのIPアドレス、ポート番号
+  udp_addr2:port2		CSSサーバ#2 UDPのIPアドレス、ポート番号
+  tcp_addr2:port2		CSSサーバ#2 TCPのIPアドレス、ポート番号
+
+（説明）
+　　CSSを登録する。--nameにCSS名を指定する。既に登録されているCSS名を
+    指定した場合、エラーとなる。
+
+    tcp_add10, tcp_addr1, tcp_addr2 に指定したホストが未登録だった場合、
+    自動的にホストの登録処理が行われる。その場合ホストのユーザ名は
+    デフォルト値の "paxos" となる。また自動的に登録されたホストは指定
+    されたCSS名のグループに属する所属する。tcp_add10, tcp_addr1,
+    tcp_addr2 に指定したホストが既に登録されていた場合、そのホストの
+    登録情報は何も変更されない。
+
+    udp_addr, tcp_addr にはホスト名よりもIPアドレスを指定することを推
+    奨する。
+
+（使用例）
+    register css --name css0 192.168.1.100:24111 192.168.1.100:24111  192.168.1.101:24111 192.168.1.101:24111  192.168.1.102:24111 192.168.1.102:24111
+
+[3-4.ホスト登録コマンド]
+（使用方法）
+register host [--user user] [--port port] [--group grp0[:grp1:...]]
+              [--use-ssh-config] hostname
+
+（引数）
+  --user user, -u user				ユーザ名
+  --port port, -p port				sshサーバのポート番号
+  --group grp0[:grp1:...] , -g grp0[:grp1:...]	このホストが属するグループ名
+  --use-ssh-config				ssh_configの設定を利用する
+  hostname					ホスト名
+
+（説明）
+　　ホスト名を登録する。hostnameにホスト名を指定する。既に登録されてい
+    るホスト名を指定した場合、エラーとなる。
+    --userにはsshでログインするときのユーザ名を指定する。省略した場合
+    はデフォルト値 paxos が使用される。--portにはsshの待ち受けポート番
+    号を指定する。省略した場合はデフォルト値 22 が使用される。
+    --groupにはホスト名が所属するグループを指定する。グループ名はコロ
+    ン(:)で区切ることで複数指定することができる。グループはshow, list,
+    deployコマンドで対象を指定する際に使用することができる。
+    --use-ssh-configオプションを指定した場合 $HOMNE/.ssh/config から設
+    定を読み込みssh接続を行う。ホスト名等$HOMNE/.ssh/configに設定した
+    名前で登録したい場合は、このオプションを有効にする必要がある。
+
+（使用例）
+    register host --user paxos 192.168.1.10
+    register host 192.168.1.11
+
+[4.登録削除コマンド]
+(使用方法)
+unregister {memcache,pair,css,host} ...
+
+（説明）
+登録削除処理を行う。削除対象となる種別を最初の引数に指定する。指定できる種
+別は以下の通り。
+
+  memcache	PAXOS memcacheの削除
+  pair		PAXOS memcache/memcachedペアの削除
+  css		CSSの削除
+  host		ホストの削除
+
+[4-1.PAXOS memcache登録削除コマンド]
+（使用方法）
+unregister memcache --id id
+
+（引数）
+  --id id, -i id  	PAXOS memcacheのID番号
+
+（説明）
+　　PAXOS memcache インスタンスを登録削除する。対象とするインスタンス
+    の ID を --id で指定する。登録されていない ID を指定した場合はエ
+    ラーとなる。
+    実行中のPAXOS memcacheのインスタンスが削除対象に指定された場合は
+    エラーとなる。
+
+（使用例）
+    unregister memcache --id 0
+
+[4-2.PAXOS memcache/memcachedペア登録削除コマンド]
+（使用方法）
+unregister pair --id id --server-address address [--server-port port]
+                [--client-address address] [--client-port port]
+
+（引数）
+  --id id, -i id        			PAXOS memcacheのID番号
+  --server-address address, -a address          memcachedサーバのIPv4アドレス
+  --server-port port, -p port                   memcachedサーバのポート番号
+  --client-address address, -A address          クライアントに公開するIPv4アドレス
+  --client-port port, -P port                   クライアントに公開するポート番号
+
+（説明）
+　　PAXOS memcache/memcachedペアを登録削除する。削除対象のPAXOS
+    memcacheインスタンスのIDを--id引数に指定する。未登録のIDを
+    指定した場合はエラーとなる。
+    削除対象とするPAXOS memcache/memcachedペアを特定するための条件を
+    --server-address,--server-port,--client-address,--client-portの４
+    つのオプションで指定する。ただし--server-port,--client-address,
+    --client-portは省略可能である。省略された場合は、それぞれのデフォ
+    ルト値 11211, 127.0.0.1, 11211 が指定されたものとして削除処理を行
+    う。
+
+    実行中のPAXOS memcacheインスタンスに対してペアの削除を行っても、変
+    更内容は即座には反映されない。実行中のインスタンスに対して変更を反
+    映するには apply pair コマンド（13-1.参照)を用いる必要がある。
+
+（使用例）
+    unregister pair --id 0 --server-address 192.168.1.200
+    unregister pair --id 0 -a 192.168.1.201 -P 11212
+
+[4-3.CSS登録削除コマンド]
+（使用方法）
+unregister css --name cell
+
+（引数）
+  --name cell, -n cell  PAXOS CSSのセル名
+
+（説明）
+　　CSSを登録削除する。削除対象のCSS名を--nameオプションで指定する。未
+    登録のCSS名を指定した場合はエラーとなる。
+    実行中のCSSが削除対象に指定された場合はエラーとなる。また、PAXOS
+    memcacheで参照中のCSSが削除対象に指定された場合はエラーとなる。
+
+（使用例）
+    unregister css --name css0
+
+[4-4.ホスト登録削除コマンド]
+（使用方法）
+unregister host hostname
+
+（引数）
+  hostname    ホスト名
+
+（説明）
+　　ホスト名を登録削除する。hostnameに削除対象のホスト名を指定する。
+    CSSのサーバとして登録されているホストが削除対象に指定された場合は
+    エラーとなる。
+
+（使用例）
+    unregister host 192.168.1.10
+
+[5.登録内容変更コマンド]
+(使用方法)
+modify {memcache,host} ...
+
+（説明）
+登録内容変更処理を行う。変更対象となる種別を最初の引数に指定する。指定できる種
+別は以下の通り。
+
+  memcache	PAXOS memcacheの内容変更
+  host		ホストの内容変更
+
+[5-1.PAXOS memcache登録内容変更コマンド]
+（使用方法）
+modify memcache --id id [--css cell] [--name-space space]
+                [--max-cache-item max] [--disable-checksum | --enable-checksum]
+                [--checksum-interval sec] [--expire-interval sec] [--worker num]
+
+（引数）
+  --id id, -i id			PAXOS memcacheのID番号（必須）
+  --css cell, -c cell			PAXOS CSSのセル名
+  --name-space space, -N space		PAXOS memcacheの名前空間
+  --max-cache-item max, -I max		キャッシュ化アイテム最大数
+  --disable-checksum, -s		チェックサムの無効化
+  --enable-checksum, -S			チェックサムの有効化
+  --checksum-interval sec, -C sec	チェックサムインターバル
+  --expire-interval sec, -E sec		エクスパイアチェックインターバル
+  --worker num, -W num			ワーカー数
+
+（説明）
+　　PAXOS memcache インスタンスの登録内容を変更する。変更対象インスタ
+    ンスのIDを--idに指定する。値を変更したい項目に対応したオプション
+    を指定する。
+
+    登録内容の変更はPAXOS memcacheの実行中も可能である。しかし登録内
+    容の変更は実行中のインスタンスに影響を与えない。変更内容が反映さ
+    れるのは次回のPAXOS memcacheの起動時である。
+
+（使用例）
+    modify memcache --id 0 --css css1
+
+[5-2.ホスト登録内容変更コマンド]
+（使用方法）
+modify host [--user user] [--port port] [--group grp0[:grp1:...]]
+            [--use-ssh-config | --not-use-ssh-config] hostname
+
+（引数）
+  --user user, -u user				ユーザ名
+  --port port, -p port				sshサーバのポート番号
+  --group grp0[:grp1:...] , -g grp0[:grp1:...]	このホストが属するグループ名
+  --use-ssh-config				ssh_configの設定を利用する
+  --not-use-ssh-config				ssh_configの設定を利用しない
+  hostname					ホスト名
+
+（説明）
+　　ホストの登録内容を変更する。変更対象のホスト名をhostnameに指定する。
+    値を変更したい項目に対応したオプションを指定する。
+
+（使用例）
+    modify host --user pmemcache 192.168.1.10
+    modify host --port 10022 192.168.1.11
+
+[6.登録内容表示コマンド]
+(使用方法)
+show {memcache,css,host} ...
+
+（説明）
+登録内容の表示を行う。表示対象となる種別を最初の引数に指定する。指定で
+きる種別は以下の通り。
+
+  memcache	PAXOS memcache
+  css		CSS
+  host		ホスト
+
+[6-1.PAXOS memcache登録内容表示コマンド]
+（使用方法）
+show memcache [--id id] [--css cell] [--name-space space]
+
+（引数）
+  --id id, -i id		PAXOS memcacheのID番号
+  --css cell, -c cell		PAXOS CSSのセル名
+  --name-space space, -N space	PAXOS memcacheの名前空間
+
+（説明）
+　　PAXOS memcache の登録内容を表示する。オプションを指定しない場合、
+    登録されている全てのPAXOS memcache の登録内容を表示する。オプショ
+    ンを指定した場合は、指定された条件に合致するPAXOS memcache の登録
+    内容を表示する。
+
+（使用例）
+    show memcache
+    show memcache --id 0
+
+[6-2.CSS登録内容表示コマンド]
+（使用方法）
+show css [--name cell]
+
+（引数）
+  --name cell, -n cell  PAXOS CSSのセル名
+
+（説明）
+　　CSSの登録内容を表示する。オプションを指定しない場合、登録されてい
+    る全てのCSSの登録内容を表示する。--nameオプションを指定した場合は、
+    指定されたセル名のCSSの登録内容を表示する。
+
+（使用例）
+    show css
+    show css --name css0
+
+[6-3.ホスト登録内容表示コマンド]
+（使用方法）
+show host [--user user] [--port port] [--group grp0[:grp1:...]]
+          [hostname [hostname ...]]
+
+（引数）
+  --user user, -u user				ユーザ名
+  --port port, -p port				sshサーバのポート番号
+  --group grp0[:grp1:...] , -g grp0[:grp1:...]	このホストが属するグループ名
+  hostname              			ホスト名
+
+（説明）
+　　ホストの登録内容を表示する。オプションを指定しない場合、登録されて
+    いる全てのホストの登録内容を表示する。オプションを指定した場合は、
+    指定された条件に合致するホストの登録内容を表示する。
+
+（使用例）
+    show host
+    show host --group css
+    show 192.168.1.10 192.168.1.11 192.168.1.12
+
+[7.一覧表示コマンド]
+(使用方法)
+list {memcache,css,host} ...
+
+（説明）
+登録アイテムの一覧表示を行う。表示対象となる種別を最初の引数に指定する。
+指定できる種別は以下の通り。
+
+  memcache	PAXOS memcache
+  css		CSS
+  host		ホスト
+
+[7-1.PAXOS memcache一覧表示コマンド]
+（使用方法）
+list memcache
+
+（引数）
+  なし
+
+（説明）
+　　登録されている全てのPAXOS memcacheインスタンスのIDを表示する。
+
+（使用例）
+    list memcache
+
+[7-2.CSS一覧表示コマンド]
+（使用方法）
+list css
+
+（引数）
+  なし
+
+（説明）
+　　登録されている全てのCSSのセル名を表示する。
+
+（使用例）
+    list css
+
+[7-3.ホスト一覧表示コマンド]
+（使用方法）
+list host [--user user] [--port port] [--group grp0[:grp1:...]]
+
+（引数）
+  --user user, -u user				ユーザ名
+  --port port, -p port				sshサーバのポート番号
+  --group grp0[:grp1:...] , -g grp0[:grp1:...]	ホストが属するグループ名
+
+（説明）
+　　登録されているホスト名を表示する。オプションが指定された場合は、
+    条件に合致するホスト名だけを表示する。
+
+（使用例）
+    list host
+    list host -g css0
+
+[8.起動コマンド]
+(使用方法)
+start {memcache,css} ...
+
+（説明）
+起動処理を行う。起動対象となる種別を最初の引数に指定する。指定できる種
+別は以下の通り。
+
+  memcache	PAXOS memcache
+  css		CSS
+
+[8-1.PAXOS memcache起動コマンド]
+（使用方法）
+start memcache [--id id]
+
+（引数）
+  --id id, -i id  PAXOS memcacheのID番号
+
+（説明）
+　　PAXOS memcache を起動する。--idオプションが指定された場合は、指
+    定されたIDのインスタンスだけを起動する。--idオプションが指定され
+    ていない場合は、登録されている全てのPAXOS memcacheを起動する。
+    起動したPAXOS mecacheのログ出力はsyslogに送られる。
+
+    管理コマンドが起動するのはローカルのPAXOS memcacheのみである。複
+    数のホストで起動するには、ホスト毎に起動の操作を行う必要がある。
+
+（使用例）
+    start memcache
+
+[8-2.CSS起動コマンド]
+start css [--name cell] [--initialize]
+
+（引数）
+  --name cell, -n cell  PAXOS CSSのセル名
+  --initialize          CSS環境を初期化した後に起動する
+
+（説明）
+　　CSSを起動する。--nameオプションが指定された場合は、指定されたセル
+    名のCSSのみを起動する。--nameオプションが指定されていない場合は、
+    登録されている全てのCSSを起動する。起動したPAXOS mecacheのログ出
+    力はsyslogに送られる。
+
+    管理コマンドではCSSサーバが他ホストにある場合はssh経由で操作を行
+    う。他ホストにsshでログインする際にパスワードが必要な場合は、パス
+    ワード入力を促すプロンプトが表示される場合がある。
+
+    操作誤り等によってCSSサーバのデータファイルが破壊された場合にCSS
+    サーバのファイルを初期化したいことがある。その場合は--initialize
+    オプションを指定することでサーバのファイルを初期化したのちCSSサー
+    バを起動することができる。過去のデータが失われるので操作は注意し
+    て行うこと。
+
+（使用例）
+    start css
+
+[9.停止コマンド]
+(使用方法)
+stop {memcache,css} ...
+
+（説明）
+停止処理を行う。停止対象となる種別を最初の引数に指定する。指定できる種
+別は以下の通り。
+
+  memcache	PAXOS memcache
+  css		CSS
+
+[9-1.PAXOS memcache停止コマンド]
+（使用方法）
+stop memcache [--id id] [--force]
+
+（引数）
+  --id id, -i id  PAXOS memcacheのID番号
+  --force         プロセスの強制的な停止
+
+（説明）
+　　PAXOS memcacheを停止する。--idオプションが指定された場合は、指
+    定されたIDのインスタンスだけを停止する。--idオプションが指定され
+    ていない場合は、登録されている全てのPAXOS memcacheを停止する。
+
+    管理コマンドが起動するのはローカルのPAXOS memcacheのみである。複
+    数のホストで停止するには、ホスト毎に停止の操作を行う必要がある。
+
+    何らかの理由によりPAXOS memcacheのインスタンスが不安定な状態とな
+    り停止操作を受け付けない場合がある。そのような場合に強制的にプロ
+    セスを停止したい場合--forceオプションを指定することで強制停止が
+    行える。
+
+（使用例）
+    stop memcache
+
+[9-2.CSS停止コマンド]
+（使用方法）
+stop css [--name cell] [--force]
+
+
+（引数）
+  --name cell, -n cell  PAXOS CSSのセル名
+  --force               強制的な停止
+
+（説明）
+　　CSSを停止する。--nameオプションが指定された場合は、指定されたセル
+    名のCSSのみを停止する。--nameオプションが指定されていない場合は、
+    登録されている全てのCSSを停止する。
+
+    停止対象のCSSが動作中のPAXOS memcacheから使用されていた場合、CSS
+    の停止操作はエラーとなる。--forceオプションを指定するとPAXOS
+    memcache使用中のCSSを強制的に停止することが出来る。
+
+（使用例）
+    stop css
+
+[10.状態表示コマンド]
+(使用方法)
+status {memcache,css} ...
+
+（説明）
+サーバの状態を表示する。表示対象となる種別を最初の引数に指定する。指定
+できる種別は以下の通り。
+
+  memcache	PAXOS memcache
+  css		CSS
+
+[10-1.PAXOS memcache状態表示コマンド]
+（使用方法）
+status memcache [--id id] [--css cell] [--name-space space] [--short | --quiet]
+
+（引数）
+  --id id, -i id			PAXOS memcacheのID番号
+  --css cell, -c cell			PAXOS CSSのセル名
+  --name-space space, -N space		PAXOS memcacheの名前空間
+  --short, -s				簡易表示
+  --quiet, -q				表示なし
+
+（説明）
+　　PAXOS memcacheの動作状況を表示する。--id, --css, --name-spaceの
+    各オプションが指定された場合は、指定された条件に合致するインスタ
+    ンスの状態を表示する。条件に関する指定がない場合は登録されている
+    全てのインスタンスに関する状態を表示する。
+
+    --shortを指定した場合は簡易表示となる。行毎にPAXOS memcacheインス
+    タンスのIDと動作状況を表示する。
+
+    --quietを指定した場合は表示なしとなり、動作状態を管理コマンドの終
+    了コードで通知する。登録されている全てのPAXOS memcacheが動作中の
+    場合は正常終了(0)となり、動作していないものがある場合は管理コマン
+    ドの終了コードで1を返す。
+
+（使用例）
+    status memcache --id 0
+    status memcache --short
+
+[10-2.CSS状態表示コマンド]
+（使用方法）
+status css [--name cell] [--short | --quiet | --long]
+
+（引数）
+  --name cell, -n cell			PAXOS CSSのセル名
+  --short, -s				簡易表示
+  --quiet, -q				表示なし
+  --long, -l				冗長表示
+
+（説明）
+　　CSSの動作状況を表示する。--nameオプションが指定された場合は、指定
+    されたセル名に一致するCSSの動作状態を表示する。--nameオプションの
+    指定がない場合は登録されている全てのCSSの状態を表示する。
+
+    --longを指定した場合は冗長表示となる。通常の表示に加えて、クライア
+    ント一覧、サーバプロセスのPID等の情報が表示される。
+
+    --shortを指定した場合は簡易表示となる。行毎にCSSのセル名と動作状況
+    を表示する。
+
+    --quietを指定した場合は表示なしとなり、動作状態を管理コマンドの終
+    了コードで通知する。登録されている全てのCSSが動作中の場合は正常終
+    了(0)となり、動作していないものがある場合は管理コマンドの終了コー
+    ドで1を返す。
+
+（使用例）
+    status css
+    status css --long --name css0
+
+[11.設定配布コマンド]
+(使用方法)
+deploy [--group grp0[:grp1:...]] [--clean] [hostname [hostname ...]]
+
+（引数）
+  --group grp0[:grp1:...] , -g grp0[:grp1:...]	ホストが属するグループ名
+  --clean					古い設定ファイルを削除する
+  hostname					ホスト名
+
+（説明）
+　　PAXOS memcache, CSSの設定ファイルを各ホストに配布する。配布対象と
+    なるホストは register hostコマンドで登録された全てのホストとなる。
+    ただし --groupオプションを指定した場合やホスト名を指定した場合は、
+    配布対象を指定されたグループに属するホストや、指定されたホストのみ
+    に限定する。
+
+    CSSに関する設定はセル毎に一つのファイルに保存している。そのため登録
+    削除されたCSSに関する設定ファイルがリモートホストに残ってしまう場合
+    がある。既に削除されたCSSに関する設定ファイルをリモートホストから削
+    除するには--cleanオプションを指定すればよい。ただし--cleanオプション
+    を指定した場合、リモートホストの$HOME/etc/cell/以下にあるCSS設定ファ
+    イル以外のファイルが全て削除されてしまうので注意が必要である。
+
+（使用例）
+    deploy
+    deploy -g css0
+
+[12.設定取得コマンド]
+(使用方法)
+fetch [--use-ssh-config] hostname
+
+（引数）
+  --use-ssh-config  ssh_configの設定を利用する
+  hostname          ホスト名
+
+（説明）
+　　PAXOS memcache, CSSの設定ファイルを指定したホストから取得して、ロー
+    カルホストの設定ファイルを置き換える。PAXOS memcache, CSSの動作状況
+    如何に関わらずローカルホストの設定を変更するので注意が必要である。
+
+（使用例）
+    fetch 192.168.1.10
+
+[13.変更適用コマンド]
+(使用方法)
+apply pair ...
+
+（説明）
+動作中のサーバに変更内容を適用する。適用対象となる種別を最初の引数に指
+定する。指定できる種別は以下の通り。
+
+  pair		PAXOS memcache/memcachedペア
+
+[13-1.PAXOS memcache/memcachedペア変更適用コマンド]
+（使用方法）
+apply pair [--id id]
+
+（引数）
+  --id id, -i id  PAXOS memcacheのID番号
+
+（説明）
+    実行中のPAXOS memcacheのPAXOS memcache/memcachedペアの状態を登録
+    されたPAXOS memcache/memcachedペアに同じとなるよう設定を行う。
+    通常PAXOS memcache/memcachedペアの状態はPAXOS memcacheを起動したと
+    きに登録されているペアと同じになっている。PAXOS memcache起動後に
+    ペアの登録、削除を行っても、実行中のPAXOS memcacheには影響を与え
+    ない。実行中のPAXOS memcacheにペア設定を反映するには apply pair
+    コマンドを実行する必要がある。
+
+    --idオプションを指定した場合は、指定されたIDのPAXOS memcacheにつ
+    いてのみペア変更の適用を行う。--idの指定がない場合は全てのPAXOS
+    memcacheについてペア変更の適用を行う。
+
+    停止中のPAXOS memcacheに対してapply pairを実行した場合、何も行わ
+    ない。
+
+（使用例）
+    apply pair
+
+[14.CSSメンバ交代コマンド]
+(使用方法)
+replace --name cell --no no --address udp_addr:port tcp_addr:port [--force]
+
+（引数）
+  --name cell, -n cell  PAXOS CSSのセル名
+  --no no, -N no        置き換え対象とするサーバ番号
+  --address udp_addr:port tcp_addr:port, -a udp_addr:port tcp_addr:port
+                        置き換え先のサーバアドレス
+  --force
+
+（説明）
+    CSSを構成する３台のサーバのうちの１台を置き換える。置き換え対象に
+    指定するサーバには既にCSS/PAXOS memcacheが適切にインストールされて
+    いなければならない。
+
+    CSSが実行中に置き換え処理を行う場合、CSSの動作を担保するため３台全
+    てのCSSサーバが正常に実行中である必要がある。１台でも実行中でない場
+    合はreplaceコマンドはエラーとなる。３台全てのサーバが停止している
+    場合はreplaceコマンドを実行することができる。
+
+    ３台のCSSサーバのうち１台でもerror状態のサーバがあるとreplaceコマン
+    ドはエラーとなり置き換え処理は実行されない。error状態のサーバがある
+    場合に強制的にメンバ交代を行う場合は--forceオプションを指定する。
+
+（使用例）
+    replace --name css0 --no 0 --address 192.168.1.109:24222 192.168.1.109:24222

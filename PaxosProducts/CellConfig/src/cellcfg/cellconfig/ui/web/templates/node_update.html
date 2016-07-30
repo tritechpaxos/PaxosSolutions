@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>サーバ登録内容変更</title>
+{% endblock title %}
+{% block content %}
+    <h2>サーバ登録内容変更</h2>
+    {% from "_formhelpers.html" import render_field, render_checkbox %}
+    <form method=post action="{{ url_for('node_detail', id=id) }}">
+        <fieldset>
+            {% for field in form %}
+                {{ render_field(field) }}
+            {% endfor %}
+            <button type="submit" class="btn btn-default">変更</button>
+            <input type=hidden name=id id=id value={{ id }}>
+            <input type=hidden name=operation id=operation value=Update>
+        </fieldset>
+    </form>
+{% endblock content %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='scripts/parsley.js') }}"></script>
+    <script>$('form').parsley({ successClass: 'success', errorClass: 'error',
+        errors: {
+            classHandler: function (element) {
+                return $(element).parent().parent();
+            },
+            container: function (element) {
+                var $container = element.parent().find(".help-inline");
+                if ($container.length === 0) {
+                    $container = $("<span class='help-inline'></span>").insertAfter(element);
+                };
+                return $container;
+            },
+            errorsWrapper: '<ul class="unstyled"></ul>'
+        }});
+    </script>
+{% endblock scripts %}

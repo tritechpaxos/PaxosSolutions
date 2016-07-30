@@ -1,0 +1,27 @@
+以下のコマンドを実行することで work/dist/ に Paxos core のアーカイブと
+CMDBクライアントライブラリのアーカイブが作成される。
+
+  bash ./build.sh
+
+Paxos coreのアーカイブは paxos-core.0.1.1.ubuntu-14.x86_64.tar.gz の
+ようにディストリビューション名でファイルが作成される。CMDBクライアン
+トライブラリのアーカイブは、 cmdb_client-dev.tar.gz という名前のファ
+イルが作成される。
+
+作成されたファイルは Paxos core のアーカイブファイルは
+~/PAXOS/manager/web/dist/linux/ に配置することでセル管理がPaxos coreの
+配備に利用できるようになる。
+
+
+また、以下のパッケージに類するものがインストールされていることを前提と
+している。
+
+gcc
+git
+make
+bison
+patch
+readline-devel(libreadline-dev)
+libevent-devel(libevent-dev)
+openssl-devel(libssl-dev)
+python-devel(python-dev)

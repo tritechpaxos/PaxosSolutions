@@ -1,0 +1,223 @@
+node:
+  - &node01 # [0]
+    hostname:  vv-vm1
+    user:      pmemcache
+    password:  paxos00
+    ssh_alias: vm01
+  - &node02 # [1]
+    hostname:  vv-vm2
+    user:      pmemcache
+    password:  paxos00
+    ssh_alias: vm02
+  - &node03 # [2]
+    hostname:  vv-vm3
+    user:      pmemcache
+    password:  paxos00
+  - &node04 # [3]
+    hostname:  vv-vm4
+    user:      pmemcache
+    password:  paxos00
+  - &node05 # [4]
+    hostname:  vv-vm5
+    user:      pmemcache
+    password:  paxos00
+  - &node06 # [5]
+    hostname:  vv-vm6
+    user:      pmemcache
+    password:  paxos00
+  - &node07 # [6]
+    hostname:  192.168.122.169
+    user:      pmemcache
+    password:  paxos00
+  - &node08 # [7]
+    hostname:  192.168.122.96
+    user:      pmemcache
+    password:  paxos00
+  - &node09 # [8]
+    hostname:  192.168.122.64
+    user:      pmemcache
+    password:  paxos00
+  - &nodeX1 # [9]
+    hostname:  192.168.122.51 # not installed PAXOS memcache
+    user:      pmemcache
+    password:  paxos00
+  - &nodeX0 # [10]
+    hostname:  192.168.122.60 # unreachable
+    user:      pmemcache
+    password:  paxos00
+  - &node10 # [11]
+    hostname:  192.168.122.14 # extension node
+    user:      pmemcache
+    password:  paxos00
+css:
+  - name: css1 # [0]
+    node:
+      - addr: *node01
+        uport: &c1port00 14000
+        tport: &c1port01 14001
+      - addr: *node02
+        uport: &c1port02 15000
+        tport: &c1port03 15001
+      - addr: *node03
+        uport: &c1port04 16000
+        tport: &c1port05 16001
+  - name: css2 # [1]
+    node:
+      - addr: *node04
+        uport: 14000
+        tport: 14001
+      - addr: *node05
+        uport: 15000
+        tport: 15001
+      - addr: *node06
+        uport: 16000
+        tport: 16001
+  - name: css3 # [2]
+    node:
+      - addr: *node01
+        uport: 14000
+        tport: 14000
+      - addr: *node01
+        uport: 15000
+        tport: 15000
+      - addr: *node01
+        uport: 16000
+        tport: 16000
+  - name: css4 # [3]
+    node:
+      - addr: *node01
+        uport: 14000
+        tport: 14001
+      - addr: *node01
+        uport: 14001
+        tport: 14002
+      - addr: *node01
+        uport: 14002
+        tport: 14000
+  - name: cssX1 # [4]
+    node:
+      - addr: *node01
+        uport: 14000
+        tport: 14001
+      - addr: *node01
+        uport: 14000
+        tport: 14001
+      - addr: *node01
+        uport: 14000
+        tport: 14001
+  - name: css5 # [5]
+    node:
+      - &cnode00
+        addr: *node07
+        uport: &cport00 24567
+        tport: *cport00
+      - &cnode01
+        addr: *node08
+        uport: *cport00
+        tport: *cport00
+      - &cnode02
+        addr: *node09
+        uport: *cport00
+        tport: *cport00
+  - name: css6 # [6]
+    node:
+      - addr: *node07
+        uport: 24568
+        tport: 24568
+      - addr: *node08
+        uport: 24568
+        tport: 24568
+      - addr: *node09
+        uport: 24568
+        tport: 24568
+  - name: cssX2 # [7]
+    node:
+      - addr: *node07
+        uport: 24999
+        tport: 24999
+      - addr: *node08
+        uport: 24999
+        tport: 24999
+      - addr: *nodeX0
+        uport: 24999
+        tport: 24999
+  - name: cssX3 # [8]
+    node:
+      - addr: *node07
+        uport: 24998
+        tport: 24998
+      - addr: *node08
+        uport: 24998
+        tport: 24998
+      - addr: *nodeX1
+        uport: 24998
+        tport: 24998
+  - name: cssX4 # [9]
+    node:
+      - addr: *node07
+        uport: 24997
+        tport: 24997
+      - addr: *nodeX0
+        uport: 24997
+        tport: 24997
+      - addr: *nodeX1
+        uport: 24997
+        tport: 24997
+  - name: css8 # [10] core:3, ext:1 ; core == css5
+    node:
+      - *cnode00
+      - *cnode01
+      - *cnode02
+      - &cnode_ext
+        addr: *node10
+        uport: *cport00
+        tport: *cport00
+
+  - name: css9 # [11] node0 is ERROR
+    node:
+      -
+        addr: *nodeX1
+        uport: *c1port00
+        tport: *c1port01
+      -
+        addr: *node08
+        uport: *c1port02
+        tport: *c1port03
+      -
+        addr: *node09
+        uport: *c1port04
+        tport: *c1port05
+  - name: css10 # [12] node0 is ERROR + ext
+    node:
+      -
+        addr: *nodeX1
+        uport: *c1port00
+        tport: *c1port01
+      -
+        addr: *node08
+        uport: *c1port02
+        tport: *c1port03
+      -
+        addr: *node09
+        uport: *c1port04
+        tport: *c1port05
+      - *cnode_ext
+  - name: css11 # [13] core:3, ext:1 ; node0 == node3, port0 != port3
+    node:
+      - *cnode00
+      - *cnode01
+      - *cnode02
+      - addr: *node07
+        uport: &cport03 31555
+        tport: *cport03
+memcache:
+  - # [0]
+    - saddr: vv-vm2
+    - saddr: vv-vm3
+      sport: 11112
+      caddr: localhost
+      cport: 11111
+  - # [1]
+    - saddr: vv-vm3
+      sport: 11113
+      cport: 11113

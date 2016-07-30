@@ -1,0 +1,16 @@
+{% extends "cell_edit.html" %}
+{% block title %}
+<title>セル登録内容変更</title>
+{% endblock title %}
+
+{% block heading %}セル登録内容変更{% endblock %}
+
+{% block action %}{{ url_for('cell_detail', id=id) }}{% endblock %}
+
+{% block nodeid %} {{ field }} {% endblock %}
+
+{% block submit_button %}
+<button type="submit" class="btn btn-default">変更</button>
+<input type=hidden name=id id=id value={{ id }}>
+<input type=hidden name=operation id=operation value=Update>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "cell_edit.html" %}
+
+{% block title %}
+<title>セル登録</title>
+{% endblock %}
+
+{% block heading %}セル登録{% endblock %}
+
+{% block action %}{{ url_for('cell_list') }}{% endblock %}
+
+{% block submit_button %}
+<button type="submit" class="btn btn-default">登録</button>
+{% endblock %}

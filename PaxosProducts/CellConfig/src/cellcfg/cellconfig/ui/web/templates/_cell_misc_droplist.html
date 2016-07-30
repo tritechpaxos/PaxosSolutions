@@ -1,0 +1,35 @@
+{% if cell.type == 'CSS' %}
+{% set misc_target = [('df', '領域空き状態'), ('FdEvent', 'FDイベント一覧'),
+('accept', 'クライアント一覧'), ('out_of_band', '帯域外データ一覧'),
+('path', 'ディレクトリイベント一覧'), ('lock', 'ロック一覧'),
+('queue', 'キュー一覧'), ('meta', 'キャッシュメタ情報一覧'),
+('fd', 'オープンファイル一覧'), ('block', 'キャッシュブロック一覧') ] %}
+{% elif cell.type == 'CMDB' %}
+{% set misc_target = [('df', '領域空き状態'), ('FdEvent', 'FDイベント一覧'),
+('accept', 'クライアント一覧'), ('out_of_band', '帯域外データ一覧') ] %}
+{% elif cell.type == 'LV' %}
+{% set misc_target = [('df', '領域空き状態'), ('FdEvent', 'FDイベント一覧'),
+('accept', 'クライアント一覧'), ('out_of_band', '帯域外データ一覧'),
+('meta', 'キャッシュメタ情報一覧'), ('fd', 'オープンファイル一覧'),
+('block', 'キャッシュブロック一覧') ] %}
+{% endif %}
+<div class="btn-group dropup">
+  <button type="button" class="hidden btn btn-default dropdown-toggle"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    その他の状態<span class="caret"></span>
+  </button>
+  <ul {# class="dropdown-menu" #}>
+{% if 'target' in request.args %}
+<li><a href="{{ url_for('cell_detail', id=cell.id) }}">コネクション状態</a></li>
+{% else %}
+<li class="disabled"><a href="{{ url_for('cell_detail', id=cell.id) }}">コネクション状態</a></li>
+{% endif %}
+{% for tgt, lbl in misc_target %}
+{% if request.args['target'] != tgt %}
+<li><a href="{{ url_for('cell_misc', id=cell.id, target=tgt) }}">{{ lbl }}</a></li>
+{% else %}
+<li class="disabled"><a href="{{ url_for('cell_misc', id=cell.id, target=tgt) }}">{{ lbl }}</a></li>
+{% endif %}
+{% endfor %}
+  </ul>
+</div>

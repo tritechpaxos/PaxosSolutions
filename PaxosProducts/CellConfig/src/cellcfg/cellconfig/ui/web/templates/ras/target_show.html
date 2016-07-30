@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>監視対象情報</title>
+{% endblock title %}
+{% block content %}
+
+<div class="btn-toolbar" role="toolbar">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rastgt_delete', grpid=target.group.id, tgtid=target.id, typ=target.type) }}" class="btn btn-sm btn-default" role="button" data-toggle="tooltip" title="監視対象削除">監視対象削除</a>
+</div>
+</div>
+
+<h2>監視対象情報</h2>
+<table class="table"><tbody>
+<tr><td>所属クラスタ</td><td><a href="{{ url_for('rasgrp_detail', id=target.group.id) }}">{{ target.group.name }}</a></td></tr>
+{% if target.type == 'cell' %}
+<tr><td>監視対象セル</td><td>{{ target.name }}</td></tr>
+{% elif target.type == 'ras' %}
+<tr><td>監視対象クラスタ</td><td>{{ target.name }}</td></tr>
+{% elif target.type == 'app' %}
+<tr><td>監視対象アプリケーション</td><td>{{ target.path.split('/')[0] }}</td></tr>
+<tr><td>監視対象</td><td>{{ target.name }}</td></tr>
+{% endif %}
+<tr><td>コメント</td><td>{{ target.comment }}</td></tr>
+</tbody></table>
+
+
+<div class="panel panel-default">
+<div class="panel-heading">
+<h3 class="panel-title">アクション</h3>
+</div>
+
+{% if target.actions |length > 0 %}
+<table class="table">
+<thead><tr><th>名前</th><th>種別</th><th>
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rasact_create', grpid=target.group.id, tgtid=target.id, atype='smtp') }}" class="btn btn-default btn-sm" role="button" data-toggle="tooltip" title="アクション登録"><span class="glyphicon glyphicon-plus" aria-label="アクション登録"></span></a></div>
+</th></thead>
+<tbody>
+{% for act in target.actions %}
+<tr><td>{{ act.name }}</td>
+<td>{{ actiontype2label(act.type) }}</td>
+<td>
+<div class="btn-toolbar" role="toolbar">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rasact_update', grpid=target.group.id, tgtid=target.id, typ=act.type, actid=act.id) }}" class="btn btn-sm btn-default" role="button" data-toggle="tooltip" title="アクション設定変更"><span class="glyphicon glyphicon-pencil" aria-label="アクション設定変更"></span></a>
+
+<a href="{{ url_for('rasact_delete', grpid=target.group.id, tgtid=target.id, typ=act.type, actid=act.id) }}" class="btn btn-sm btn-default" role="button" data-toggle="tooltip" title="アクション削除"><span class="glyphicon glyphicon-trash" aria-label="アクション削除"></span></a>
+</div>
+</div>
+
+</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<div class="panel-body">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rasact_create', grpid=target.group.id, tgtid=target.id, atype='smtp') }}" class="btn btn-default btn-sm" role="button" data-toggle="tooltip" title="アクション登録"><span class="glyphicon glyphicon-plus" aria-label="アクション登録"></span></a></div>
+<p>アクションはまだ登録されていません</p>
+</div>
+{% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,86 @@
+PAXOS 管理で利用している各モジュールの著作権表示に関するファイルを
+以下の場所に納めている。
+
+  * blinker (http://pythonhosted.org/blinker/)
+
+     ./blinker/LICENSE
+
+  * ecdsa (http://github.com/warner/python-ecdsa)
+
+     ./ecdsa/LICENSE
+
+  * Fabric (http://www.fabfile.org/)
+
+     ./fabric/LICENSE
+
+  * Flask (http://flask.pocoo.org/)
+
+     ./Flask/LICENSE
+
+  * Flask-Breadcrumbs (http://flask-breadcrumbs.readthedocs.org/)
+
+     ./Flask-Breadcrumbs/LICENSE
+
+  * Flask-Menu (https://github.com/inveniosoftware/flask-menu)
+
+     ./Flask-Menu/LICENSE
+    
+  * Frozen-Flask (https://github.com/SimonSapin/Frozen-Flask)
+
+     ./Frozen-Flask/LICENSE
+
+  * gevent (http://www.gevent.org/)
+
+     ./gevent/LICENSE
+
+  * greenlet (https://github.com/python-greenlet/greenlet)
+
+     ./greenlet/LICENSE, ./greenlet/LICENSE.PSF
+
+  * gunicorn (http://gunicorn.org/)
+
+     ./gunicorn//LICENSE
+
+  * Jinja2 (http://jinja.pocoo.org/)
+
+     ./Jinja2/LICENSE
+
+  * MarkupSafe (http://github.com/mitsuhiko/markupsafe)
+
+     ./MarkupSafe/LICENSE
+
+  * paramiko (https://github.com/paramiko/paramiko/)
+
+     ./paramiko/LICENSE
+
+  * peewee (http://github.com/coleifer/peewee/)
+
+     ./peewee/LICENSE
+
+  * pip (https://pip.pypa.io/en/stable/)
+
+     ./pip/LICENSE.txt
+
+  * pycrypto (http://www.pycrypto.org/)
+
+     ./pycrypto/LEGAL/
+
+  * six (http://pypi.python.org/pypi/six/)
+
+     ./six/LICENSE
+
+  * virtualenv (https://virtualenv.pypa.io/)
+
+     ./virtualenv/LICENSE.txt
+
+  * Werkzeug (http://werkzeug.pocoo.org/)
+
+     ./Werkzeug/LICENSE
+
+  * WTForms (http://wtforms.simplecodes.com/)
+
+     ./WTForms/LICENSE.txt
+
+  * wtforms-parsleyjs (https://github.com/fuhrysteve/wtforms-parsleyjs)
+
+     ./WTForms_ParsleyJS/LICENSE

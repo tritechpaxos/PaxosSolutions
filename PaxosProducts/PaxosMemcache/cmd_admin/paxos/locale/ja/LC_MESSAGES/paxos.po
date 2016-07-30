@@ -1,0 +1,389 @@
+# Translations template for paxos_memcached_cmd.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the paxos_memcached_cmd
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: paxos_memcached_cmd 0.5.3\n"
+"Report-Msgid-Bugs-To: prj-paxos@tritech.co.jp\n"
+"POT-Creation-Date: 2016-03-22 15:42+0900\n"
+"PO-Revision-Date: 2016-03-22 16:20+0900\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.2.0\n"
+
+#: paxos/css.py:42
+msgid "non-numeric value has been specified for the port number"
+msgstr "エラー：ポート番号に数値以外が指定されています"
+
+#: paxos/css.py:47
+msgid "port number should be {0} or less"
+msgstr "ポート番号は {0} 以下の値を指定する必要があります"
+
+#: paxos/css.py:102
+msgid "illegal css name"
+msgstr "不正なCSS名です"
+
+#: paxos/css.py:111 paxos/css.py:741
+msgid "the same address has been specified more than once"
+msgstr "同じアドレスが複数回指定されています"
+
+#: paxos/css.py:299
+msgid "exist server running"
+msgstr "動作中のサーバが存在しています"
+
+#: paxos/css.py:341
+msgid "configuration file to {0} has not been deployed"
+msgstr "{0}: 設定ファイルが配備されていません"
+
+#: paxos/css.py:345
+msgid "{0}: start operation to this host was not accepted"
+msgstr "{0}：このサーバの起動に失敗しました"
+
+#: paxos/css.py:377 paxos/css.py:475 paxos/css.py:487 paxos/css.py:532
+#: paxos/css.py:674 paxos/memcache.py:314 paxos/memcache.py:386
+#: paxos/memcache.py:427 paxos/memcache.py:526 paxos/memcache.py:545
+msgid "timeout: {0}"
+msgstr "実行したコマンドがタイムアウトしました：{0}"
+
+#: paxos/css.py:404 paxos/css.py:936
+msgid "this css is in use."
+msgstr "このCSSはPAXOS memcacheから参照中です"
+
+#: paxos/css.py:430
+msgid "{0}: stop operation to this host was not accepted."
+msgstr "{0}：このサーバの停止に失敗しました"
+
+#: paxos/css.py:744
+msgid "cannot be members change because not running servers"
+msgstr "実行中ではないサーバがあるためCSSのメンバ交代ができません"
+
+#: paxos/css.py:747
+msgid "it does not properly install PAXOS to {0}"
+msgstr "{0}にPAXOSコマンドが正しくインストールされていません"
+
+#: paxos/css.py:806
+msgid "cannot start the css server"
+msgstr "CSSサーバの起動に失敗しました"
+
+#: paxos/css.py:907
+msgid "css already exists"
+msgstr "既存のCSSと重複した名前が指定されました"
+
+#: paxos/css.py:938
+msgid "this css is running."
+msgstr "このCSSは動作中です"
+
+#: paxos/memcache.py:129
+msgid "address is duplicated"
+msgstr "アドレスが重複しています"
+
+#: paxos/memcache.py:135
+msgid "not found pair"
+msgstr "登録されていないペアが指定されています"
+
+#: paxos/memcache.py:200
+msgid "memcache id is duplicated"
+msgstr "PAXOS memcache のIDが重複しています"
+
+#: paxos/memcache.py:213
+msgid "this memcache is running."
+msgstr "この PAXOS memcache は動作中です"
+
+#: paxos/memcache.py:312
+msgid "not be able to {1} a pair (id={0})"
+msgstr "{1}: ペアの操作に失敗しました(id={0})"
+
+#: paxos/memcache.py:384
+msgid "not be able to add a pair (id={0})"
+msgstr "ペアの追加に失敗しました(id={0})"
+
+#: paxos/memcache.py:394
+msgid "failed to start PAXOS memcache"
+msgstr "PAXOS memcacheの起動に失敗しました"
+
+#: paxos/memcache.py:421
+msgid "failed to stop PAXOS memcache"
+msgstr "PAXOS memcacheの停止に失敗しました"
+
+#: paxos/memcache.py:523
+msgid "state of 'pair' can not be obtained (id={0})"
+msgstr "ペアの状態取得に失敗しました(id={0})"
+
+#: paxos/node.py:77
+msgid "host already exists"
+msgstr "登録済のホスト名と重複しています"
+
+#: paxos/node.py:94
+msgid "this host is in use."
+msgstr "このホスト名はCSSから参照中です"
+
+#: paxos/opt.py:30 paxos/opt.py:34
+msgid "identification number of PAXOS memcache"
+msgstr "PAXOS memcacheのID番号"
+
+#: paxos/opt.py:38 paxos/opt.py:41 paxos/opt.py:74 paxos/opt.py:77
+msgid "cell name of CSS"
+msgstr "PAXOS CSSのセル名"
+
+#: paxos/opt.py:44
+msgid "forced to terminate the procss"
+msgstr "プロセスの強制的な停止"
+
+#: paxos/opt.py:48 paxos/opt.py:71
+msgid "name space of  PAXOS memcache"
+msgstr "PAXOS memcacheの名前空間"
+
+#: paxos/opt.py:51
+msgid "maximum value of the cache item (default:2000)"
+msgstr "キャッシュ化アイテム最大数"
+
+#: paxos/opt.py:55
+msgid "disable checksum processing"
+msgstr "チェックサムの無効化"
+
+#: paxos/opt.py:58
+msgid "enable checksum processing (default)"
+msgstr "チェックサムの有効化（デフォルト）"
+
+#: paxos/opt.py:61
+msgid "interval for calculating the checksum"
+msgstr "チェックサムインターバル"
+
+#: paxos/opt.py:64
+msgid "interval to expire the cache"
+msgstr "エクスパイアチェックインターバル"
+
+#: paxos/opt.py:67
+msgid "number of worker (default:5)"
+msgstr "ワーカー数"
+
+#: paxos/opt.py:81
+msgid "list of CSS server(udp/tcp) constituting the cell"
+msgstr "セルを構成するCSSサーバのアドレスリスト"
+
+#: paxos/opt.py:85
+msgid "initialize the environment of CSS"
+msgstr "CSS環境を初期化した後に起動する"
+
+#: paxos/opt.py:89 paxos/opt.py:183
+msgid "number of replacement target"
+msgstr "置き換え対象とするサーバ番号"
+
+#: paxos/opt.py:93
+msgid "server address after replacement"
+msgstr "置き換え先のサーバアドレス"
+
+#: paxos/opt.py:98
+msgid "no. of CSS server"
+msgstr "CSSサーバ番号"
+
+#: paxos/opt.py:101 paxos/opt.py:128
+msgid "hostname"
+msgstr "ホスト名"
+
+#: paxos/opt.py:103
+msgid "user name"
+msgstr "ユーザ名"
+
+#: paxos/opt.py:105
+msgid "port number of ssh"
+msgstr "sshサーバのポート番号"
+
+#: paxos/opt.py:108 paxos/opt.py:112
+msgid "group that the host belong to"
+msgstr "ホストが属するグループ名"
+
+#: paxos/opt.py:117 paxos/opt.py:122
+msgid "to use the setting of ssh_config"
+msgstr "ssh_configの設定を利用する"
+
+#: paxos/opt.py:125
+msgid "do not use the setting of ssh_config"
+msgstr "ssh_configの設定を利用しない(default)"
+
+#: paxos/opt.py:144
+msgid "IPv4 address of the server"
+msgstr "memcachedサーバのIPv4アドレス"
+
+#: paxos/opt.py:147
+msgid "port number of the server"
+msgstr "memcachedサーバのポート番号"
+
+#: paxos/opt.py:150
+msgid "IPv4 address to be exposed to the client"
+msgstr "クライアントに公開するIPv4アドレス"
+
+#: paxos/opt.py:153
+msgid "port number to be exposed to the client"
+msgstr "クライアントに公開するポート番号"
+
+#: paxos/opt.py:157
+msgid "delete the old configuration files"
+msgstr "古い設定ファイルを削除する"
+
+#: paxos/opt.py:161
+msgid "configure the PAXOS CSS"
+msgstr "PAXOS CSSの設定"
+
+#: paxos/opt.py:167 paxos/opt.py:289
+msgid "start the PAXOS CSS"
+msgstr "PAXOS memcacheの起動"
+
+#: paxos/opt.py:171
+msgid "stop the local PAXOS CSS"
+msgstr "PAXOS memcacheの停止"
+
+#: paxos/opt.py:175
+msgid "local state of the PAXOS CSS"
+msgstr "PAXOS CSSの状態表示"
+
+#: paxos/opt.py:180
+msgid "replace the CSS server"
+msgstr "CSSサーバの置き換え"
+
+#: paxos/opt.py:195
+msgid "register the object"
+msgstr "対象を登録する"
+
+#: paxos/opt.py:197
+msgid "unregister the object"
+msgstr "対象の登録を削除する"
+
+#: paxos/opt.py:199
+msgid "modify the registered contents of the object"
+msgstr "対象の登録内容を変更する"
+
+#: paxos/opt.py:202
+msgid "show the registered contents of the object"
+msgstr "対象の登録内容を表示する"
+
+#: paxos/opt.py:205
+msgid "shows a list of the object"
+msgstr "対象の識別子を一覧表示する"
+
+#: paxos/opt.py:207
+msgid "start the object"
+msgstr "対象を起動する"
+
+#: paxos/opt.py:209
+msgid "stop the object"
+msgstr "対象を停止する"
+
+#: paxos/opt.py:211
+msgid "show the state of the object"
+msgstr "対象の動作状況を表示する"
+
+#: paxos/opt.py:214
+msgid "deploy the configuration files to each host"
+msgstr "設定ファイルの配布"
+
+#: paxos/opt.py:217
+msgid "fetch the configuration files from the specified host"
+msgstr "設定ファイルの取得"
+
+#: paxos/opt.py:219
+msgid "apply the changes to the object"
+msgstr "動作中の対象に変更内容を反映させる"
+
+#: paxos/opt.py:222
+msgid "to run the member change of CSS server"
+msgstr "CSSサーバのメンバ交代を行う"
+
+#: paxos/opt.py:226
+msgid "register PAXOS memcache"
+msgstr "PAXOS memcacheの登録"
+
+#: paxos/opt.py:229
+msgid "register PAXOS memcache pair"
+msgstr "memcachedとの接続ペア登録"
+
+#: paxos/opt.py:233
+msgid "register PAXOS CSS"
+msgstr "PAXOS CSSの登録"
+
+#: paxos/opt.py:237
+msgid "register PAXOS host"
+msgstr "PAXOSホストの登録"
+
+#: paxos/opt.py:242
+msgid "unregister PAXOS memcache"
+msgstr "PAXOS memcacheの登録解除"
+
+#: paxos/opt.py:245
+msgid "unregister PAXOS memcache pair"
+msgstr "memcachedとの接続ペア登録削除"
+
+#: paxos/opt.py:249
+msgid "unregister PAXOS CSS"
+msgstr "PAXOS CSSの登録解除"
+
+#: paxos/opt.py:252
+msgid "unregister PAXOS host"
+msgstr "PAXOSホストの登録解除"
+
+#: paxos/opt.py:256
+msgid "modify the CSS of PAXOS memcache"
+msgstr "PAXOS memcacheの登録内容変更"
+
+#: paxos/opt.py:261
+msgid "modify user or port number of the PAXOS host"
+msgstr "PAXOSホストの登録内容変更"
+
+#: paxos/opt.py:266
+msgid "show the configuration of PAXOS memcache"
+msgstr "PAXOS memcacheの登録内容表示"
+
+#: paxos/opt.py:269
+msgid "show the configuration of PAXOS CSS"
+msgstr "PAXOS CSSの登録内容表示"
+
+#: paxos/opt.py:273
+msgid "show the configuration of the PAXOS host"
+msgstr "PAXOSホストの登録内容表示"
+
+#: paxos/opt.py:277
+msgid "ID list of PAXOS memcache"
+msgstr "PAXOS memcacheのID番号一覧"
+
+#: paxos/opt.py:279
+msgid "list of PAXOS CSS"
+msgstr "PAXOS CSSのセル名一覧"
+
+#: paxos/opt.py:282
+msgid "list of the PAXOS host"
+msgstr "PAXOSホストの登録名一覧表示"
+
+#: paxos/opt.py:286
+msgid "start the PAXOS memcache"
+msgstr "PAXOS memcacheの起動"
+
+#: paxos/opt.py:294
+msgid "stop the PAXOS memcache"
+msgstr "PAXOS memcacheの停止"
+
+#: paxos/opt.py:298
+msgid "stop the PAXOS CSS"
+msgstr "PAXOS CSSの停止"
+
+#: paxos/opt.py:303
+msgid "state of PAXOS memcache"
+msgstr "PAXOS memcacheの状態表示"
+
+#: paxos/opt.py:306
+msgid "state of the PAXOS CSS"
+msgstr "PAXOS CSSの状態表示"
+
+#: paxos/opt.py:311
+msgid "apply the settings of PAXOS memcache pair"
+msgstr "接続ペアの変更反映"
+
+#: paxos/util.py:116
+msgid "not found: {0}"
+msgstr "{0}が見つかりません"
+

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>{{ get_admin_label()[typ] }}設定</title>
+{% endblock title %}
+{% block content %}
+{% if get_admin_tabs()|length > 1 %}
+<ul class="nav nav-tabs">
+{% for key, value in get_admin_tabs() %}
+<li role="presentation"{% if typ == value[1] %}class="active"{% endif %}>
+<a href="{{ url_for(value[0], typ=value[1]) }}">
+{{ key }}
+</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<h2>{{ get_admin_label()[typ] }}設定</h2>
+<form action="#">
+  <fieldset>
+    <table class="table"><tbody>
+        {% for field in form %}
+	<tr>
+	  <td>{{ field.label }}</td>
+	  <td>{{ field.data }}</td>
+	</tr>
+        {% endfor %}
+    </tbody></table>
+  </fieldset>
+</form>
+
+<a href="{{ url_for('admin_conf_update', typ=typ) }}"
+   class="btn btn-default" role="button">変更</a>
+{% endblock content %}

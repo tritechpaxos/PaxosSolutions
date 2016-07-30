@@ -1,0 +1,146 @@
+[起動方法]
+
+インストールしたユーザでログインして、以下のコマンドを実行する。
+
+  $ cd ~/PAXOS/manager
+  $ bin/gunicorn -c conf/gunicorn.conf cellconfig.ui.web:app
+
+サービスとして起動する場合の手順は ~/PAXOS/manager/doc/SERVICE に記して
+ある。
+
+[設定方法]
+
+(HTTPサーバの設定)
+
+HTTPサーバの設定は ~/PAXOS/manager/conf/gunicorn.conf に格納されている。
+サーバの listen port はデフォルトでポート番号 7000 を使用している。変更
+する場合は設定ファイルの以下に示す行を編集する。
+
+bind = '0.0.0.0:7000'
+
+指定は HOST:PORT の形式で行う。
+
+
+セル管理では HTTPサーバに gunicorn(http://gunicorn.org/) を利用している。
+設定の詳細については gunicorn の設定方法
+http://docs.gunicorn.org/en/latest/settings.html を参照のこと。
+
+ただし worker_class については 'gevent' を指定しないとセル管理が正しく
+動作しない。必ず以下の指定を行うこと。
+
+worker_class = 'gevent'
+
+(Nginxを使用する場合)
+
+フロントエンドのサーバに Nginx を用いる場合の設定例を以下に記す。
+
+  1) gunicorn.conf の変更
+
+     bindするソケットをUNIXドメインソケットに変更する。
+
+(例)
+bind = 'unix:/home/paxos/PAXOS/manager/run/cellcfg.sock'
+
+  2) nginx の設定ファイルの変更
+
+     upstream等の設定を追加する。
+     
+(例)
+nginx の設定ファイルに以下の差分のような記述を追加する。
+============================================================================
++upstream cellcfg {
++    server unix:/home/paxos/PAXOS/manager/run/cellcfg.sock fail_timeout=0;
++}
++
+ server {
+        listen 80 default_server;
+
++       location /cellcfg {
++               try_files $uri @cellcfg;
++       }
++
++       location @cellcfg {
++               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++               proxy_set_header Host                   $http_host;
++               proxy_set_header X-Real-IP              $remote_addr;
++               proxy_set_header X-Script-Name          /cellcfg;
++               proxy_buffering off;
++
++               proxy_redirect off;
++               proxy_pass http://cellcfg;
++       }
++
+============================================================================
+
+この設定を反映させると http://127.0.0.1/cellcfg/ からセル管理にアクセス
+できる。
+
+上記の例の様に Nginx ルートパス以外に配置する場合は X-Script-Nameの指定
+を行うこと。
+
+     proxy_set_header X-Script-Name          /cellcfg;
+
+
+(データベースの変更方法)
+
+インストール直後はセル管理のデータベースに sqlite を使用するようになっ
+ている。データベースに CMDB を用いる場合の変更手順を以下に記す。
+
+  1) 設定ファイルの変更
+
+
+      ~/PAXOS/manager/conf/cellconfig.cfg の DATABASE 設定を書き換える。
+      指定方法は以下のようにする。
+
+DATABASE = 'cmdb:///{CMDBセル名}?conf_dir={CMDBセルの設定ファイルディレクトリ}'
+
+(例)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+CMDBセル名:				cmdb
+CMDBセル設定ファイルディレクトリ:   	/home/paxos/PAXOS/manager/conf/
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+DATABASE = 'cmdb:///cmdb?conf_dir=/home/paxos/PAXOS/manager/conf/'
+
+   2) CMDBセル設定ファイルの配置
+
+      1) での記述に従い、セルの設定ファイルを配置する。
+      
+(例)
+$ cp cmdb.conf /home/paxos/PAXOS/manager/conf/
+
+   3) テーブルの作成
+
+      テーブル作成スクリプト bin/create_tables を用いてCMDBにセル管理用
+      のテーブルを作成する。
+
+(例)
+$ cd ~/PAXOS/manager
+$ bin/create_tables
+
+(注意)
+セル管理のデータベースとしてCMDB を使用するには(セル管理外で)既に動作し
+ているCMDBが必要となる。
+
+
+
+[ファイル構成]
+
+セル管理のファイル構成を以下に記す。
+
+~/PAXOS/manager/			セル管理のインストールディレクトリ
+
+		bin/			コマンド等の配置場所
+		    gunicorn		HTTPサーバ
+		    create_tables	セル管理テーブル作成スクリプト
+
+		conf/			設定ファイル等の配置場所
+		    cellconfig.cfg	セル管理設定ファイル
+		    cellconfig.db	セル管理DBテーブル(sqlite3)
+		    gunicorn.conf	HTTPサーバ設定ファイル
+
+		dist/			PAXOS coreパッケージの配置場所
+		lib/			セル管理が利用するライブラリの配置場所
+		run/			実行時情報の出力場所
+
+		    

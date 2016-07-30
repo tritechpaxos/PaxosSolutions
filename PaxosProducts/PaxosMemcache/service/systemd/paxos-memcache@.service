@@ -1,0 +1,12 @@
+[Unit]
+Description=PAXOS memcahce
+After=network.target
+
+[Service]
+ExecStart=/home/paxos/bin/paxos memcache start -F -i %i
+ExecStop=/home/paxos/bin/paxos memcache stop -i %i
+Restart=on-failure
+User=paxos
+
+[Install]
+WantedBy=multi-user.target

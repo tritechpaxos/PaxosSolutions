@@ -1,0 +1,2 @@
+recursive-include cellconfig/ui/web/templates *
+recursive-include cellconfig/ui/web/static *

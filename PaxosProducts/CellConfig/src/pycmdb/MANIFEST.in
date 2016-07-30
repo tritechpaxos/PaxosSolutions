@@ -1,0 +1,3 @@
+recursive-include src *.h
+recursive-include paxos/include *.h
+recursive-include paxos/lib *.a

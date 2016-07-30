@@ -1,0 +1,61 @@
+[手順]
+
+build_pkg/ で build.sh を実行すると pkgs/ の下に PAXOS memcacheの配布用
+アーカイブファイルが作成される。
+
+  $ cd build_pkg
+  $ bash ./build.sh
+  ...
+  $ ls pkgs
+  CentOS_7.tar.gz
+
+
+アーカイブファイルはディストリビューションに依存した名前となっている。
+現在のところ以下のものに対応している。
+
+   CentOS Linux 7:	CentOS_7.tar.gz
+   Ubuntu 14.04 LTS	Ubuntu_14.tar.gz
+   Ubuntu 15.04		Ubuntu_15.tar.gz
+
+---------------------------------------------------------------------------
+[インストール]
+
+インストールの大まかな手順を以下に記す。
+
+1) PAXOS memcache 実行用のユーザを作成する。
+
+  # adduser paxos
+
+2) アーカイブファイルの展開
+   1) で作成したユーザのホームディレクトリにアーカイブファイルを展開する。
+
+  $ tar -xzf CentOS_7.tar.gz -C ~
+
+3) 環境設定スクリプトの実行
+
+  $ cd ~/misc
+  $ bash ./setup.sh
+
+4) PAXOS memcache の設定
+
+5) (必要に応じて) サービスとして登録
+
+   サービスに登録する場合の設定ファイルの例が ~/misc/service/ にある。
+
+---------------------------------------------------------------------------
+[環境]
+
+アーカイブファイルを作成するには以下のものがインストール済であることを
+前提としている。
+
+    gcc
+    bison
+    make
+    subversion
+    lsb_release
+    readline-devel
+    libevent-devel
+    python-devel
+    wget
+    libffi-devel
+    openssl-devel

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+#export CELLCONFIG_SETTINGS=`pwd`/cellconfig.cfg
+export CELLCONFIG_SETTINGS=`pwd`/devel.cfg
+
+exec python runserver.py

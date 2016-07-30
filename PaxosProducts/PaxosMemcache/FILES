@@ -1,0 +1,71 @@
+[ディレクトリ、ファイル構成]
+
+１．運用時のディレクトリ、ファイル配置イメージ
+
+(/home/paxos/)				ユーザpaxosのホームディレクトリ(*)
+
+  bin/
+    PaxosMemcache			PAXOS memcache
+    PaxosMemcacheAdm			PAXOS memcache 管理コマンド
+    PFSServer				PAXOS CSS サーバ
+    PFSProbe				PAXOS CSS 管理コマンド
+    PaxosSessionShutdown		(同上)
+    PaxosSessionProbe			(同上)
+    PaxosAdmin				(同上)
+    paxos				PAXOS memcache/CSS 構成、管理コマンド
+    python				paxosコマンドが使用するpythonコマンド
+    fab, pip, ...			pythonの管理ツール類
+    
+  lib/
+    python2.7/				paxosコマンドが使用するpythonライブラリ
+
+  etc/
+    paxos_memcache.conf			PAXOS memcache の設定ファイル
+    cell/				CSSの設定ファイル格納場所
+      xxx.conf				CSSの設定ファイル 
+					(実際はxxxがCSSのセル名になる）
+
+  data/					CSSのデータ格納場所
+     xxx/0/				セル名:xxx、ID:0のCSSのデータ格納場所
+
+  include/				pythonライブラリが参照するincludeファイル
+					の格納場所
+
+  misc/					パッケージ展開後の設定スクリプト
+    setup.sh				パッケージ展開後の設定スクリプト
+    tools.tar.gz			設定スクリプトが展開するpythonライブラリ
+    					などのアーカイブファイル
+
+    doc/				管理コマンドのドキュメント
+      README.txt			管理コマンドの簡単な使用方法
+      MANUAL.txt			管理コマンドのマニュアル
+
+    license/				管理コマンドが使用しているライブラリ等の
+					ライセンス関連のファイル
+       
+
+(*) PAXOS memcahce 用のユーザとしてpaxos以外を使用する場合、ホームディレクトリの
+　　場所を適宜読み替えることになる。
+
+２．インストールパッケージ内のファイル配置イメージ
+
+  bin/
+    PaxosMemcache
+    PaxosMemcacheAdm
+    PFSServer
+    PFSProbe
+    PaxosSessionShutdown
+    PaxosSessionProbe
+    PaxosAdmin
+
+  misc/
+    setup.sh
+    tools.tar.gz
+    doc/
+       README.txt
+       MANUAL.txt
+    license/
+
+「１．運用時のディレクトリ、ファイル配置イメージ」にあり、上記の構成にない
+ファイル、ディレクトリはインストール後の設定スクリプト(setup.sh)によって生
+成される。

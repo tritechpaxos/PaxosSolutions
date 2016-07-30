@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>RASセル一覧</title>
+{% endblock title %}
+
+{% block content %}
+{{ super() }}
+<div class="btn-toolbar" role="toolbar">
+<div class="btn-group pull-right" role="group">
+<a href="{{ url_for('rascell_create') }}" class="btn btn-default btn-sm" role="button" data-toggle="tooltip" title="新規作成">新規作成</a>
+</div></div>
+
+<h2>RASセル一覧</h2>
+
+{% if cells|length > 0 %}
+<table class="table" id="cell_list">
+<thead>
+<tr><th></th><th>セル名</th><th>コメント</th><th></th></tr>
+</thead>
+<tbody>
+{% for cell in cells %}
+<tr id="{{ cell.id }}">
+<td><span class="glyphicon"></span></td>
+<td><a href="{{ url_for('cell_detail', id=cell.id) }}">{{ cell.name }}</a></td>
+<td>{{ cell.comment }}</td>
+
+
+<td>
+<div class="btn-group">
+<button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="cell起動" id="btn-cell-start-{{ cell.id }}"><span class="glyphicon glyphicon-play"></span></button>
+</div>
+<div class="btn-group">
+<button type="button" class="btn btn-default btn-sm paxos-show-config" data-toggle="tooltip" title="設定ファイル表示"><span class="glyphicon glyphicon-list-alt"></span></button>
+</div>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+  RASセルが登録されていません
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/cell_list.js') }}">
+</script>
+{% endblock scripts %}

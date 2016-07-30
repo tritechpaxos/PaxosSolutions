@@ -1,0 +1,34 @@
+PAXOS 管理コマンドで利用している各モジュールの著作権表示に関するファイルを
+以下の場所に納めている。
+
+  * Fabric (http://www.fabfile.org/)
+
+     ./fabric/LICENSE
+
+  * pycrypto (http://www.pycrypto.org/)
+
+     ./pycrypto/LEGAL/
+
+  * PyYAML (http://pyyaml.org/wiki/PyYAML)
+
+     ./pyyaml/LICENSE
+
+  * psutil (https://github.com/giampaolo/psutil)
+
+     ./psutil/LICENSE
+
+  * ecdsa (http://github.com/warner/python-ecdsa)
+
+     ./ecdsa/LICENSE
+
+  * paramiko (https://github.com/paramiko/paramiko/)
+
+     ./paramiko/LICENSE
+
+  * pip (https://pip.pypa.io/en/stable/)
+
+     ./pip/LICENSE.txt
+
+  * virtualenv (https://virtualenv.pypa.io/)
+
+     ./virtualenv/LICENSE.txt

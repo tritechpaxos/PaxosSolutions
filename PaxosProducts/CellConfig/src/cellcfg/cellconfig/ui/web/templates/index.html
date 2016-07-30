@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+    <ul>
+      <li><a href="{{ url_for('node_list') }}">サーバ一覧</a>
+      <li><a href="{{ url_for('cell_list') }}">セル一覧</a>
+    </ul>
+{% endblock %}

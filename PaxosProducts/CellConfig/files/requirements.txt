@@ -1,0 +1,10 @@
+blinker==1.4
+Fabric3
+Flask
+future
+gevent
+gunicorn
+peewee==2.8.0
+WTForms==2.1
+WTForms-ParsleyJS==2.0.1
+wheel

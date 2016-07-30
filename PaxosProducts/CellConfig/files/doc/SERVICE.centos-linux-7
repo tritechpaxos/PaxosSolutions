@@ -1,0 +1,41 @@
+セル管理を Systemd から起動する手順を記す。
+
+1) 設定ファイルを用意する。
+
+以下のようなファイルを /etc/systemd/system/cellcfg.service に作成する。 
+
+====================================================================
+[Unit]
+Description=PAXOS cell config
+After=network.target
+
+[Service]
+User=paxos
+Group=paxos
+WorkingDirectory=/home/paxos/PAXOS/manager
+ExecStart=/home/paxos/PAXOS/manager/bin/gunicorn -c /home/paxos/PAXOS/manager/conf/gunicorn.conf cellconfig.ui.web:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+====================================================================
+
+なお上記の例ではセル管理は、ユーザpaxos の権限で
+/home/paxos/PAXOS/manager にインストールされたものとしている。
+
+
+2) セル管理の起動
+
+管理者権限で以下のコマンドを実行する。
+
+# systemctl start cellcfg
+
+他のホストからアクセスする場合は以下のような設定をすること。
+
+# firewall-cmd --add-port=7000/tcp
+
+3) OS起動時の設定
+
+管理者権限で以下のコマンドを実行する。
+
+# systemctl enable cellcfg

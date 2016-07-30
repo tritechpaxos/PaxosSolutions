@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>{{ title[0] }}</title>
+{% endblock title %}
+{% block content %}
+    <h2>セル情報</h2>
+    <table class="table"><tbody>
+      <tr><td>セル名</td><td>{{ cell.name }}</td></tr>
+      <tr><td>セルタイプ</td><td>{{ cell.type }}</td></tr>
+      <tr><td>コメント</td><td>{{ cell.comment }}</td></tr>
+    </tbody></table>
+
+    <h3>{{ title[1] }}</h3>
+<div class="table-responsive">
+    <table class="table table-bordered" id="misc_info">
+    <thead>
+    <tr> {% for val in label %} <th>{{ val }}</th> {% endfor %} </tr>
+    </thead>
+    <tbody>
+{% for val in info %}
+    <tr> {% for v in val %} <td>{{ v }}</td> {% endfor %} </tr>
+{% endfor %}
+    </tbody>
+    </table>
+</div>
+{% include "_cell_misc_droplist.html" %}
+{% endblock content %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/cell_misc.js') }}">
+</script>
+<script>
+  var dropup = $( '.dropup' );
+  $(dropup).find('button:first').removeClass('hidden');
+  $(dropup).find('ul:first').addClass('dropdown-menu');
+</script>
+{% endblock scripts %}
+{% block styles %}
+    {{ super() }}
+    <style>
+       table#misc_info {
+         background-image: url("{{ url_for('static', filename='images/load.gif') }}");
+         background-repeat: no-repeat;
+       }
+    </style>
+{% endblock styles %}

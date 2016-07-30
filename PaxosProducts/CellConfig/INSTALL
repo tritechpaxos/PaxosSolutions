@@ -1,0 +1,42 @@
+[インストール手順]
+
+  0. libevent のインストール
+
+     PAXOS core, セル管理では libevent を使用している。もしインストール
+     されていない場合は事前にインストールすること。
+
+      # yum install libevent
+      又は
+      # apt-get install libevent-2.0
+
+  1. セル管理用ユーザの作成
+
+      % sudo adduser paxos
+
+  2. パッケージの展開
+
+      % su paxos   (1.で作成したユーザで実行する)
+      % tar xzf paxos-cellcfg.XXXXX.tar.gz
+        (XXXXX の箇所はディストリビューション毎にことなる)
+
+  3. インストールスクリプトの実行
+
+      % cd dist/
+      % ./setup.sh
+
+  4. セル管理の実行
+
+      % cd ~/PAXOS/manager
+      % bin/gunicorn -c conf/gunicorn.conf cellconfig:app
+
+      webブラウザで http://127.0.0.1:7000/ にアクセスし、セル管理の画面
+      が表示されていることを確認して下さい。
+
+
+2.で展開したファイルは実行には不要なので削除して下さい。
+
+セル管理の設定方法や、サービスへの登録方法等はインストールしたマシンの
+~/PAXOS/manager/doc/README に記述してあります。
+
+インストールのログが /tmp/paxos_(日時)_(XXXX).log に記録されています。
+正しくインストール出来無かった場合は確認してみてください。

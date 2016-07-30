@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>監視対象削除</title>
+{% endblock title %}
+{% block content %}
+<h2>監視対象削除</h2>
+<form method="post" action="{{ url_for('rastgt_detail_op', grpid=grpid, tgtid=tgtid, typ=typ) }}">
+  <fieldset>
+    <table class="table"><tbody>
+	<tr>
+	  <td><label for="name">所属クラスタ</label></td><td>{{ group_name }}</td>
+	</tr>
+	{% for field in form %}
+	<tr>
+	  {% if field.name == 'type' %}
+	  <td><label for="name">監視対象種別</label></td>
+	  <td> 
+	    {% if field.data == 'cell' %}
+	    セル
+	    {% elif field.data == 'ras' %}
+	    監視クラスタ
+	    {% elif field.data == 'app' %}
+	    アプリケーション
+	    {% endif %}
+	  </td>
+	  {% elif field.name == 'cell' %}
+	  <td> {{ field.label }}</td>
+	  <td> {{ form.get_cell_name(field.data) }}</td>
+	  {% elif field.name == 'group' %}
+	  <td> {{ field.label }}</td>
+	  <td> {{ form.get_group_name(field.data) }}</td>
+	  {% else %}
+	  <td> {{ field.label }}</td>
+	  <td> {{ field.data }}</td>
+	  {% endif %}
+	</tr>
+	{% endfor %}
+    </tbody></table>
+    <button type="submit" class="btn btn-default">削除</button>
+    <input type=hidden name=operation id=operation value=Delete>
+  </fieldset>
+</form>
+{% endblock content %}

@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>{{ title }}</title>
+{% endblock title %}
+{% block content %}
+    <h2>セル情報</h2>
+    <table class="table"><tbody>
+      <tr><td>セル名</td><td>{{ cell.name }}</td></tr>
+      <tr><td>セルタイプ</td><td>{{ cell.type }}</td></tr>
+      <tr><td>コメント</td><td>{{ cell.comment }}</td></tr>
+    </tbody></table>
+
+{% for tbl in table %}
+    <h3>{{ tbl['title'] }}</h3>
+<div class="table-responsive">
+    <table class="table table-bordered">
+    <thead>
+    <tr> {% for val in tbl['label'] %} <th>{{ val }}</th> {% endfor %} </tr>
+    </thead>
+    <tbody>
+{% for val in tbl['info'] %}
+    <tr> {% for v in val %} <td>{{ v }}</td> {% endfor %} </tr>
+{% endfor %}
+    </tbody>
+    </table>
+{% endfor %}
+</div>
+{% include "_cell_misc_droplist.html" %}
+{% endblock content %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+      var dropup = $( '.dropup' );
+      $(dropup).find('button:first').removeClass('hidden');
+      $(dropup).find('ul:first').addClass('dropdown-menu');
+    </script>
+{% endblock scripts %}

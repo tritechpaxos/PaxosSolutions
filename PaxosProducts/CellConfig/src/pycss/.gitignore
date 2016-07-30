@@ -1,0 +1,12 @@
+*.pyc
+*~
+*.so
+.*.swp
+*.egg-info
+*,cover
+pip-selfcheck.json
+.python-version
+build/
+dist/
+paxos/
+.coverage

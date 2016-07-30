@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>セル情報</title>
+{% if refresh %}
+<meta http-equiv="refresh" content="{{ refresh }}">
+{% endif %}
+{% endblock title %}
+{% block content %}
+    {{ super() }}
+    <h2>セル情報</h2>
+    <table class="table"><tbody>
+      <tr><td>セル名</td><td>{{ cell.name }}</td></tr>
+      <tr><td>セルタイプ</td><td>{{ cell.type }}</td></tr>
+      <tr><td>コメント</td><td>{{ cell.comment }}</td></tr>
+    </tbody></table>
+
+    <h3>コネクション状態</h3>
+<div class="table-responsive">
+    <table class="table" id="cnodes">
+    <thead>
+    <tr><th>#</th><th>サーバ名</th><th>pid</th><th>マスタ</th>
+        {% for idx in range(nodes.__len__()) %}
+        <th>{{ idx }}</th>
+        {% endfor %}
+        <th>立上時刻</th><th>PAXOS合意回数</th></tr>
+    </thead>
+
+    <tbody>
+    {% for cnode in nodes %}
+{% if not cnode['pid'] %}
+    <tr>
+{% else %}
+    <tr>
+{% endif %}
+    <td id="cnode-no-{{ cnode['id'] }}">{{ cnode['no'] }}</td>
+    <td id="cnode-hostname-{{ cnode['id'] }}">{{ cnode['hostname'] }}</td>
+    <td id="cnode-pid-{{ cnode['id'] }}">
+      {% if cnode['pid'] %}{{ cnode['pid'] }}{% else %}―{% endif %}
+    </td>
+    <td id="cnode-ismaster-{{ cnode['id'] }}">
+        {% if cnode['ismaster'] %}
+            <span class="show glyphicon glyphicon-ok" aria-label="true"></span>
+        {% else %}
+            <span class="hidden glyphicon glyphicon-ok" aria-label="true"></span>
+        {% endif %}
+    </td>
+    {% for idx in range(nodes.__len__()) %}
+    <td id="cnode-connection{{idx}}-{{ cnode['id'] }}">
+      {% if idx in cnode['connection'] and cnode['connection'][idx] %}
+      <span class="show glyphicon glyphicon-link" aria-label="true"></span>
+      <span class="hidden glyphicon glyphicon-minus" aria-label="true"></span>
+      {% else %}
+      <span class="show glyphicon glyphicon-minus" aria-label="true"></span>
+      <span class="hidden glyphicon glyphicon-link" aria-label="true"></span>
+      {% endif %}
+    </td>
+    {% endfor %}
+    <td id="cnode-birth-{{ cnode['id'] }}">
+      {% if cnode['birth'] %}{{ cnode['birth'] }}{% else %}―{% endif %}
+    </td>
+    <td id="cnode-consensus-{{ cnode['id'] }}">
+       {% if cnode['consensus'] %}{{ cnode['consensus'] }}{% else %}―{% endif %}
+    </td>
+<td>
+<div class="btn-group">
+<button class="btn btn-default btn-sm disabled" role="button"
+	id="btn-start-{{ cnode['id'] }}">起動</button>
+<button class="btn btn-default btn-sm disabled" role="button"
+	id="btn-stop-{{ cnode['id'] }}">停止</button>
+</div>
+</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+{% include "_cell_misc_droplist.html" %}
+<div class="btn-group">
+<button class="btn btn-default" id="show-conf">設定ファイル表示</button>
+<button class="btn btn-default" id="deploy-conf">設定ファイル配備</button>
+<a href="{{ url_for('cell_update', id=cell.id) }}" id="btn-edit-cell"
+   class="btn btn-default disabled" role="button">編集</a>
+<a href="{{ url_for('cell_delete', id=cell.id) }}" id="btn-delete-cell"
+   class="btn btn-default disabled" role="button">削除</a>
+</div>
+<div class="btn-group">
+<button class="btn btn-default" role="button" id="btn-cell-start">起動</button>
+<button class="btn btn-default" role="button" id="btn-cell-stop">停止</button>
+</div>
+{% endblock content %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/cell_node.js') }}">
+</script>
+<script>
+  var dropup = $( '.dropup' );
+  $(dropup).find('button:first').removeClass('hidden');
+  $(dropup).find('ul:first').addClass('dropdown-menu');
+</script>
+{% endblock scripts %}

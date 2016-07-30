@@ -1,0 +1,27 @@
+以下のコマンドを実行することでにセル管理のパッケージが作成される。
+
+  ./build_pkg.sh
+
+作成されたパッケージは dist/ に配置され、以下のようなファイル名となる。
+
+  dist/paxos-cellcfg.ubuntu-14.x86_64.tar.gz
+
+作成したパッケージは PAXOS core パッケージ等を内包している。
+
+[前提条件]
+
+* 以下のパッケージがインストールされていること
+
+    git
+    gcc
+    make
+    bison
+    patch
+    unzip
+    readline-devel(libreadline-dev)
+    libevent-devel(libevent-dev)
+    openssl-devel(libssl-dev)
+    libffi-devel(libffi-dev)
+    python-devel(python-dev)
+
+* インターネットにアクセスできること(python のライブラリ等を取得するため)

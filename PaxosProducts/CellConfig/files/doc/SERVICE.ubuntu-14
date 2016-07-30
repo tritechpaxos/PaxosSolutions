@@ -1,0 +1,32 @@
+セル管理をUpstart から起動する手順を記す。
+
+1) 設定ファイルを用意する。
+
+以下のようなファイルを /etc/init/cellcfg.conf に作成する。 
+
+====================================================================
+# /etc/init/cellcfg.conf - cellcfg config
+
+description "PAXOS cell config"
+
+start on (filesystem)
+stop on runlevel [016]
+
+respawn
+setuid paxos
+setgid paxos
+chdir /home/paxos/PAXOS/manager
+
+exec bin/gunicorn -c conf/gunicorn.conf cellconfig.ui.web:app
+====================================================================
+
+なお上記の例ではセル管理は、ユーザpaxos の権限で
+/home/paxos/PAXOS/manager にインストールされたものとしている。
+
+
+2) セル管理の起動
+
+管理者権限で以下のコマンドを実行する。
+
+# initctl reload-configuration
+# initctl start cellcfg

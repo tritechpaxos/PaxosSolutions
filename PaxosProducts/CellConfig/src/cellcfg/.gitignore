@@ -1,0 +1,13 @@
+*.pyc
+*~
+.*.swp
+.python-version
+dist
+build
+*.egg-info
+*.db
+pip-selfcheck.json
+bin/
+include/
+lib/
+local/
