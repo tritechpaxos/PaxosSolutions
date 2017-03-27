@@ -1,0 +1,2365 @@
+Terminals unused in grammar
+
+   TLEAF
+   VITEM
+   VITEM_ALLOC
+   VSTRING
+   VSTRING_ALLOC
+   VBIN
+   VINT
+   VUINT
+   VLONG
+   VULONG
+   VFLOAT
+   VBOOL
+   VPARAM
+   STR_EQ
+   STR_NE
+   STR_GT
+   STR_LT
+   STR_GE
+   STR_LE
+   SNODE
+   SDROP_TABLE
+   SDROP_VIEW
+   SCREATE_TABLE
+   SCREATE_VIEW
+   SSTATEMENT
+   SNOTLIKE
+
+
+状態 83 conflicts: 20 reduce/reduce
+状態 161 conflicts: 9 reduce/reduce
+
+
+文法
+
+    0 $accept: start $end
+
+    1 start: START_program program
+    2      | START_pstatement pstatement
+
+    3 program: %empty
+    4        | statements
+
+    5 statements: statement
+    6           | statements statement
+
+    7 statement: schema_statement ';'
+    8          | data_statement ';'
+    9          | transaction_statement ';'
+
+   10 pstatement: schema_statement
+   11           | data_statement
+   12           | transaction_statement
+
+   13 transaction_statement: SBEGIN
+   14                      | SCOMMIT
+   15                      | SROLLBACK
+
+   16 schema_statement: SCREATE STABLE sname '(' table_element_list ')'
+   17                 | SCREATE SVIEW sname SAS query_expr
+   18                 | SCREATE SVIEW sname SAS query_expr union
+   19                 | SDROP STABLE sname
+   20                 | SDROP SVIEW sname
+
+   21 union: SUNION SALL query_expr
+   22      | union SUNION SALL query_expr
+
+   23 table_element_list: table_element
+
+   24 $@1: %empty
+
+   25 table_element_list: table_element_list ',' table_element $@1
+
+   26 table_element: sname SNAME '(' SNUM ')' table_element_restriction
+   27              | sname SNAME '(' SNUM ',' SNUM ')' table_element_restriction
+   28              | sname SNAME table_element_restriction
+
+   29 table_element_restriction: %empty
+   30                          | SPRIMARY SKEY
+
+   31 data_statement: delete_statement
+   32               | insert_statement
+   33               | update_statement
+   34               | query_expr
+
+   35 delete_statement: SDELETE SFROM sname
+   36                 | SDELETE SFROM sname where_clause
+
+   37 insert_statement: SINSERT SINTO sname SVALUES '(' value_list ')'
+   38                 | SINSERT SINTO sname '(' name_list ')' SVALUES '(' value_list ')'
+
+   39 value_list: value
+   40           | value_list ',' value
+
+   41 value: SNUM
+   42      | SSTRING
+   43      | SFLOAT
+   44      | '-' value
+   45      | param
+
+   46 param: '?'
+
+   47 name_list: sname
+   48          | name_list ',' sname
+
+   49 update_statement: SUPDATE sname SSET set_list
+   50                 | SUPDATE sname SSET set_list where_clause
+
+   51 set_list: sname '=' arith_expr
+   52         | set_list ',' sname '=' arith_expr
+
+   53 query_expr: SSELECT select_list from_clause
+   54           | SSELECT select_list from_clause where_clause
+   55           | SSELECT select_list from_clause order_by_clause
+   56           | SSELECT select_list from_clause where_clause order_by_clause
+
+   57 select_list: '*'
+   58            | select_sublists
+
+   59 select_sublists: select_sublist
+   60                | select_sublists ',' select_sublist
+
+   61 select_sublist: column_name
+   62               | column_name SAS sname
+   63               | column_name sname
+
+   64 column_name: sname
+   65            | sname '.' sname
+
+   66 from_clause: SFROM tables
+
+   67 tables: table
+   68       | tables ',' table
+
+   69 table: sname
+   70      | sname sname
+
+   71 where_clause: SWHERE search_condition
+
+   72 order_by_clause: SORDER SBY order_lists
+
+   73 order_lists: order_column
+   74            | order_lists ',' order_column
+
+   75 order_column: column_name
+   76             | column_name SASC
+   77             | column_name SDESC
+
+   78 search_condition: expr
+
+   79 expr: uexpr
+   80     | '(' expr ')'
+
+   81 uexpr: expr SOR expr
+   82      | expr SAND expr
+   83      | column_name relop column_name
+   84      | column_name relop value
+   85      | value relop column_name
+   86      | value relop value
+   87      | column_name SLIKE SSTRING
+   88      | column_name SNOT SLIKE SSTRING
+   89      | column_name SLIKE SSTRING SESCAPE SSTRING
+   90      | column_name SNOT SLIKE SSTRING SESCAPE SSTRING
+
+   91 relop: SEQ
+   92      | SGT
+   93      | SLT
+   94      | SGE
+   95      | SLE
+   96      | SNE
+   97      | '='
+
+   98 arith_expr: '(' arith_expr ')'
+   99           | arith_expr '+' arith_expr
+  100           | arith_expr '-' arith_expr
+  101           | arith_expr '*' arith_expr
+  102           | arith_expr '/' arith_expr
+  103           | '-' arith_expr
+  104           | value
+  105           | column_name
+
+  106 sname: SNAME
+  107      | SSTRING
+
+
+出現位置の規則による終端
+
+$end (0) 0
+'(' (40) 16 26 27 37 38 80 98
+')' (41) 16 26 27 37 38 80 98
+'*' (42) 57 101
+'+' (43) 99
+',' (44) 25 27 40 48 52 60 68 74
+'-' (45) 44 100 103
+'.' (46) 65
+'/' (47) 102
+';' (59) 7 8 9
+'=' (61) 51 52 97
+'?' (63) 46
+error (256)
+TLEAF (258)
+VITEM (259)
+VITEM_ALLOC (260)
+VSTRING (261)
+VSTRING_ALLOC (262)
+VBIN (263)
+VINT (264)
+VUINT (265)
+VLONG (266)
+VULONG (267)
+VFLOAT (268)
+VBOOL (269)
+VPARAM (270)
+SNAME (271) 26 27 28 106
+SSTRING (272) 42 87 88 89 90 107
+SNUM (273) 26 27 41
+SFLOAT (274) 43
+SOR (275) 81
+SAND (276) 82
+SLT (277) 93
+SGT (278) 92
+SLE (279) 95
+SGE (280) 94
+SEQ (281) 91
+SNE (282) 96
+STR_EQ (283)
+STR_NE (284)
+STR_GT (285)
+STR_LT (286)
+STR_GE (287)
+STR_LE (288)
+SCREATE (289) 16 17 18
+SDROP (290) 19 20
+STABLE (291) 16 19
+SVIEW (292) 17 18 20
+SAS (293) 17 18 62
+SSELECT (294) 53 54 55 56
+SFROM (295) 35 36 66
+SWHERE (296) 71
+SDELETE (297) 35 36
+SINSERT (298) 37 38
+SINTO (299) 37 38
+SVALUES (300) 37 38
+SUPDATE (301) 49 50
+SSET (302) 49 50
+SNODE (303)
+SDROP_TABLE (304)
+SDROP_VIEW (305)
+SCREATE_TABLE (306)
+SCREATE_VIEW (307)
+SSTATEMENT (308)
+SBEGIN (309) 13
+SCOMMIT (310) 14
+SROLLBACK (311) 15
+SORDER (312) 72
+SBY (313) 72
+SASC (314) 76
+SDESC (315) 77
+SPRIMARY (316) 30
+SKEY (317) 30
+SUNION (318) 21 22
+SALL (319) 21 22
+SLIKE (320) 87 88 89 90
+SNOT (321) 88 90
+SNOTLIKE (322)
+SESCAPE (323) 89 90
+START_program (324) 1
+START_pstatement (325) 2
+
+
+出現位置の規則による非終端
+
+$accept (82)
+    左辺: 0
+start (83)
+    左辺: 1 2, 右辺: 0
+program (84)
+    左辺: 3 4, 右辺: 1
+statements (85)
+    左辺: 5 6, 右辺: 4 6
+statement (86)
+    左辺: 7 8 9, 右辺: 5 6
+pstatement (87)
+    左辺: 10 11 12, 右辺: 2
+transaction_statement (88)
+    左辺: 13 14 15, 右辺: 9 12
+schema_statement (89)
+    左辺: 16 17 18 19 20, 右辺: 7 10
+union (90)
+    左辺: 21 22, 右辺: 18 22
+table_element_list (91)
+    左辺: 23 25, 右辺: 16 25
+$@1 (92)
+    左辺: 24, 右辺: 25
+table_element (93)
+    左辺: 26 27 28, 右辺: 23 25
+table_element_restriction (94)
+    左辺: 29 30, 右辺: 26 27 28
+data_statement (95)
+    左辺: 31 32 33 34, 右辺: 8 11
+delete_statement (96)
+    左辺: 35 36, 右辺: 31
+insert_statement (97)
+    左辺: 37 38, 右辺: 32
+value_list (98)
+    左辺: 39 40, 右辺: 37 38 40
+value (99)
+    左辺: 41 42 43 44 45, 右辺: 39 40 44 84 85 86 104
+param (100)
+    左辺: 46, 右辺: 45
+name_list (101)
+    左辺: 47 48, 右辺: 38 48
+update_statement (102)
+    左辺: 49 50, 右辺: 33
+set_list (103)
+    左辺: 51 52, 右辺: 49 50 52
+query_expr (104)
+    左辺: 53 54 55 56, 右辺: 17 18 21 22 34
+select_list (105)
+    左辺: 57 58, 右辺: 53 54 55 56
+select_sublists (106)
+    左辺: 59 60, 右辺: 58 60
+select_sublist (107)
+    左辺: 61 62 63, 右辺: 59 60
+column_name (108)
+    左辺: 64 65, 右辺: 61 62 63 75 76 77 83 84 85 87 88 89 90 105
+from_clause (109)
+    左辺: 66, 右辺: 53 54 55 56
+tables (110)
+    左辺: 67 68, 右辺: 66 68
+table (111)
+    左辺: 69 70, 右辺: 67 68
+where_clause (112)
+    左辺: 71, 右辺: 36 50 54 56
+order_by_clause (113)
+    左辺: 72, 右辺: 55 56
+order_lists (114)
+    左辺: 73 74, 右辺: 72 74
+order_column (115)
+    左辺: 75 76 77, 右辺: 73 74
+search_condition (116)
+    左辺: 78, 右辺: 71
+expr (117)
+    左辺: 79 80, 右辺: 78 80 81 82
+uexpr (118)
+    左辺: 81 82 83 84 85 86 87 88 89 90, 右辺: 79
+relop (119)
+    左辺: 91 92 93 94 95 96 97, 右辺: 83 84 85 86
+arith_expr (120)
+    左辺: 98 99 100 101 102 103 104 105, 右辺: 51 52 98 99 100
+    101 102 103
+sname (121)
+    左辺: 106 107, 右辺: 16 17 18 19 20 26 27 28 35 36 37 38 47
+    48 49 50 51 52 62 63 64 65 69 70
+
+
+State 0
+
+    0 $accept: . start $end
+
+    START_program     shift, and go to state 1
+    START_pstatement  shift, and go to state 2
+
+    start  go to state 3
+
+
+State 1
+
+    1 start: START_program . program
+
+    SCREATE    shift, and go to state 4
+    SDROP      shift, and go to state 5
+    SSELECT    shift, and go to state 6
+    SDELETE    shift, and go to state 7
+    SINSERT    shift, and go to state 8
+    SUPDATE    shift, and go to state 9
+    SBEGIN     shift, and go to state 10
+    SCOMMIT    shift, and go to state 11
+    SROLLBACK  shift, and go to state 12
+
+    $default  reduce using rule 3 (program)
+
+    program                go to state 13
+    statements             go to state 14
+    statement              go to state 15
+    transaction_statement  go to state 16
+    schema_statement       go to state 17
+    data_statement         go to state 18
+    delete_statement       go to state 19
+    insert_statement       go to state 20
+    update_statement       go to state 21
+    query_expr             go to state 22
+
+
+State 2
+
+    2 start: START_pstatement . pstatement
+
+    SCREATE    shift, and go to state 4
+    SDROP      shift, and go to state 5
+    SSELECT    shift, and go to state 6
+    SDELETE    shift, and go to state 7
+    SINSERT    shift, and go to state 8
+    SUPDATE    shift, and go to state 9
+    SBEGIN     shift, and go to state 10
+    SCOMMIT    shift, and go to state 11
+    SROLLBACK  shift, and go to state 12
+
+    pstatement             go to state 23
+    transaction_statement  go to state 24
+    schema_statement       go to state 25
+    data_statement         go to state 26
+    delete_statement       go to state 19
+    insert_statement       go to state 20
+    update_statement       go to state 21
+    query_expr             go to state 22
+
+
+State 3
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 27
+
+
+State 4
+
+   16 schema_statement: SCREATE . STABLE sname '(' table_element_list ')'
+   17                 | SCREATE . SVIEW sname SAS query_expr
+   18                 | SCREATE . SVIEW sname SAS query_expr union
+
+    STABLE  shift, and go to state 28
+    SVIEW   shift, and go to state 29
+
+
+State 5
+
+   19 schema_statement: SDROP . STABLE sname
+   20                 | SDROP . SVIEW sname
+
+    STABLE  shift, and go to state 30
+    SVIEW   shift, and go to state 31
+
+
+State 6
+
+   53 query_expr: SSELECT . select_list from_clause
+   54           | SSELECT . select_list from_clause where_clause
+   55           | SSELECT . select_list from_clause order_by_clause
+   56           | SSELECT . select_list from_clause where_clause order_by_clause
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+    '*'      shift, and go to state 34
+
+    select_list      go to state 35
+    select_sublists  go to state 36
+    select_sublist   go to state 37
+    column_name      go to state 38
+    sname            go to state 39
+
+
+State 7
+
+   35 delete_statement: SDELETE . SFROM sname
+   36                 | SDELETE . SFROM sname where_clause
+
+    SFROM  shift, and go to state 40
+
+
+State 8
+
+   37 insert_statement: SINSERT . SINTO sname SVALUES '(' value_list ')'
+   38                 | SINSERT . SINTO sname '(' name_list ')' SVALUES '(' value_list ')'
+
+    SINTO  shift, and go to state 41
+
+
+State 9
+
+   49 update_statement: SUPDATE . sname SSET set_list
+   50                 | SUPDATE . sname SSET set_list where_clause
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 42
+
+
+State 10
+
+   13 transaction_statement: SBEGIN .
+
+    $default  reduce using rule 13 (transaction_statement)
+
+
+State 11
+
+   14 transaction_statement: SCOMMIT .
+
+    $default  reduce using rule 14 (transaction_statement)
+
+
+State 12
+
+   15 transaction_statement: SROLLBACK .
+
+    $default  reduce using rule 15 (transaction_statement)
+
+
+State 13
+
+    1 start: START_program program .
+
+    $default  reduce using rule 1 (start)
+
+
+State 14
+
+    4 program: statements .
+    6 statements: statements . statement
+
+    SCREATE    shift, and go to state 4
+    SDROP      shift, and go to state 5
+    SSELECT    shift, and go to state 6
+    SDELETE    shift, and go to state 7
+    SINSERT    shift, and go to state 8
+    SUPDATE    shift, and go to state 9
+    SBEGIN     shift, and go to state 10
+    SCOMMIT    shift, and go to state 11
+    SROLLBACK  shift, and go to state 12
+
+    $default  reduce using rule 4 (program)
+
+    statement              go to state 43
+    transaction_statement  go to state 16
+    schema_statement       go to state 17
+    data_statement         go to state 18
+    delete_statement       go to state 19
+    insert_statement       go to state 20
+    update_statement       go to state 21
+    query_expr             go to state 22
+
+
+State 15
+
+    5 statements: statement .
+
+    $default  reduce using rule 5 (statements)
+
+
+State 16
+
+    9 statement: transaction_statement . ';'
+
+    ';'  shift, and go to state 44
+
+
+State 17
+
+    7 statement: schema_statement . ';'
+
+    ';'  shift, and go to state 45
+
+
+State 18
+
+    8 statement: data_statement . ';'
+
+    ';'  shift, and go to state 46
+
+
+State 19
+
+   31 data_statement: delete_statement .
+
+    $default  reduce using rule 31 (data_statement)
+
+
+State 20
+
+   32 data_statement: insert_statement .
+
+    $default  reduce using rule 32 (data_statement)
+
+
+State 21
+
+   33 data_statement: update_statement .
+
+    $default  reduce using rule 33 (data_statement)
+
+
+State 22
+
+   34 data_statement: query_expr .
+
+    $default  reduce using rule 34 (data_statement)
+
+
+State 23
+
+    2 start: START_pstatement pstatement .
+
+    $default  reduce using rule 2 (start)
+
+
+State 24
+
+   12 pstatement: transaction_statement .
+
+    $default  reduce using rule 12 (pstatement)
+
+
+State 25
+
+   10 pstatement: schema_statement .
+
+    $default  reduce using rule 10 (pstatement)
+
+
+State 26
+
+   11 pstatement: data_statement .
+
+    $default  reduce using rule 11 (pstatement)
+
+
+State 27
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 28
+
+   16 schema_statement: SCREATE STABLE . sname '(' table_element_list ')'
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 47
+
+
+State 29
+
+   17 schema_statement: SCREATE SVIEW . sname SAS query_expr
+   18                 | SCREATE SVIEW . sname SAS query_expr union
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 48
+
+
+State 30
+
+   19 schema_statement: SDROP STABLE . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 49
+
+
+State 31
+
+   20 schema_statement: SDROP SVIEW . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 50
+
+
+State 32
+
+  106 sname: SNAME .
+
+    $default  reduce using rule 106 (sname)
+
+
+State 33
+
+  107 sname: SSTRING .
+
+    $default  reduce using rule 107 (sname)
+
+
+State 34
+
+   57 select_list: '*' .
+
+    $default  reduce using rule 57 (select_list)
+
+
+State 35
+
+   53 query_expr: SSELECT select_list . from_clause
+   54           | SSELECT select_list . from_clause where_clause
+   55           | SSELECT select_list . from_clause order_by_clause
+   56           | SSELECT select_list . from_clause where_clause order_by_clause
+
+    SFROM  shift, and go to state 51
+
+    from_clause  go to state 52
+
+
+State 36
+
+   58 select_list: select_sublists .
+   60 select_sublists: select_sublists . ',' select_sublist
+
+    ','  shift, and go to state 53
+
+    $default  reduce using rule 58 (select_list)
+
+
+State 37
+
+   59 select_sublists: select_sublist .
+
+    $default  reduce using rule 59 (select_sublists)
+
+
+State 38
+
+   61 select_sublist: column_name .
+   62               | column_name . SAS sname
+   63               | column_name . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+    SAS      shift, and go to state 54
+
+    $default  reduce using rule 61 (select_sublist)
+
+    sname  go to state 55
+
+
+State 39
+
+   64 column_name: sname .
+   65            | sname . '.' sname
+
+    '.'  shift, and go to state 56
+
+    $default  reduce using rule 64 (column_name)
+
+
+State 40
+
+   35 delete_statement: SDELETE SFROM . sname
+   36                 | SDELETE SFROM . sname where_clause
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 57
+
+
+State 41
+
+   37 insert_statement: SINSERT SINTO . sname SVALUES '(' value_list ')'
+   38                 | SINSERT SINTO . sname '(' name_list ')' SVALUES '(' value_list ')'
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 58
+
+
+State 42
+
+   49 update_statement: SUPDATE sname . SSET set_list
+   50                 | SUPDATE sname . SSET set_list where_clause
+
+    SSET  shift, and go to state 59
+
+
+State 43
+
+    6 statements: statements statement .
+
+    $default  reduce using rule 6 (statements)
+
+
+State 44
+
+    9 statement: transaction_statement ';' .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 45
+
+    7 statement: schema_statement ';' .
+
+    $default  reduce using rule 7 (statement)
+
+
+State 46
+
+    8 statement: data_statement ';' .
+
+    $default  reduce using rule 8 (statement)
+
+
+State 47
+
+   16 schema_statement: SCREATE STABLE sname . '(' table_element_list ')'
+
+    '('  shift, and go to state 60
+
+
+State 48
+
+   17 schema_statement: SCREATE SVIEW sname . SAS query_expr
+   18                 | SCREATE SVIEW sname . SAS query_expr union
+
+    SAS  shift, and go to state 61
+
+
+State 49
+
+   19 schema_statement: SDROP STABLE sname .
+
+    $default  reduce using rule 19 (schema_statement)
+
+
+State 50
+
+   20 schema_statement: SDROP SVIEW sname .
+
+    $default  reduce using rule 20 (schema_statement)
+
+
+State 51
+
+   66 from_clause: SFROM . tables
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    tables  go to state 62
+    table   go to state 63
+    sname   go to state 64
+
+
+State 52
+
+   53 query_expr: SSELECT select_list from_clause .
+   54           | SSELECT select_list from_clause . where_clause
+   55           | SSELECT select_list from_clause . order_by_clause
+   56           | SSELECT select_list from_clause . where_clause order_by_clause
+
+    SWHERE  shift, and go to state 65
+    SORDER  shift, and go to state 66
+
+    $default  reduce using rule 53 (query_expr)
+
+    where_clause     go to state 67
+    order_by_clause  go to state 68
+
+
+State 53
+
+   60 select_sublists: select_sublists ',' . select_sublist
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    select_sublist  go to state 69
+    column_name     go to state 38
+    sname           go to state 39
+
+
+State 54
+
+   62 select_sublist: column_name SAS . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 70
+
+
+State 55
+
+   63 select_sublist: column_name sname .
+
+    $default  reduce using rule 63 (select_sublist)
+
+
+State 56
+
+   65 column_name: sname '.' . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 71
+
+
+State 57
+
+   35 delete_statement: SDELETE SFROM sname .
+   36                 | SDELETE SFROM sname . where_clause
+
+    SWHERE  shift, and go to state 65
+
+    $default  reduce using rule 35 (delete_statement)
+
+    where_clause  go to state 72
+
+
+State 58
+
+   37 insert_statement: SINSERT SINTO sname . SVALUES '(' value_list ')'
+   38                 | SINSERT SINTO sname . '(' name_list ')' SVALUES '(' value_list ')'
+
+    SVALUES  shift, and go to state 73
+    '('      shift, and go to state 74
+
+
+State 59
+
+   49 update_statement: SUPDATE sname SSET . set_list
+   50                 | SUPDATE sname SSET . set_list where_clause
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    set_list  go to state 75
+    sname     go to state 76
+
+
+State 60
+
+   16 schema_statement: SCREATE STABLE sname '(' . table_element_list ')'
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    table_element_list  go to state 77
+    table_element       go to state 78
+    sname               go to state 79
+
+
+State 61
+
+   17 schema_statement: SCREATE SVIEW sname SAS . query_expr
+   18                 | SCREATE SVIEW sname SAS . query_expr union
+
+    SSELECT  shift, and go to state 6
+
+    query_expr  go to state 80
+
+
+State 62
+
+   66 from_clause: SFROM tables .
+   68 tables: tables . ',' table
+
+    ','  shift, and go to state 81
+
+    $default  reduce using rule 66 (from_clause)
+
+
+State 63
+
+   67 tables: table .
+
+    $default  reduce using rule 67 (tables)
+
+
+State 64
+
+   69 table: sname .
+   70      | sname . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    $default  reduce using rule 69 (table)
+
+    sname  go to state 82
+
+
+State 65
+
+   71 where_clause: SWHERE . search_condition
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+    '('      shift, and go to state 88
+
+    value             go to state 89
+    param             go to state 90
+    column_name       go to state 91
+    search_condition  go to state 92
+    expr              go to state 93
+    uexpr             go to state 94
+    sname             go to state 39
+
+
+State 66
+
+   72 order_by_clause: SORDER . SBY order_lists
+
+    SBY  shift, and go to state 95
+
+
+State 67
+
+   54 query_expr: SSELECT select_list from_clause where_clause .
+   56           | SSELECT select_list from_clause where_clause . order_by_clause
+
+    SORDER  shift, and go to state 66
+
+    $default  reduce using rule 54 (query_expr)
+
+    order_by_clause  go to state 96
+
+
+State 68
+
+   55 query_expr: SSELECT select_list from_clause order_by_clause .
+
+    $default  reduce using rule 55 (query_expr)
+
+
+State 69
+
+   60 select_sublists: select_sublists ',' select_sublist .
+
+    $default  reduce using rule 60 (select_sublists)
+
+
+State 70
+
+   62 select_sublist: column_name SAS sname .
+
+    $default  reduce using rule 62 (select_sublist)
+
+
+State 71
+
+   65 column_name: sname '.' sname .
+
+    $default  reduce using rule 65 (column_name)
+
+
+State 72
+
+   36 delete_statement: SDELETE SFROM sname where_clause .
+
+    $default  reduce using rule 36 (delete_statement)
+
+
+State 73
+
+   37 insert_statement: SINSERT SINTO sname SVALUES . '(' value_list ')'
+
+    '('  shift, and go to state 97
+
+
+State 74
+
+   38 insert_statement: SINSERT SINTO sname '(' . name_list ')' SVALUES '(' value_list ')'
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    name_list  go to state 98
+    sname      go to state 99
+
+
+State 75
+
+   49 update_statement: SUPDATE sname SSET set_list .
+   50                 | SUPDATE sname SSET set_list . where_clause
+   52 set_list: set_list . ',' sname '=' arith_expr
+
+    SWHERE  shift, and go to state 65
+    ','     shift, and go to state 100
+
+    $default  reduce using rule 49 (update_statement)
+
+    where_clause  go to state 101
+
+
+State 76
+
+   51 set_list: sname . '=' arith_expr
+
+    '='  shift, and go to state 102
+
+
+State 77
+
+   16 schema_statement: SCREATE STABLE sname '(' table_element_list . ')'
+   25 table_element_list: table_element_list . ',' table_element $@1
+
+    ')'  shift, and go to state 103
+    ','  shift, and go to state 104
+
+
+State 78
+
+   23 table_element_list: table_element .
+
+    $default  reduce using rule 23 (table_element_list)
+
+
+State 79
+
+   26 table_element: sname . SNAME '(' SNUM ')' table_element_restriction
+   27              | sname . SNAME '(' SNUM ',' SNUM ')' table_element_restriction
+   28              | sname . SNAME table_element_restriction
+
+    SNAME  shift, and go to state 105
+
+
+State 80
+
+   17 schema_statement: SCREATE SVIEW sname SAS query_expr .
+   18                 | SCREATE SVIEW sname SAS query_expr . union
+
+    SUNION  shift, and go to state 106
+
+    $default  reduce using rule 17 (schema_statement)
+
+    union  go to state 107
+
+
+State 81
+
+   68 tables: tables ',' . table
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    table  go to state 108
+    sname  go to state 64
+
+
+State 82
+
+   70 table: sname sname .
+
+    $default  reduce using rule 70 (table)
+
+
+State 83
+
+   42 value: SSTRING .
+  107 sname: SSTRING .
+
+    $end      reduce using rule 42 (value)
+    $end      [reduce using rule 107 (sname)]
+    SOR       reduce using rule 42 (value)
+    SOR       [reduce using rule 107 (sname)]
+    SAND      reduce using rule 42 (value)
+    SAND      [reduce using rule 107 (sname)]
+    SLT       reduce using rule 42 (value)
+    SLT       [reduce using rule 107 (sname)]
+    SGT       reduce using rule 42 (value)
+    SGT       [reduce using rule 107 (sname)]
+    SLE       reduce using rule 42 (value)
+    SLE       [reduce using rule 107 (sname)]
+    SGE       reduce using rule 42 (value)
+    SGE       [reduce using rule 107 (sname)]
+    SEQ       reduce using rule 42 (value)
+    SEQ       [reduce using rule 107 (sname)]
+    SNE       reduce using rule 42 (value)
+    SNE       [reduce using rule 107 (sname)]
+    '='       reduce using rule 42 (value)
+    '='       [reduce using rule 107 (sname)]
+    SWHERE    reduce using rule 42 (value)
+    SWHERE    [reduce using rule 107 (sname)]
+    SORDER    reduce using rule 42 (value)
+    SORDER    [reduce using rule 107 (sname)]
+    SUNION    reduce using rule 42 (value)
+    SUNION    [reduce using rule 107 (sname)]
+    SLIKE     reduce using rule 107 (sname)
+    SNOT      reduce using rule 107 (sname)
+    '+'       reduce using rule 42 (value)
+    '+'       [reduce using rule 107 (sname)]
+    '-'       reduce using rule 42 (value)
+    '-'       [reduce using rule 107 (sname)]
+    '*'       reduce using rule 42 (value)
+    '*'       [reduce using rule 107 (sname)]
+    '/'       reduce using rule 42 (value)
+    '/'       [reduce using rule 107 (sname)]
+    ';'       reduce using rule 42 (value)
+    ';'       [reduce using rule 107 (sname)]
+    ')'       reduce using rule 42 (value)
+    ')'       [reduce using rule 107 (sname)]
+    ','       reduce using rule 42 (value)
+    ','       [reduce using rule 107 (sname)]
+    '.'       reduce using rule 107 (sname)
+    $default  reduce using rule 42 (value)
+
+
+State 84
+
+   41 value: SNUM .
+
+    $default  reduce using rule 41 (value)
+
+
+State 85
+
+   43 value: SFLOAT .
+
+    $default  reduce using rule 43 (value)
+
+
+State 86
+
+   46 param: '?' .
+
+    $default  reduce using rule 46 (param)
+
+
+State 87
+
+   44 value: '-' . value
+
+    SSTRING  shift, and go to state 109
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+
+    value  go to state 110
+    param  go to state 90
+
+
+State 88
+
+   80 expr: '(' . expr ')'
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+    '('      shift, and go to state 88
+
+    value        go to state 89
+    param        go to state 90
+    column_name  go to state 91
+    expr         go to state 111
+    uexpr        go to state 94
+    sname        go to state 39
+
+
+State 89
+
+   85 uexpr: value . relop column_name
+   86      | value . relop value
+
+    SLT  shift, and go to state 112
+    SGT  shift, and go to state 113
+    SLE  shift, and go to state 114
+    SGE  shift, and go to state 115
+    SEQ  shift, and go to state 116
+    SNE  shift, and go to state 117
+    '='  shift, and go to state 118
+
+    relop  go to state 119
+
+
+State 90
+
+   45 value: param .
+
+    $default  reduce using rule 45 (value)
+
+
+State 91
+
+   83 uexpr: column_name . relop column_name
+   84      | column_name . relop value
+   87      | column_name . SLIKE SSTRING
+   88      | column_name . SNOT SLIKE SSTRING
+   89      | column_name . SLIKE SSTRING SESCAPE SSTRING
+   90      | column_name . SNOT SLIKE SSTRING SESCAPE SSTRING
+
+    SLT    shift, and go to state 112
+    SGT    shift, and go to state 113
+    SLE    shift, and go to state 114
+    SGE    shift, and go to state 115
+    SEQ    shift, and go to state 116
+    SNE    shift, and go to state 117
+    '='    shift, and go to state 118
+    SLIKE  shift, and go to state 120
+    SNOT   shift, and go to state 121
+
+    relop  go to state 122
+
+
+State 92
+
+   71 where_clause: SWHERE search_condition .
+
+    $default  reduce using rule 71 (where_clause)
+
+
+State 93
+
+   78 search_condition: expr .
+   81 uexpr: expr . SOR expr
+   82      | expr . SAND expr
+
+    SOR   shift, and go to state 123
+    SAND  shift, and go to state 124
+
+    $default  reduce using rule 78 (search_condition)
+
+
+State 94
+
+   79 expr: uexpr .
+
+    $default  reduce using rule 79 (expr)
+
+
+State 95
+
+   72 order_by_clause: SORDER SBY . order_lists
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    column_name   go to state 125
+    order_lists   go to state 126
+    order_column  go to state 127
+    sname         go to state 39
+
+
+State 96
+
+   56 query_expr: SSELECT select_list from_clause where_clause order_by_clause .
+
+    $default  reduce using rule 56 (query_expr)
+
+
+State 97
+
+   37 insert_statement: SINSERT SINTO sname SVALUES '(' . value_list ')'
+
+    SSTRING  shift, and go to state 109
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+
+    value_list  go to state 128
+    value       go to state 129
+    param       go to state 90
+
+
+State 98
+
+   38 insert_statement: SINSERT SINTO sname '(' name_list . ')' SVALUES '(' value_list ')'
+   48 name_list: name_list . ',' sname
+
+    ')'  shift, and go to state 130
+    ','  shift, and go to state 131
+
+
+State 99
+
+   47 name_list: sname .
+
+    $default  reduce using rule 47 (name_list)
+
+
+State 100
+
+   52 set_list: set_list ',' . sname '=' arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 132
+
+
+State 101
+
+   50 update_statement: SUPDATE sname SSET set_list where_clause .
+
+    $default  reduce using rule 50 (update_statement)
+
+
+State 102
+
+   51 set_list: sname '=' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 137
+    sname        go to state 39
+
+
+State 103
+
+   16 schema_statement: SCREATE STABLE sname '(' table_element_list ')' .
+
+    $default  reduce using rule 16 (schema_statement)
+
+
+State 104
+
+   25 table_element_list: table_element_list ',' . table_element $@1
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    table_element  go to state 138
+    sname          go to state 79
+
+
+State 105
+
+   26 table_element: sname SNAME . '(' SNUM ')' table_element_restriction
+   27              | sname SNAME . '(' SNUM ',' SNUM ')' table_element_restriction
+   28              | sname SNAME . table_element_restriction
+
+    SPRIMARY  shift, and go to state 139
+    '('       shift, and go to state 140
+
+    $default  reduce using rule 29 (table_element_restriction)
+
+    table_element_restriction  go to state 141
+
+
+State 106
+
+   21 union: SUNION . SALL query_expr
+
+    SALL  shift, and go to state 142
+
+
+State 107
+
+   18 schema_statement: SCREATE SVIEW sname SAS query_expr union .
+   22 union: union . SUNION SALL query_expr
+
+    SUNION  shift, and go to state 143
+
+    $default  reduce using rule 18 (schema_statement)
+
+
+State 108
+
+   68 tables: tables ',' table .
+
+    $default  reduce using rule 68 (tables)
+
+
+State 109
+
+   42 value: SSTRING .
+
+    $default  reduce using rule 42 (value)
+
+
+State 110
+
+   44 value: '-' value .
+
+    $default  reduce using rule 44 (value)
+
+
+State 111
+
+   80 expr: '(' expr . ')'
+   81 uexpr: expr . SOR expr
+   82      | expr . SAND expr
+
+    SOR   shift, and go to state 123
+    SAND  shift, and go to state 124
+    ')'   shift, and go to state 144
+
+
+State 112
+
+   93 relop: SLT .
+
+    $default  reduce using rule 93 (relop)
+
+
+State 113
+
+   92 relop: SGT .
+
+    $default  reduce using rule 92 (relop)
+
+
+State 114
+
+   95 relop: SLE .
+
+    $default  reduce using rule 95 (relop)
+
+
+State 115
+
+   94 relop: SGE .
+
+    $default  reduce using rule 94 (relop)
+
+
+State 116
+
+   91 relop: SEQ .
+
+    $default  reduce using rule 91 (relop)
+
+
+State 117
+
+   96 relop: SNE .
+
+    $default  reduce using rule 96 (relop)
+
+
+State 118
+
+   97 relop: '=' .
+
+    $default  reduce using rule 97 (relop)
+
+
+State 119
+
+   85 uexpr: value relop . column_name
+   86      | value relop . value
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+
+    value        go to state 145
+    param        go to state 90
+    column_name  go to state 146
+    sname        go to state 39
+
+
+State 120
+
+   87 uexpr: column_name SLIKE . SSTRING
+   89      | column_name SLIKE . SSTRING SESCAPE SSTRING
+
+    SSTRING  shift, and go to state 147
+
+
+State 121
+
+   88 uexpr: column_name SNOT . SLIKE SSTRING
+   90      | column_name SNOT . SLIKE SSTRING SESCAPE SSTRING
+
+    SLIKE  shift, and go to state 148
+
+
+State 122
+
+   83 uexpr: column_name relop . column_name
+   84      | column_name relop . value
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+
+    value        go to state 149
+    param        go to state 90
+    column_name  go to state 150
+    sname        go to state 39
+
+
+State 123
+
+   81 uexpr: expr SOR . expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+    '('      shift, and go to state 88
+
+    value        go to state 89
+    param        go to state 90
+    column_name  go to state 91
+    expr         go to state 151
+    uexpr        go to state 94
+    sname        go to state 39
+
+
+State 124
+
+   82 uexpr: expr SAND . expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+    '('      shift, and go to state 88
+
+    value        go to state 89
+    param        go to state 90
+    column_name  go to state 91
+    expr         go to state 152
+    uexpr        go to state 94
+    sname        go to state 39
+
+
+State 125
+
+   75 order_column: column_name .
+   76             | column_name . SASC
+   77             | column_name . SDESC
+
+    SASC   shift, and go to state 153
+    SDESC  shift, and go to state 154
+
+    $default  reduce using rule 75 (order_column)
+
+
+State 126
+
+   72 order_by_clause: SORDER SBY order_lists .
+   74 order_lists: order_lists . ',' order_column
+
+    ','  shift, and go to state 155
+
+    $default  reduce using rule 72 (order_by_clause)
+
+
+State 127
+
+   73 order_lists: order_column .
+
+    $default  reduce using rule 73 (order_lists)
+
+
+State 128
+
+   37 insert_statement: SINSERT SINTO sname SVALUES '(' value_list . ')'
+   40 value_list: value_list . ',' value
+
+    ')'  shift, and go to state 156
+    ','  shift, and go to state 157
+
+
+State 129
+
+   39 value_list: value .
+
+    $default  reduce using rule 39 (value_list)
+
+
+State 130
+
+   38 insert_statement: SINSERT SINTO sname '(' name_list ')' . SVALUES '(' value_list ')'
+
+    SVALUES  shift, and go to state 158
+
+
+State 131
+
+   48 name_list: name_list ',' . sname
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    sname  go to state 159
+
+
+State 132
+
+   52 set_list: set_list ',' sname . '=' arith_expr
+
+    '='  shift, and go to state 160
+
+
+State 133
+
+   44 value: '-' . value
+  103 arith_expr: '-' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 161
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 162
+    sname        go to state 39
+
+
+State 134
+
+   98 arith_expr: '(' . arith_expr ')'
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 163
+    sname        go to state 39
+
+
+State 135
+
+  104 arith_expr: value .
+
+    $default  reduce using rule 104 (arith_expr)
+
+
+State 136
+
+  105 arith_expr: column_name .
+
+    $default  reduce using rule 105 (arith_expr)
+
+
+State 137
+
+   51 set_list: sname '=' arith_expr .
+   99 arith_expr: arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+
+    '+'  shift, and go to state 164
+    '-'  shift, and go to state 165
+    '*'  shift, and go to state 166
+    '/'  shift, and go to state 167
+
+    $default  reduce using rule 51 (set_list)
+
+
+State 138
+
+   25 table_element_list: table_element_list ',' table_element . $@1
+
+    $default  reduce using rule 24 ($@1)
+
+    $@1  go to state 168
+
+
+State 139
+
+   30 table_element_restriction: SPRIMARY . SKEY
+
+    SKEY  shift, and go to state 169
+
+
+State 140
+
+   26 table_element: sname SNAME '(' . SNUM ')' table_element_restriction
+   27              | sname SNAME '(' . SNUM ',' SNUM ')' table_element_restriction
+
+    SNUM  shift, and go to state 170
+
+
+State 141
+
+   28 table_element: sname SNAME table_element_restriction .
+
+    $default  reduce using rule 28 (table_element)
+
+
+State 142
+
+   21 union: SUNION SALL . query_expr
+
+    SSELECT  shift, and go to state 6
+
+    query_expr  go to state 171
+
+
+State 143
+
+   22 union: union SUNION . SALL query_expr
+
+    SALL  shift, and go to state 172
+
+
+State 144
+
+   80 expr: '(' expr ')' .
+
+    $default  reduce using rule 80 (expr)
+
+
+State 145
+
+   86 uexpr: value relop value .
+
+    $default  reduce using rule 86 (uexpr)
+
+
+State 146
+
+   85 uexpr: value relop column_name .
+
+    $default  reduce using rule 85 (uexpr)
+
+
+State 147
+
+   87 uexpr: column_name SLIKE SSTRING .
+   89      | column_name SLIKE SSTRING . SESCAPE SSTRING
+
+    SESCAPE  shift, and go to state 173
+
+    $default  reduce using rule 87 (uexpr)
+
+
+State 148
+
+   88 uexpr: column_name SNOT SLIKE . SSTRING
+   90      | column_name SNOT SLIKE . SSTRING SESCAPE SSTRING
+
+    SSTRING  shift, and go to state 174
+
+
+State 149
+
+   84 uexpr: column_name relop value .
+
+    $default  reduce using rule 84 (uexpr)
+
+
+State 150
+
+   83 uexpr: column_name relop column_name .
+
+    $default  reduce using rule 83 (uexpr)
+
+
+State 151
+
+   81 uexpr: expr . SOR expr
+   81      | expr SOR expr .
+   82      | expr . SAND expr
+
+    SAND  shift, and go to state 124
+
+    $default  reduce using rule 81 (uexpr)
+
+
+State 152
+
+   81 uexpr: expr . SOR expr
+   82      | expr . SAND expr
+   82      | expr SAND expr .
+
+    $default  reduce using rule 82 (uexpr)
+
+
+State 153
+
+   76 order_column: column_name SASC .
+
+    $default  reduce using rule 76 (order_column)
+
+
+State 154
+
+   77 order_column: column_name SDESC .
+
+    $default  reduce using rule 77 (order_column)
+
+
+State 155
+
+   74 order_lists: order_lists ',' . order_column
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 33
+
+    column_name   go to state 125
+    order_column  go to state 175
+    sname         go to state 39
+
+
+State 156
+
+   37 insert_statement: SINSERT SINTO sname SVALUES '(' value_list ')' .
+
+    $default  reduce using rule 37 (insert_statement)
+
+
+State 157
+
+   40 value_list: value_list ',' . value
+
+    SSTRING  shift, and go to state 109
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+
+    value  go to state 176
+    param  go to state 90
+
+
+State 158
+
+   38 insert_statement: SINSERT SINTO sname '(' name_list ')' SVALUES . '(' value_list ')'
+
+    '('  shift, and go to state 177
+
+
+State 159
+
+   48 name_list: name_list ',' sname .
+
+    $default  reduce using rule 48 (name_list)
+
+
+State 160
+
+   52 set_list: set_list ',' sname '=' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 178
+    sname        go to state 39
+
+
+State 161
+
+   44 value: '-' value .
+  104 arith_expr: value .
+
+    $end      reduce using rule 44 (value)
+    $end      [reduce using rule 104 (arith_expr)]
+    SWHERE    reduce using rule 44 (value)
+    SWHERE    [reduce using rule 104 (arith_expr)]
+    '+'       reduce using rule 44 (value)
+    '+'       [reduce using rule 104 (arith_expr)]
+    '-'       reduce using rule 44 (value)
+    '-'       [reduce using rule 104 (arith_expr)]
+    '*'       reduce using rule 44 (value)
+    '*'       [reduce using rule 104 (arith_expr)]
+    '/'       reduce using rule 44 (value)
+    '/'       [reduce using rule 104 (arith_expr)]
+    ';'       reduce using rule 44 (value)
+    ';'       [reduce using rule 104 (arith_expr)]
+    ')'       reduce using rule 44 (value)
+    ')'       [reduce using rule 104 (arith_expr)]
+    ','       reduce using rule 44 (value)
+    ','       [reduce using rule 104 (arith_expr)]
+    $default  reduce using rule 44 (value)
+
+
+State 162
+
+   99 arith_expr: arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+  103           | '-' arith_expr .
+
+    '*'  shift, and go to state 166
+    '/'  shift, and go to state 167
+
+    $default  reduce using rule 103 (arith_expr)
+
+
+State 163
+
+   98 arith_expr: '(' arith_expr . ')'
+   99           | arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+
+    '+'  shift, and go to state 164
+    '-'  shift, and go to state 165
+    '*'  shift, and go to state 166
+    '/'  shift, and go to state 167
+    ')'  shift, and go to state 179
+
+
+State 164
+
+   99 arith_expr: arith_expr '+' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 180
+    sname        go to state 39
+
+
+State 165
+
+  100 arith_expr: arith_expr '-' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 181
+    sname        go to state 39
+
+
+State 166
+
+  101 arith_expr: arith_expr '*' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 182
+    sname        go to state 39
+
+
+State 167
+
+  102 arith_expr: arith_expr '/' . arith_expr
+
+    SNAME    shift, and go to state 32
+    SSTRING  shift, and go to state 83
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 133
+    '('      shift, and go to state 134
+
+    value        go to state 135
+    param        go to state 90
+    column_name  go to state 136
+    arith_expr   go to state 183
+    sname        go to state 39
+
+
+State 168
+
+   25 table_element_list: table_element_list ',' table_element $@1 .
+
+    $default  reduce using rule 25 (table_element_list)
+
+
+State 169
+
+   30 table_element_restriction: SPRIMARY SKEY .
+
+    $default  reduce using rule 30 (table_element_restriction)
+
+
+State 170
+
+   26 table_element: sname SNAME '(' SNUM . ')' table_element_restriction
+   27              | sname SNAME '(' SNUM . ',' SNUM ')' table_element_restriction
+
+    ')'  shift, and go to state 184
+    ','  shift, and go to state 185
+
+
+State 171
+
+   21 union: SUNION SALL query_expr .
+
+    $default  reduce using rule 21 (union)
+
+
+State 172
+
+   22 union: union SUNION SALL . query_expr
+
+    SSELECT  shift, and go to state 6
+
+    query_expr  go to state 186
+
+
+State 173
+
+   89 uexpr: column_name SLIKE SSTRING SESCAPE . SSTRING
+
+    SSTRING  shift, and go to state 187
+
+
+State 174
+
+   88 uexpr: column_name SNOT SLIKE SSTRING .
+   90      | column_name SNOT SLIKE SSTRING . SESCAPE SSTRING
+
+    SESCAPE  shift, and go to state 188
+
+    $default  reduce using rule 88 (uexpr)
+
+
+State 175
+
+   74 order_lists: order_lists ',' order_column .
+
+    $default  reduce using rule 74 (order_lists)
+
+
+State 176
+
+   40 value_list: value_list ',' value .
+
+    $default  reduce using rule 40 (value_list)
+
+
+State 177
+
+   38 insert_statement: SINSERT SINTO sname '(' name_list ')' SVALUES '(' . value_list ')'
+
+    SSTRING  shift, and go to state 109
+    SNUM     shift, and go to state 84
+    SFLOAT   shift, and go to state 85
+    '?'      shift, and go to state 86
+    '-'      shift, and go to state 87
+
+    value_list  go to state 189
+    value       go to state 129
+    param       go to state 90
+
+
+State 178
+
+   52 set_list: set_list ',' sname '=' arith_expr .
+   99 arith_expr: arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+
+    '+'  shift, and go to state 164
+    '-'  shift, and go to state 165
+    '*'  shift, and go to state 166
+    '/'  shift, and go to state 167
+
+    $default  reduce using rule 52 (set_list)
+
+
+State 179
+
+   98 arith_expr: '(' arith_expr ')' .
+
+    $default  reduce using rule 98 (arith_expr)
+
+
+State 180
+
+   99 arith_expr: arith_expr . '+' arith_expr
+   99           | arith_expr '+' arith_expr .
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+
+    '*'  shift, and go to state 166
+    '/'  shift, and go to state 167
+
+    $default  reduce using rule 99 (arith_expr)
+
+
+State 181
+
+   99 arith_expr: arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  100           | arith_expr '-' arith_expr .
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+
+    '*'  shift, and go to state 166
+    '/'  shift, and go to state 167
+
+    $default  reduce using rule 100 (arith_expr)
+
+
+State 182
+
+   99 arith_expr: arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  101           | arith_expr '*' arith_expr .
+  102           | arith_expr . '/' arith_expr
+
+    $default  reduce using rule 101 (arith_expr)
+
+
+State 183
+
+   99 arith_expr: arith_expr . '+' arith_expr
+  100           | arith_expr . '-' arith_expr
+  101           | arith_expr . '*' arith_expr
+  102           | arith_expr . '/' arith_expr
+  102           | arith_expr '/' arith_expr .
+
+    $default  reduce using rule 102 (arith_expr)
+
+
+State 184
+
+   26 table_element: sname SNAME '(' SNUM ')' . table_element_restriction
+
+    SPRIMARY  shift, and go to state 139
+
+    $default  reduce using rule 29 (table_element_restriction)
+
+    table_element_restriction  go to state 190
+
+
+State 185
+
+   27 table_element: sname SNAME '(' SNUM ',' . SNUM ')' table_element_restriction
+
+    SNUM  shift, and go to state 191
+
+
+State 186
+
+   22 union: union SUNION SALL query_expr .
+
+    $default  reduce using rule 22 (union)
+
+
+State 187
+
+   89 uexpr: column_name SLIKE SSTRING SESCAPE SSTRING .
+
+    $default  reduce using rule 89 (uexpr)
+
+
+State 188
+
+   90 uexpr: column_name SNOT SLIKE SSTRING SESCAPE . SSTRING
+
+    SSTRING  shift, and go to state 192
+
+
+State 189
+
+   38 insert_statement: SINSERT SINTO sname '(' name_list ')' SVALUES '(' value_list . ')'
+   40 value_list: value_list . ',' value
+
+    ')'  shift, and go to state 193
+    ','  shift, and go to state 157
+
+
+State 190
+
+   26 table_element: sname SNAME '(' SNUM ')' table_element_restriction .
+
+    $default  reduce using rule 26 (table_element)
+
+
+State 191
+
+   27 table_element: sname SNAME '(' SNUM ',' SNUM . ')' table_element_restriction
+
+    ')'  shift, and go to state 194
+
+
+State 192
+
+   90 uexpr: column_name SNOT SLIKE SSTRING SESCAPE SSTRING .
+
+    $default  reduce using rule 90 (uexpr)
+
+
+State 193
+
+   38 insert_statement: SINSERT SINTO sname '(' name_list ')' SVALUES '(' value_list ')' .
+
+    $default  reduce using rule 38 (insert_statement)
+
+
+State 194
+
+   27 table_element: sname SNAME '(' SNUM ',' SNUM ')' . table_element_restriction
+
+    SPRIMARY  shift, and go to state 139
+
+    $default  reduce using rule 29 (table_element_restriction)
+
+    table_element_restriction  go to state 195
+
+
+State 195
+
+   27 table_element: sname SNAME '(' SNUM ',' SNUM ')' table_element_restriction .
+
+    $default  reduce using rule 27 (table_element)

@@ -1,0 +1,21 @@
+#!/bin/bash -x
+
+cmddir=$HOME/tgt-1.0.17/usr
+if [ $# -gt 1 ]
+then
+cmddir=$1
+fi
+
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode=logicalunit --tid=5 --lun=1
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode target --tid 5
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode=logicalunit --tid=4 --lun=1
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode target --tid 4
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode=logicalunit --tid=3 --lun=1
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode target --tid 3
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode=logicalunit --tid=2 --lun=1
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode target --tid 2
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode=logicalunit --tid=1 --lun=1
+sudo $cmddir/tgtadm --lld iscsi --op delete --mode target --tid 1
+sudo $cmddir/tgtadm --lld iscsi --op show --mode target
+
+sudo killall -9 tgtd.pss

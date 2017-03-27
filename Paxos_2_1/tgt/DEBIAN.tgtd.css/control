@@ -1,0 +1,13 @@
+Package: tgt-css-target
+Version: 1.1.1
+Section: iSCSI Target Storage Service
+Priority: optional
+Architecture: amd64
+Essential: no
+Suggests: 
+Maintainer: Kubo Masanari <kubo@tritech.co.jp>
+Conflicts: 
+Replaces: 
+Provides: 
+Description: Cell iSCSI Target Package.
+Depends: libconfig-general-perl,css-common

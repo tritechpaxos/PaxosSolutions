@@ -1,0 +1,34 @@
+#!/bin/sh
+
+#
+# install rc
+#
+update-rc.d tgtd.css defaults
+
+#
+# check exist servet.conf
+#
+if [ ! -f /etc/css/server.conf -o ! -f /etc/tgt/targets.conf ]
+then
+    exit 0
+fi
+
+
+YesNo="N"
+if [ $LANG = ja_JP.UTF-8 ]
+then
+    echo -n "/etc/css/server.confと/etc/tgt/targets.confに従ってサーバを起動しますか？[Y/N(default N)] ===> "
+else
+    echo -n "run server by /etc/css/server.conf and /etc/tgt/targets.conf ？[Y/N(default N)] ===> "
+fi
+read YesNo
+yn=`expr substr "$YesNo"  1 1`
+if [ "$yn" = "y" -o "$yn" = "Y" ]
+then
+    SERVER_RUN=/etc/init.d/tgtd.css
+    if [ -x $SERVER_RUN ]
+    then
+	$SERVER_RUN start
+    fi
+fi
+exit 0

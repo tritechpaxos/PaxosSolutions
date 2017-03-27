@@ -1,0 +1,126 @@
+################################################################################
+#
+# makelib --- Common makefile of xjPing (On Memory DB) Library programs
+#
+# Copyright (C) 2011 triTech Inc. All Rights Reserved.
+#
+# See GPL-LICENSE.txt for copyright and license details.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version. 
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+
+INCDIRC	= $(TOP)/../h
+INCDIRA	= $(TOP)/../../../NWGadget/h
+
+DEF	= $(DEBUG) -D_FILE_OFFSET_BITS=64
+INC	= -I. $(LCFLGS) -I$(INCDIRC) -I$(INCDIRA)
+OPT= -Wall -fPIC
+CFLAGS	= $(OPT) $(DEF) $(INC)
+#CC	= gcc -D_NEO_BSD_
+CC	= gcc -g
+
+LIB	= $(LIBNAME).a
+
+OBJ	= $(SRC:.c=.o)
+CLEAN   = $(OBJ) $(Y)
+
+.KEEP_STATE:
+
+.PRECIOUS: $(LIB)
+
+#all: $(OBJ) libc 
+#libc: $(LIB)
+
+#$(LIB): $(OBJ)
+#libc:all
+#all:$(OBJ)
+
+all:$(LIB)
+libc:$(LIB)
+$(LIB):$(OBJ)
+	ar rv $(LIB) $(OBJ)
+	ranlib $(LIB)
+
+.c.o:
+	$(CC) -c $(CFLAGS) $<
+
+procc: 
+
+install: 
+
+tinstall: 
+
+clean: libclean
+libclean:
+	rm -f $(CLEAN)
+
+proclean:
+
+allclean: liballclean
+liballclean: libclean
+	rm -f $(LIB)
+	if test -d SCCS; then sccs clean; rm -f ,* ; fi
+
+procallclean:
+
+#
+#	for lint
+#
+LINTLIB	= $(TOP)/lib/*.ln
+LNFLAGS	= $(INC) $(DEF)
+lint: $(SRC) $(HEAD)
+	lint -abhu $(LNFLAGS) $(SRC) $(LINTLIB) | grep -v \
+	'multiply declared.*  ::  libsrc.c'
+
+#
+#	for source file administration
+#
+catsrc:
+	cat $(SRC) >> $(CATSRC)
+
+wc: $(SRC) $(HEAD)
+	@for i in $(SRC) $(HEAD); do \
+		wc $$i; \
+		grep -v include $$i | /lib/cpp -P | \
+			grep -v "^[ 	]*$$"  |wc; \
+	done > wc.tmp
+	@echo ""
+	@echo ""
+	@pwd
+	@echo ""
+	@awk -f $(TOP)/makedef/wc.awk wc.tmp
+	@echo ""
+	@rm  wc.tmp
+
+tags:   TAGS
+
+TAGS:   $(SRC) $(HEAD)
+	ctags $(SRC) $(HEAD)
+
+index:  $(SRC)
+	/usr/ucb/ctags -x $(SRC) |\
+			/usr/bin/awk '{print $$4 "\t" $$5 "\t" $$6}' > $@
+
+count:
+	cntline $(CFLAGS) $(SRC)
+
+
+create:
+	sccs create $(SRC) $(HEAD)
+
+get: $(SRC) $(HEAD)
+
+alledit:
+	sccs edit $(SRC) $(HEAD)
+

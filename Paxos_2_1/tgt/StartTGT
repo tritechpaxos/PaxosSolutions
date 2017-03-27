@@ -1,0 +1,49 @@
+#!/bin/bash -x
+
+cmddir=$HOME/tgt-1.0.49/usr
+if [ $# -gt 1 ]
+then
+cmddir=$1
+fi
+
+sudo ./tgtd.css -d 1
+
+
+#### target
+sudo $cmddir/tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.2001-03.jp.tritech:dhcp1140-pss
+sudo $cmddir/tgtadm --lld iscsi --op new --mode=logicalunit --tid=1 --lun=1 --bstype pss -b vol001
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
+
+sudo $cmddir/tgtadm --lld iscsi --op new --mode target --tid 2 -T iqn.2001-03.jp.tritech:dhcp1140-pss-kubo
+sudo $cmddir/tgtadm --lld iscsi --op new --mode=logicalunit --tid=2 --lun=1 --bstype pss -b vol002
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode target --tid 2 -I ALL
+
+sudo $cmddir/tgtadm --lld iscsi --op new --mode target --tid 3 -T iqn.2001-03.jp.tritech:dhcp1140-pss-nw
+sudo $cmddir/tgtadm --lld iscsi --op new --mode=logicalunit --tid=3 --lun=1 --bstype pss -b vol003
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode target --tid 3 -I ALL
+
+sudo $cmddir/tgtadm --lld iscsi --op new --mode target --tid 4 -T iqn.2001-03.jp.tritech:dhcp1140-pss-shojima
+sudo $cmddir/tgtadm --lld iscsi --op new --mode=logicalunit --tid=4 --lun=1 --bstype pss -b vol004
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode target --tid 4 -I ALL
+
+sudo $cmddir/tgtadm --lld iscsi --op new --mode target --tid 5 -T iqn.2001-03.jp.tritech:dhcp1140-pss-nami
+sudo $cmddir/tgtadm --lld iscsi --op new --mode=logicalunit --tid=5 --lun=1 --bstype pss -b vol005
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode target --tid 5 -I ALL
+
+#### acount
+sudo $cmddir/tgtadm --lld iscsi --op show --mode target
+sudo $cmddir/tgtadm --lld iscsi --op new --mode account --user iscsi_pss --password iscsi_pss000
+sudo $cmddir/tgtadm --lld iscsi --op new --mode account --user nw --password watanabenoritaka
+sudo $cmddir/tgtadm --lld iscsi --op new --mode account --user shojima --password shojimamakoto
+sudo $cmddir/tgtadm --lld iscsi --op new --mode account --user nami --password shiojirituneharu
+sudo $cmddir/tgtadm --lld iscsi --op new --mode account --user kubo --password kubomasanari
+
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode account --tid 1 --user iscsi_pss
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode account --tid 2 --user kubo
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode account --tid 3 --user nw
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode account --tid 4 --user shojima
+sudo $cmddir/tgtadm --lld iscsi --op bind --mode account --tid 5 --user nami
+
+sudo $cmddir/tgtadm --lld iscsi --op show --mode accunt
+
+sudo $cmddir/tgtadm --lld iscsi --op show --mode target

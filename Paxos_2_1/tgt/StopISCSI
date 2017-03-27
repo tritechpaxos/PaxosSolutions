@@ -1,0 +1,6 @@
+#!/bin/bash -x
+
+sudo umount /dev/sdc
+sudo /usr/bin/iscsiadm --mode=node --logout
+sleep 2
+ls /dev/sd*

@@ -1,0 +1,106 @@
+cd com;make
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com' に入ります
+make -C class
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com/class' に入ります
+make[2]: 'all' に対して行うべき事はありません.
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com/class' から出ます
+make -C dbg 
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com/dbg' に入ります
+make[2]: 'all' に対して行うべき事はありません.
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com/dbg' から出ます
+make -C errno
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com/errno' に入ります
+make[2]: 'all' に対して行うべき事はありません.
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com/errno' から出ます
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/com' から出ます
+cd skel;make
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' に入ります
+make  MFLAGS=" " DO="libc" subdirlib
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' に入ります
+if test -n "eplg mem sig itimer process lock misc main"; then \
+	make sublib; \
+fi
+make[3]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' に入ります
+for i in eplg mem sig itimer process lock misc main; do \
+	cd $i; make DIRFLAGS="LIBDIR"  libc; cd ..; \
+done
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/eplg' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/eplg' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/mem' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/mem' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/sig' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/sig' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/itimer' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/itimer' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/process' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/process' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/lock' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/lock' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/misc' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/misc' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/main' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel/main' から出ます
+make[3]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' から出ます
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' から出ます
+make  MFLAGS=" " DO="procc" subdirproc
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' に入ります
+if test -n ""; then \
+	make  subproc; \
+fi
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' から出ます
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/skel' から出ます
+cd link;make
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/link' に入ります
+make[1]: 'all' に対して行うべき事はありません.
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/link' から出ます
+cd db;make
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' に入ります
+make  MFLAGS=" " DO="libc" subdirlib
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' に入ります
+if test -n "clnt dbif sql util svc"; then \
+	make sublib; \
+fi
+make[3]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' に入ります
+for i in clnt dbif sql util svc; do \
+	cd $i; make DIRFLAGS="LIBDIR"  libc; cd ..; \
+done
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/clnt' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/clnt' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/dbif' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/dbif' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/sql' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/sql' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/util' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/util' から出ます
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/svc' に入ります
+make[4]: 'libc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/svc' から出ます
+make[3]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' から出ます
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' から出ます
+make  MFLAGS=" " DO="procc" subdirproc
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' に入ります
+if test -n "test"; then \
+	make  subproc; \
+fi
+make[3]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' に入ります
+for i in test; do \
+	cd $i; make DIRFLAGS="PROCDIR"  procc; cd ..; \
+done
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/test' に入ります
+make[4]: 'procc' に対して行うべき事はありません.
+make[4]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db/test' から出ます
+make[3]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' から出ます
+make[2]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' から出ます
+make[1]: ディレクトリ '/home/nw/Paxos/xjPing/src/ctl/db' から出ます

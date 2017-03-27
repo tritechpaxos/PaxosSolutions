@@ -1,0 +1,4 @@
+1.make
+2.make install	bin,lib,h
+3.make uninstall
+4.make clean

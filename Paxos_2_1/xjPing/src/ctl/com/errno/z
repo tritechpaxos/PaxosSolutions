@@ -1,0 +1,1257 @@
+# 1 "<stdin>"
+# 1 "<built-in>"
+#define __STDC__ 1
+#define __STDC_VERSION__ 201112L
+#define __STDC_UTF_16__ 1
+#define __STDC_UTF_32__ 1
+#define __STDC_HOSTED__ 1
+#define __GNUC__ 5
+#define __GNUC_MINOR__ 4
+#define __GNUC_PATCHLEVEL__ 0
+#define __VERSION__ "5.4.0 20160609"
+#define __ATOMIC_RELAXED 0
+#define __ATOMIC_SEQ_CST 5
+#define __ATOMIC_ACQUIRE 2
+#define __ATOMIC_RELEASE 3
+#define __ATOMIC_ACQ_REL 4
+#define __ATOMIC_CONSUME 1
+#define __FINITE_MATH_ONLY__ 0
+#define _LP64 1
+#define __LP64__ 1
+#define __SIZEOF_INT__ 4
+#define __SIZEOF_LONG__ 8
+#define __SIZEOF_LONG_LONG__ 8
+#define __SIZEOF_SHORT__ 2
+#define __SIZEOF_FLOAT__ 4
+#define __SIZEOF_DOUBLE__ 8
+#define __SIZEOF_LONG_DOUBLE__ 16
+#define __SIZEOF_SIZE_T__ 8
+#define __CHAR_BIT__ 8
+#define __BIGGEST_ALIGNMENT__ 16
+#define __ORDER_LITTLE_ENDIAN__ 1234
+#define __ORDER_BIG_ENDIAN__ 4321
+#define __ORDER_PDP_ENDIAN__ 3412
+#define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+#define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
+#define __SIZEOF_POINTER__ 8
+#define __SIZE_TYPE__ long unsigned int
+#define __PTRDIFF_TYPE__ long int
+#define __WCHAR_TYPE__ int
+#define __WINT_TYPE__ unsigned int
+#define __INTMAX_TYPE__ long int
+#define __UINTMAX_TYPE__ long unsigned int
+#define __CHAR16_TYPE__ short unsigned int
+#define __CHAR32_TYPE__ unsigned int
+#define __SIG_ATOMIC_TYPE__ int
+#define __INT8_TYPE__ signed char
+#define __INT16_TYPE__ short int
+#define __INT32_TYPE__ int
+#define __INT64_TYPE__ long int
+#define __UINT8_TYPE__ unsigned char
+#define __UINT16_TYPE__ short unsigned int
+#define __UINT32_TYPE__ unsigned int
+#define __UINT64_TYPE__ long unsigned int
+#define __INT_LEAST8_TYPE__ signed char
+#define __INT_LEAST16_TYPE__ short int
+#define __INT_LEAST32_TYPE__ int
+#define __INT_LEAST64_TYPE__ long int
+#define __UINT_LEAST8_TYPE__ unsigned char
+#define __UINT_LEAST16_TYPE__ short unsigned int
+#define __UINT_LEAST32_TYPE__ unsigned int
+#define __UINT_LEAST64_TYPE__ long unsigned int
+#define __INT_FAST8_TYPE__ signed char
+#define __INT_FAST16_TYPE__ long int
+#define __INT_FAST32_TYPE__ long int
+#define __INT_FAST64_TYPE__ long int
+#define __UINT_FAST8_TYPE__ unsigned char
+#define __UINT_FAST16_TYPE__ long unsigned int
+#define __UINT_FAST32_TYPE__ long unsigned int
+#define __UINT_FAST64_TYPE__ long unsigned int
+#define __INTPTR_TYPE__ long int
+#define __UINTPTR_TYPE__ long unsigned int
+#define __has_include(STR) __has_include__(STR)
+#define __has_include_next(STR) __has_include_next__(STR)
+#define __GXX_ABI_VERSION 1009
+#define __SCHAR_MAX__ 0x7f
+#define __SHRT_MAX__ 0x7fff
+#define __INT_MAX__ 0x7fffffff
+#define __LONG_MAX__ 0x7fffffffffffffffL
+#define __LONG_LONG_MAX__ 0x7fffffffffffffffLL
+#define __WCHAR_MAX__ 0x7fffffff
+#define __WCHAR_MIN__ (-__WCHAR_MAX__ - 1)
+#define __WINT_MAX__ 0xffffffffU
+#define __WINT_MIN__ 0U
+#define __PTRDIFF_MAX__ 0x7fffffffffffffffL
+#define __SIZE_MAX__ 0xffffffffffffffffUL
+#define __INTMAX_MAX__ 0x7fffffffffffffffL
+#define __INTMAX_C(c) c ## L
+#define __UINTMAX_MAX__ 0xffffffffffffffffUL
+#define __UINTMAX_C(c) c ## UL
+#define __SIG_ATOMIC_MAX__ 0x7fffffff
+#define __SIG_ATOMIC_MIN__ (-__SIG_ATOMIC_MAX__ - 1)
+#define __INT8_MAX__ 0x7f
+#define __INT16_MAX__ 0x7fff
+#define __INT32_MAX__ 0x7fffffff
+#define __INT64_MAX__ 0x7fffffffffffffffL
+#define __UINT8_MAX__ 0xff
+#define __UINT16_MAX__ 0xffff
+#define __UINT32_MAX__ 0xffffffffU
+#define __UINT64_MAX__ 0xffffffffffffffffUL
+#define __INT_LEAST8_MAX__ 0x7f
+#define __INT8_C(c) c
+#define __INT_LEAST16_MAX__ 0x7fff
+#define __INT16_C(c) c
+#define __INT_LEAST32_MAX__ 0x7fffffff
+#define __INT32_C(c) c
+#define __INT_LEAST64_MAX__ 0x7fffffffffffffffL
+#define __INT64_C(c) c ## L
+#define __UINT_LEAST8_MAX__ 0xff
+#define __UINT8_C(c) c
+#define __UINT_LEAST16_MAX__ 0xffff
+#define __UINT16_C(c) c
+#define __UINT_LEAST32_MAX__ 0xffffffffU
+#define __UINT32_C(c) c ## U
+#define __UINT_LEAST64_MAX__ 0xffffffffffffffffUL
+#define __UINT64_C(c) c ## UL
+#define __INT_FAST8_MAX__ 0x7f
+#define __INT_FAST16_MAX__ 0x7fffffffffffffffL
+#define __INT_FAST32_MAX__ 0x7fffffffffffffffL
+#define __INT_FAST64_MAX__ 0x7fffffffffffffffL
+#define __UINT_FAST8_MAX__ 0xff
+#define __UINT_FAST16_MAX__ 0xffffffffffffffffUL
+#define __UINT_FAST32_MAX__ 0xffffffffffffffffUL
+#define __UINT_FAST64_MAX__ 0xffffffffffffffffUL
+#define __INTPTR_MAX__ 0x7fffffffffffffffL
+#define __UINTPTR_MAX__ 0xffffffffffffffffUL
+#define __GCC_IEC_559 2
+#define __GCC_IEC_559_COMPLEX 2
+#define __FLT_EVAL_METHOD__ 0
+#define __DEC_EVAL_METHOD__ 2
+#define __FLT_RADIX__ 2
+#define __FLT_MANT_DIG__ 24
+#define __FLT_DIG__ 6
+#define __FLT_MIN_EXP__ (-125)
+#define __FLT_MIN_10_EXP__ (-37)
+#define __FLT_MAX_EXP__ 128
+#define __FLT_MAX_10_EXP__ 38
+#define __FLT_DECIMAL_DIG__ 9
+#define __FLT_MAX__ 3.40282346638528859812e+38F
+#define __FLT_MIN__ 1.17549435082228750797e-38F
+#define __FLT_EPSILON__ 1.19209289550781250000e-7F
+#define __FLT_DENORM_MIN__ 1.40129846432481707092e-45F
+#define __FLT_HAS_DENORM__ 1
+#define __FLT_HAS_INFINITY__ 1
+#define __FLT_HAS_QUIET_NAN__ 1
+#define __DBL_MANT_DIG__ 53
+#define __DBL_DIG__ 15
+#define __DBL_MIN_EXP__ (-1021)
+#define __DBL_MIN_10_EXP__ (-307)
+#define __DBL_MAX_EXP__ 1024
+#define __DBL_MAX_10_EXP__ 308
+#define __DBL_DECIMAL_DIG__ 17
+#define __DBL_MAX__ ((double)1.79769313486231570815e+308L)
+#define __DBL_MIN__ ((double)2.22507385850720138309e-308L)
+#define __DBL_EPSILON__ ((double)2.22044604925031308085e-16L)
+#define __DBL_DENORM_MIN__ ((double)4.94065645841246544177e-324L)
+#define __DBL_HAS_DENORM__ 1
+#define __DBL_HAS_INFINITY__ 1
+#define __DBL_HAS_QUIET_NAN__ 1
+#define __LDBL_MANT_DIG__ 64
+#define __LDBL_DIG__ 18
+#define __LDBL_MIN_EXP__ (-16381)
+#define __LDBL_MIN_10_EXP__ (-4931)
+#define __LDBL_MAX_EXP__ 16384
+#define __LDBL_MAX_10_EXP__ 4932
+#define __DECIMAL_DIG__ 21
+#define __LDBL_MAX__ 1.18973149535723176502e+4932L
+#define __LDBL_MIN__ 3.36210314311209350626e-4932L
+#define __LDBL_EPSILON__ 1.08420217248550443401e-19L
+#define __LDBL_DENORM_MIN__ 3.64519953188247460253e-4951L
+#define __LDBL_HAS_DENORM__ 1
+#define __LDBL_HAS_INFINITY__ 1
+#define __LDBL_HAS_QUIET_NAN__ 1
+#define __DEC32_MANT_DIG__ 7
+#define __DEC32_MIN_EXP__ (-94)
+#define __DEC32_MAX_EXP__ 97
+#define __DEC32_MIN__ 1E-95DF
+#define __DEC32_MAX__ 9.999999E96DF
+#define __DEC32_EPSILON__ 1E-6DF
+#define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
+#define __DEC64_MANT_DIG__ 16
+#define __DEC64_MIN_EXP__ (-382)
+#define __DEC64_MAX_EXP__ 385
+#define __DEC64_MIN__ 1E-383DD
+#define __DEC64_MAX__ 9.999999999999999E384DD
+#define __DEC64_EPSILON__ 1E-15DD
+#define __DEC64_SUBNORMAL_MIN__ 0.000000000000001E-383DD
+#define __DEC128_MANT_DIG__ 34
+#define __DEC128_MIN_EXP__ (-6142)
+#define __DEC128_MAX_EXP__ 6145
+#define __DEC128_MIN__ 1E-6143DL
+#define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
+#define __DEC128_EPSILON__ 1E-33DL
+#define __DEC128_SUBNORMAL_MIN__ 0.000000000000000000000000000000001E-6143DL
+#define __REGISTER_PREFIX__ 
+#define __USER_LABEL_PREFIX__ 
+#define __GNUC_STDC_INLINE__ 1
+#define __NO_INLINE__ 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 1
+#define __GCC_ATOMIC_BOOL_LOCK_FREE 2
+#define __GCC_ATOMIC_CHAR_LOCK_FREE 2
+#define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 2
+#define __GCC_ATOMIC_CHAR32_T_LOCK_FREE 2
+#define __GCC_ATOMIC_WCHAR_T_LOCK_FREE 2
+#define __GCC_ATOMIC_SHORT_LOCK_FREE 2
+#define __GCC_ATOMIC_INT_LOCK_FREE 2
+#define __GCC_ATOMIC_LONG_LOCK_FREE 2
+#define __GCC_ATOMIC_LLONG_LOCK_FREE 2
+#define __GCC_ATOMIC_TEST_AND_SET_TRUEVAL 1
+#define __GCC_ATOMIC_POINTER_LOCK_FREE 2
+#define __GCC_HAVE_DWARF2_CFI_ASM 1
+#define __PRAGMA_REDEFINE_EXTNAME 1
+#define __SSP_STRONG__ 3
+#define __SIZEOF_INT128__ 16
+#define __SIZEOF_WCHAR_T__ 4
+#define __SIZEOF_WINT_T__ 4
+#define __SIZEOF_PTRDIFF_T__ 8
+#define __amd64 1
+#define __amd64__ 1
+#define __x86_64 1
+#define __x86_64__ 1
+#define __SIZEOF_FLOAT80__ 16
+#define __SIZEOF_FLOAT128__ 16
+#define __ATOMIC_HLE_ACQUIRE 65536
+#define __ATOMIC_HLE_RELEASE 131072
+#define __k8 1
+#define __k8__ 1
+#define __code_model_small__ 1
+#define __MMX__ 1
+#define __SSE__ 1
+#define __SSE2__ 1
+#define __FXSR__ 1
+#define __SSE_MATH__ 1
+#define __SSE2_MATH__ 1
+#define __gnu_linux__ 1
+#define __linux 1
+#define __linux__ 1
+#define linux 1
+#define __unix 1
+#define __unix__ 1
+#define unix 1
+#define __ELF__ 1
+#define __DECIMAL_BID_FORMAT__ 1
+# 1 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+
+# 1 "/usr/include/stdc-predef.h" 3 4
+/* Copyright (C) 1991-2016 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+
+#define _STDC_PREDEF_H 1
+
+/* This header is separate from features.h so that the compiler can
+   include it implicitly at the start of every compilation.  It must
+   not itself include <features.h> or any other header that includes
+   <features.h> because the implicit include comes before any feature
+   test macros that may be defined in a source file before it first
+   explicitly includes a system header.  GCC knows the name of this
+   header in order to preinclude it.  */
+
+/* glibc's intent is to support the IEC 559 math functionality, real
+   and complex.  If the GCC (4.9 and later) predefined macros
+   specifying compiler intent are available, use them to determine
+   whether the overall intent is to support these features; otherwise,
+   presume an older compiler has intent to support these features and
+   define these macros by default.  */
+
+
+
+#define __STDC_IEC_559__ 1
+
+
+
+
+
+
+
+#define __STDC_IEC_559_COMPLEX__ 1
+
+
+
+
+
+/* wchar_t uses Unicode 8.0.0.  Version 8.0 of the Unicode Standard is
+   synchronized with ISO/IEC 10646:2014, plus Amendment 1 (published
+   2015-05-15).  */
+#define __STDC_ISO_10646__ 201505L
+
+/* We do not support C11 <threads.h>.  */
+#define __STDC_NO_THREADS__ 1
+# 1 "<command-line>" 2
+# 1 "<stdin>"
+
+# 1 "<stdin>"
+/* Copyright (C) 1991-2016 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+/*
+ *	ISO C99 Standard: 7.5 Errors	<errno.h>
+ */
+
+
+
+/* The includer defined __need_Emath if he wants only the definitions
+   of EDOM and ERANGE, and not everything else.  */
+
+#define _ERRNO_H 1
+# 1 "/usr/include/features.h" 1 3 4
+
+# 1 "/usr/include/features.h" 3 4
+/* Copyright (C) 1991-2016 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+
+#define _FEATURES_H 1
+
+/* These are defined by the user (or the compiler)
+   to specify the desired environment:
+
+   __STRICT_ANSI__	ISO Standard C.
+   _ISOC99_SOURCE	Extensions to ISO C89 from ISO C99.
+   _ISOC11_SOURCE	Extensions to ISO C99 from ISO C11.
+   _POSIX_SOURCE	IEEE Std 1003.1.
+   _POSIX_C_SOURCE	If ==1, like _POSIX_SOURCE; if >=2 add IEEE Std 1003.2;
+			if >=199309L, add IEEE Std 1003.1b-1993;
+			if >=199506L, add IEEE Std 1003.1c-1995;
+			if >=200112L, all of IEEE 1003.1-2004
+			if >=200809L, all of IEEE 1003.1-2008
+   _XOPEN_SOURCE	Includes POSIX and XPG things.  Set to 500 if
+			Single Unix conformance is wanted, to 600 for the
+			sixth revision, to 700 for the seventh revision.
+   _XOPEN_SOURCE_EXTENDED XPG things and X/Open Unix extensions.
+   _LARGEFILE_SOURCE	Some more functions for correct standard I/O.
+   _LARGEFILE64_SOURCE	Additional functionality from LFS for large files.
+   _FILE_OFFSET_BITS=N	Select default filesystem interface.
+   _ATFILE_SOURCE	Additional *at interfaces.
+   _GNU_SOURCE		All of the above, plus GNU extensions.
+   _DEFAULT_SOURCE	The default set of features (taking precedence over
+			__STRICT_ANSI__).
+   _REENTRANT		Select additionally reentrant object.
+   _THREAD_SAFE		Same as _REENTRANT, often used by other systems.
+   _FORTIFY_SOURCE	If set to numeric value > 0 additional security
+			measures are defined, according to level.
+
+   The `-ansi' switch to the GNU C compiler, and standards conformance
+   options such as `-std=c99', define __STRICT_ANSI__.  If none of
+   these are defined, or if _DEFAULT_SOURCE is defined, the default is
+   to have _POSIX_SOURCE set to one and _POSIX_C_SOURCE set to
+   200809L, as well as enabling miscellaneous functions from BSD and
+   SVID.  If more than one of these are defined, they accumulate.  For
+   example __STRICT_ANSI__, _POSIX_SOURCE and _POSIX_C_SOURCE together
+   give you ISO C, 1003.1, and 1003.2, but nothing else.
+
+   These are defined by this file and are used by the
+   header files to decide what to declare or define:
+
+   __USE_ISOC11		Define ISO C11 things.
+   __USE_ISOC99		Define ISO C99 things.
+   __USE_ISOC95		Define ISO C90 AMD1 (C95) things.
+   __USE_POSIX		Define IEEE Std 1003.1 things.
+   __USE_POSIX2		Define IEEE Std 1003.2 things.
+   __USE_POSIX199309	Define IEEE Std 1003.1, and .1b things.
+   __USE_POSIX199506	Define IEEE Std 1003.1, .1b, .1c and .1i things.
+   __USE_XOPEN		Define XPG things.
+   __USE_XOPEN_EXTENDED	Define X/Open Unix things.
+   __USE_UNIX98		Define Single Unix V2 things.
+   __USE_XOPEN2K        Define XPG6 things.
+   __USE_XOPEN2KXSI     Define XPG6 XSI things.
+   __USE_XOPEN2K8       Define XPG7 things.
+   __USE_XOPEN2K8XSI    Define XPG7 XSI things.
+   __USE_LARGEFILE	Define correct standard I/O things.
+   __USE_LARGEFILE64	Define LFS things with separate names.
+   __USE_FILE_OFFSET64	Define 64bit interface as default.
+   __USE_MISC		Define things from 4.3BSD or System V Unix.
+   __USE_ATFILE		Define *at interfaces and AT_* constants for them.
+   __USE_GNU		Define GNU extensions.
+   __USE_REENTRANT	Define reentrant/thread-safe *_r functions.
+   __USE_FORTIFY_LEVEL	Additional security measures used, according to level.
+
+   The macros `__GNU_LIBRARY__', `__GLIBC__', and `__GLIBC_MINOR__' are
+   defined by this file unconditionally.  `__GNU_LIBRARY__' is provided
+   only for compatibility.  All new code should use the other symbols
+   to test for features.
+
+   All macros listed above as possibly being defined by this file are
+   explicitly undefined if they are not explicitly defined.
+   Feature-test macros that are not defined by the user or compiler
+   but are implied by the other feature-test macros defined (or by the
+   lack of any definitions) are defined by the file.  */
+
+
+/* Undefine everything, so we get a clean slate.  */
+#undef __USE_ISOC11
+#undef __USE_ISOC99
+#undef __USE_ISOC95
+#undef __USE_ISOCXX11
+#undef __USE_POSIX
+#undef __USE_POSIX2
+#undef __USE_POSIX199309
+#undef __USE_POSIX199506
+#undef __USE_XOPEN
+#undef __USE_XOPEN_EXTENDED
+#undef __USE_UNIX98
+#undef __USE_XOPEN2K
+#undef __USE_XOPEN2KXSI
+#undef __USE_XOPEN2K8
+#undef __USE_XOPEN2K8XSI
+#undef __USE_LARGEFILE
+#undef __USE_LARGEFILE64
+#undef __USE_FILE_OFFSET64
+#undef __USE_MISC
+#undef __USE_ATFILE
+#undef __USE_GNU
+#undef __USE_REENTRANT
+#undef __USE_FORTIFY_LEVEL
+#undef __KERNEL_STRICT_NAMES
+
+/* Suppress kernel-name space pollution unless user expressedly asks
+   for it.  */
+
+#define __KERNEL_STRICT_NAMES 
+
+
+/* Convenience macros to test the versions of glibc and gcc.
+   Use them like this:
+   #if __GNUC_PREREQ (2,8)
+   ... code requiring gcc 2.8 or later ...
+   #endif
+   Note - they won't work for gcc1 or glibc1, since the _MINOR macros
+   were not defined then.  */
+
+#define __GNUC_PREREQ(maj,min) ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+
+
+
+
+
+/* _BSD_SOURCE and _SVID_SOURCE are deprecated aliases for
+   _DEFAULT_SOURCE.  If _DEFAULT_SOURCE is present we do not
+   issue a warning; the expectation is that the source is being
+   transitioned to use the new macro.  */
+# 156 "/usr/include/features.h" 3 4
+/* If _GNU_SOURCE was defined by the user, turn on all the other features.  */
+# 180 "/usr/include/features.h" 3 4
+/* If nothing (other than _GNU_SOURCE and _DEFAULT_SOURCE) is defined,
+   define _DEFAULT_SOURCE.  */
+
+
+
+
+
+#undef _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE 1
+
+
+/* This is to enable the ISO C11 extension.  */
+
+
+#define __USE_ISOC11 1
+
+
+/* This is to enable the ISO C99 extension.  */
+
+
+#define __USE_ISOC99 1
+
+
+/* This is to enable the ISO C90 Amendment 1:1995 extension.  */
+
+
+#define __USE_ISOC95 1
+
+
+/* This is to enable compatibility for ISO C++11.
+
+   So far g++ does not provide a macro.  Check the temporary macro for
+   now, too.  */
+
+
+
+
+
+/* If none of the ANSI/POSIX macros are defined, or if _DEFAULT_SOURCE
+   is defined, use POSIX.1-2008 (or another version depending on
+   _XOPEN_SOURCE).  */
+
+
+#define __USE_POSIX_IMPLICITLY 1
+
+#undef _POSIX_SOURCE
+#define _POSIX_SOURCE 1
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+# 249 "/usr/include/features.h" 3 4
+#define __USE_POSIX 1
+
+
+
+#define __USE_POSIX2 1
+
+
+
+#define __USE_POSIX199309 1
+
+
+
+#define __USE_POSIX199506 1
+
+
+
+#define __USE_XOPEN2K 1
+#undef __USE_ISOC95
+#define __USE_ISOC95 1
+#undef __USE_ISOC99
+#define __USE_ISOC99 1
+
+
+
+#define __USE_XOPEN2K8 1
+#undef _ATFILE_SOURCE
+#define _ATFILE_SOURCE 1
+# 317 "/usr/include/features.h" 3 4
+#define __USE_MISC 1
+
+
+
+#define __USE_ATFILE 1
+# 340 "/usr/include/features.h" 3 4
+#define __USE_FORTIFY_LEVEL 0
+
+
+/* Get definitions of __STDC_* predefined macros, if the compiler has
+   not preincluded this header automatically.  */
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+/* Copyright (C) 1991-2016 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+# 346 "/usr/include/features.h" 2 3 4
+
+/* This macro indicates that the installed library is the GNU C Library.
+   For historic reasons the value now is 6 and this will stay from now
+   on.  The use of this variable is deprecated.  Use __GLIBC__ and
+   __GLIBC_MINOR__ now (see below) when you want to test for a specific
+   GNU C library version and use the values in <gnu/lib-names.h> to get
+   the sonames of the shared libraries.  */
+#undef __GNU_LIBRARY__
+#define __GNU_LIBRARY__ 6
+
+/* Major and minor version number of the GNU C library package.  Use
+   these macros to test for features in specific releases.  */
+#define __GLIBC__ 2
+#define __GLIBC_MINOR__ 23
+
+#define __GLIBC_PREREQ(maj,min) ((__GLIBC__ << 16) + __GLIBC_MINOR__ >= ((maj) << 16) + (min))
+
+
+/* This is here only because every header file already includes this one.  */
+
+
+# 1 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 1 3 4
+/* Copyright (C) 1992-2016 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+
+#define _SYS_CDEFS_H 1
+
+/* We are almost always included from features.h. */
+
+
+
+
+/* The GNU libc does not support any K&R compilers or the traditional mode
+   of ISO C compilers anymore.  Check for some of the combinations not
+   anymore supported.  */
+
+
+
+
+/* Some user header file might have defined this before.  */
+#undef __P
+#undef __PMT
+
+
+
+/* All functions, except those with callbacks or those that
+   synchronize memory, are leaf functions.  */
+
+#define __LEAF , __leaf__
+#define __LEAF_ATTR __attribute__ ((__leaf__))
+
+
+
+
+
+/* GCC can always grok prototypes.  For C++ programs we add throw()
+   to help it optimize the function calls.  But this works only with
+   gcc 2.8.x and egcs.  For gcc 3.2 and up we even mark C functions
+   as non-throwing using a function attribute since programs can use
+   the -fexceptions options for C code as well.  */
+
+#define __THROW __attribute__ ((__nothrow__ __LEAF))
+#define __THROWNL __attribute__ ((__nothrow__))
+#define __NTH(fct) __attribute__ ((__nothrow__ __LEAF)) fct
+# 80 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+/* These two macros are not used in glibc anymore.  They are kept here
+   only because some other projects expect the macros to be defined.  */
+#define __P(args) args
+#define __PMT(args) args
+
+/* For these things, GCC behaves the ANSI way normally,
+   and the non-ANSI way under -traditional.  */
+
+#define __CONCAT(x,y) x ## y
+#define __STRING(x) #x
+
+/* This is not a typedef so `const __ptr_t' does the right thing.  */
+#define __ptr_t void *
+#define __long_double_t long double
+
+
+/* C++ needs to know that types and declarations are C, not C++.  */
+
+
+
+
+#define __BEGIN_DECLS 
+#define __END_DECLS 
+
+
+
+/* The standard library needs the functions from the ISO C90 standard
+   in the std namespace.  At the same time we want to be safe for
+   future changes and we include the ISO C99 code in the non-standard
+   namespace __c99.  The C++ wrapper header take case of adding the
+   definitions to the global namespace.  */
+# 119 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+/* For compatibility we do not add the declarations into any
+   namespace.  They will end up in the global namespace which is what
+   old code expects.  */
+#define __BEGIN_NAMESPACE_STD 
+#define __END_NAMESPACE_STD 
+#define __USING_NAMESPACE_STD(name) 
+#define __BEGIN_NAMESPACE_C99 
+#define __END_NAMESPACE_C99 
+#define __USING_NAMESPACE_C99(name) 
+
+
+
+/* Fortify support.  */
+#define __bos(ptr) __builtin_object_size (ptr, __USE_FORTIFY_LEVEL > 1)
+#define __bos0(ptr) __builtin_object_size (ptr, 0)
+
+
+#define __warndecl(name,msg) extern void name (void) __attribute__((__warning__ (msg)))
+
+#define __warnattr(msg) __attribute__((__warning__ (msg)))
+#define __errordecl(name,msg) extern void name (void) __attribute__((__error__ (msg)))
+
+
+
+
+
+
+
+/* Support for flexible arrays.  */
+
+/* GCC 2.97 supports C99 flexible array members.  */
+#define __flexarr []
+# 165 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+/* __asm__ ("xyz") is used throughout the headers to rename functions
+   at the assembly language level.  This is wrapped by the __REDIRECT
+   macro, in order to support compilers that can do this some other
+   way.  When compilers don't support asm-names at all, we have to do
+   preprocessor tricks instead (which don't have exactly the right
+   semantics, but it's the best we can do).
+
+   Example:
+   int __REDIRECT(setpgrp, (__pid_t pid, __pid_t pgrp), setpgid); */
+
+
+
+#define __REDIRECT(name,proto,alias) name proto __asm__ (__ASMNAME (#alias))
+
+
+
+
+
+
+#define __REDIRECT_NTH(name,proto,alias) name proto __asm__ (__ASMNAME (#alias)) __THROW
+
+#define __REDIRECT_NTHNL(name,proto,alias) name proto __asm__ (__ASMNAME (#alias)) __THROWNL
+
+
+#define __ASMNAME(cname) __ASMNAME2 (__USER_LABEL_PREFIX__, cname)
+#define __ASMNAME2(prefix,cname) __STRING (prefix) cname
+
+/*
+#elif __SOME_OTHER_COMPILER__
+
+# define __REDIRECT(name, proto, alias) name proto; 	_Pragma("let " #name " = " #alias)
+)
+*/
+
+
+/* GCC has various useful declarations that can be made with the
+   `__attribute__' syntax.  All of the ways we use this do fine if
+   they are omitted for compilers that don't understand it. */
+
+
+
+
+/* At some point during the gcc 2.96 development the `malloc' attribute
+   for functions was introduced.  We don't want to use it unconditionally
+   (although this would be possible) since it generates warnings.  */
+
+#define __attribute_malloc__ __attribute__ ((__malloc__))
+
+
+
+
+/* Tell the compiler which arguments to an allocation function
+   indicate the size of the allocation.  */
+
+#define __attribute_alloc_size__(params) __attribute__ ((__alloc_size__ params))
+
+
+
+
+
+/* At some point during the gcc 2.96 development the `pure' attribute
+   for functions was introduced.  We don't want to use it unconditionally
+   (although this would be possible) since it generates warnings.  */
+
+#define __attribute_pure__ __attribute__ ((__pure__))
+
+
+
+
+/* This declaration tells the compiler that the value is constant.  */
+
+#define __attribute_const__ __attribute__ ((__const__))
+
+
+
+
+/* At some point during the gcc 3.1 development the `used' attribute
+   for functions was introduced.  We don't want to use it unconditionally
+   (although this would be possible) since it generates warnings.  */
+
+#define __attribute_used__ __attribute__ ((__used__))
+#define __attribute_noinline__ __attribute__ ((__noinline__))
+
+
+
+
+
+/* gcc allows marking deprecated functions.  */
+
+#define __attribute_deprecated__ __attribute__ ((__deprecated__))
+
+
+
+
+/* At some point during the gcc 2.8 development the `format_arg' attribute
+   for functions was introduced.  We don't want to use it unconditionally
+   (although this would be possible) since it generates warnings.
+   If several `format_arg' attributes are given for the same function, in
+   gcc-3.0 and older, all but the last one are ignored.  In newer gccs,
+   all designated arguments are considered.  */
+
+#define __attribute_format_arg__(x) __attribute__ ((__format_arg__ (x)))
+
+
+
+
+/* At some point during the gcc 2.97 development the `strfmon' format
+   attribute for functions was introduced.  We don't want to use it
+   unconditionally (although this would be possible) since it
+   generates warnings.  */
+
+#define __attribute_format_strfmon__(a,b) __attribute__ ((__format__ (__strfmon__, a, b)))
+
+
+
+
+
+/* The nonull function attribute allows to mark pointer parameters which
+   must not be NULL.  */
+
+#define __nonnull(params) __attribute__ ((__nonnull__ params))
+
+
+
+
+/* If fortification mode, we warn about unused results of certain
+   function calls which can lead to problems.  */
+
+#define __attribute_warn_unused_result__ __attribute__ ((__warn_unused_result__))
+# 302 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+#define __wur /* Ignore */
+
+
+/* Forces a function to be always inlined.  */
+
+#define __always_inline __inline __attribute__ ((__always_inline__))
+
+
+
+
+/* Associate error messages with the source location of the call site rather
+   than with the source location inside the function.  */
+
+#define __attribute_artificial__ __attribute__ ((__artificial__))
+
+
+
+
+/* GCC 4.3 and above with -std=c99 or -std=gnu99 implements ISO C99
+   inline semantics, unless -fgnu89-inline is used.  Using __GNUC_STDC_INLINE__
+   or __GNUC_GNU_INLINE is not a good enough check for gcc because gcc versions
+   older than 4.3 may define these macros and still not guarantee GNU inlining
+   semantics.
+
+   clang++ identifies itself as gcc-4.2, but has support for GNU inlining
+   semantics, that can be checked fot by using the __GNUC_STDC_INLINE_ and
+   __GNUC_GNU_INLINE__ macro definitions.  */
+
+
+
+
+#define __extern_inline extern __inline __attribute__ ((__gnu_inline__))
+#define __extern_always_inline extern __always_inline __attribute__ ((__gnu_inline__))
+# 343 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+#define __fortify_function __extern_always_inline __attribute_artificial__
+
+
+/* GCC 4.3 and above allow passing all anonymous arguments of an
+   __extern_always_inline function to some other vararg function.  */
+
+#define __va_arg_pack() __builtin_va_arg_pack ()
+#define __va_arg_pack_len() __builtin_va_arg_pack_len ()
+
+
+/* It is possible to compile containing GCC extensions even if GCC is
+   run in pedantic mode if the uses are carefully marked using the
+   `__extension__' keyword.  But this is not generally available before
+   version 2.8.  */
+
+
+
+
+/* __restrict is known in EGCS 1.2 and above. */
+
+
+
+
+/* ISO C99 also allows to declare arrays as non-overlapping.  The syntax is
+     array_name[restrict]
+   GCC 3.1 supports this.  */
+
+#define __restrict_arr __restrict
+# 385 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+#define __glibc_unlikely(cond) __builtin_expect ((cond), 0)
+#define __glibc_likely(cond) __builtin_expect ((cond), 1)
+# 410 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+/* Determine the wordsize from the preprocessor defines.  */
+
+
+#define __WORDSIZE 64
+
+
+
+
+
+#define __WORDSIZE_TIME64_COMPAT32 1
+/* Both x86-64 and x32 use the 64-bit system call interface.  */
+#define __SYSCALL_WORDSIZE 64
+# 411 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 2 3 4
+# 432 "/usr/include/x86_64-linux-gnu/sys/cdefs.h" 3 4
+#define __LDBL_REDIR1(name,proto,alias) name proto
+#define __LDBL_REDIR(name,proto) name proto
+#define __LDBL_REDIR1_NTH(name,proto,alias) name proto __THROW
+#define __LDBL_REDIR_NTH(name,proto) name proto __THROW
+#define __LDBL_REDIR_DECL(name) 
+
+#define __REDIRECT_LDBL(name,proto,alias) __REDIRECT (name, proto, alias)
+#define __REDIRECT_NTH_LDBL(name,proto,alias) __REDIRECT_NTH (name, proto, alias)
+# 368 "/usr/include/features.h" 2 3 4
+
+
+/* If we don't have __REDIRECT, prototypes will be missing if
+   __USE_FILE_OFFSET64 but not __USE_LARGEFILE[64]. */
+
+
+
+
+
+
+
+/* Decide whether we can define 'extern inline' functions in headers.  */
+
+
+
+
+
+
+
+/* This is here only because every header file already includes this one.
+   Get the definitions of all the appropriate `__stub_FUNCTION' symbols.
+   <gnu/stubs.h> contains `#define __stub_FUNCTION' when FUNCTION is a stub
+   that will always return failure (and set errno to ENOSYS).  */
+# 1 "/usr/include/x86_64-linux-gnu/gnu/stubs.h" 1 3 4
+/* This file is automatically generated.
+   This file selects the right generated file of `__stub_FUNCTION' macros
+   based on the architecture being compiled for.  */
+
+
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h" 1 3 4
+/* This file is automatically generated.
+   It defines a symbol `__stub_FUNCTION' for each function
+   in the C library which is a stub, meaning it will fail
+   every time called, usually setting errno to ENOSYS.  */
+
+
+
+
+
+#define __stub___compat_bdflush 
+#define __stub_chflags 
+#define __stub_fattach 
+#define __stub_fchflags 
+#define __stub_fdetach 
+#define __stub_getmsg 
+#define __stub_gtty 
+#define __stub_lchmod 
+#define __stub_putmsg 
+#define __stub_revoke 
+#define __stub_setlogin 
+#define __stub_sigreturn 
+#define __stub_sstk 
+#define __stub_stty 
+# 11 "/usr/include/x86_64-linux-gnu/gnu/stubs.h" 2 3 4
+# 392 "/usr/include/features.h" 2 3 4
+# 29 "<stdin>" 2
+
+
+
+
+
+# 33 "<stdin>"
+/* Get the error number constants from the system-specific file.
+   This file will test __need_Emath and _ERRNO_H.  */
+# 1 "/usr/include/x86_64-linux-gnu/bits/errno.h" 1 3 4
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+/* Error constants.  Linux specific version.
+   Copyright (C) 1996-2016 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+
+
+#undef EDOM
+#undef EILSEQ
+#undef ERANGE
+# 1 "/usr/include/linux/errno.h" 1 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 1 3 4
+# 1 "/usr/include/asm-generic/errno.h" 1 3 4
+
+#define _ASM_GENERIC_ERRNO_H 
+
+# 1 "/usr/include/asm-generic/errno-base.h" 1 3 4
+
+#define _ASM_GENERIC_ERRNO_BASE_H 
+
+#define EPERM 1 /* Operation not permitted */
+#define ENOENT 2 /* No such file or directory */
+#define ESRCH 3 /* No such process */
+#define EINTR 4 /* Interrupted system call */
+#define EIO 5 /* I/O error */
+#define ENXIO 6 /* No such device or address */
+#define E2BIG 7 /* Argument list too long */
+#define ENOEXEC 8 /* Exec format error */
+#define EBADF 9 /* Bad file number */
+#define ECHILD 10 /* No child processes */
+#define EAGAIN 11 /* Try again */
+#define ENOMEM 12 /* Out of memory */
+#define EACCES 13 /* Permission denied */
+#define EFAULT 14 /* Bad address */
+#define ENOTBLK 15 /* Block device required */
+#define EBUSY 16 /* Device or resource busy */
+#define EEXIST 17 /* File exists */
+#define EXDEV 18 /* Cross-device link */
+#define ENODEV 19 /* No such device */
+#define ENOTDIR 20 /* Not a directory */
+#define EISDIR 21 /* Is a directory */
+#define EINVAL 22 /* Invalid argument */
+#define ENFILE 23 /* File table overflow */
+#define EMFILE 24 /* Too many open files */
+#define ENOTTY 25 /* Not a typewriter */
+#define ETXTBSY 26 /* Text file busy */
+#define EFBIG 27 /* File too large */
+#define ENOSPC 28 /* No space left on device */
+#define ESPIPE 29 /* Illegal seek */
+#define EROFS 30 /* Read-only file system */
+#define EMLINK 31 /* Too many links */
+#define EPIPE 32 /* Broken pipe */
+#define EDOM 33 /* Math argument out of domain of func */
+#define ERANGE 34 /* Math result not representable */
+# 5 "/usr/include/asm-generic/errno.h" 2 3 4
+
+#define EDEADLK 35 /* Resource deadlock would occur */
+#define ENAMETOOLONG 36 /* File name too long */
+#define ENOLCK 37 /* No record locks available */
+
+/*
+ * This error code is special: arch syscall entry code will return
+ * -ENOSYS if users try to call a syscall that doesn't exist.  To keep
+ * failures of syscalls that really do exist distinguishable from
+ * failures due to attempts to use a nonexistent syscall, syscall
+ * implementations should refrain from returning -ENOSYS.
+ */
+#define ENOSYS 38 /* Invalid system call number */
+
+#define ENOTEMPTY 39 /* Directory not empty */
+#define ELOOP 40 /* Too many symbolic links encountered */
+#define EWOULDBLOCK EAGAIN /* Operation would block */
+#define ENOMSG 42 /* No message of desired type */
+#define EIDRM 43 /* Identifier removed */
+#define ECHRNG 44 /* Channel number out of range */
+#define EL2NSYNC 45 /* Level 2 not synchronized */
+#define EL3HLT 46 /* Level 3 halted */
+#define EL3RST 47 /* Level 3 reset */
+#define ELNRNG 48 /* Link number out of range */
+#define EUNATCH 49 /* Protocol driver not attached */
+#define ENOCSI 50 /* No CSI structure available */
+#define EL2HLT 51 /* Level 2 halted */
+#define EBADE 52 /* Invalid exchange */
+#define EBADR 53 /* Invalid request descriptor */
+#define EXFULL 54 /* Exchange full */
+#define ENOANO 55 /* No anode */
+#define EBADRQC 56 /* Invalid request code */
+#define EBADSLT 57 /* Invalid slot */
+
+#define EDEADLOCK EDEADLK
+
+#define EBFONT 59 /* Bad font file format */
+#define ENOSTR 60 /* Device not a stream */
+#define ENODATA 61 /* No data available */
+#define ETIME 62 /* Timer expired */
+#define ENOSR 63 /* Out of streams resources */
+#define ENONET 64 /* Machine is not on the network */
+#define ENOPKG 65 /* Package not installed */
+#define EREMOTE 66 /* Object is remote */
+#define ENOLINK 67 /* Link has been severed */
+#define EADV 68 /* Advertise error */
+#define ESRMNT 69 /* Srmount error */
+#define ECOMM 70 /* Communication error on send */
+#define EPROTO 71 /* Protocol error */
+#define EMULTIHOP 72 /* Multihop attempted */
+#define EDOTDOT 73 /* RFS specific error */
+#define EBADMSG 74 /* Not a data message */
+#define EOVERFLOW 75 /* Value too large for defined data type */
+#define ENOTUNIQ 76 /* Name not unique on network */
+#define EBADFD 77 /* File descriptor in bad state */
+#define EREMCHG 78 /* Remote address changed */
+#define ELIBACC 79 /* Can not access a needed shared library */
+#define ELIBBAD 80 /* Accessing a corrupted shared library */
+#define ELIBSCN 81 /* .lib section in a.out corrupted */
+#define ELIBMAX 82 /* Attempting to link in too many shared libraries */
+#define ELIBEXEC 83 /* Cannot exec a shared library directly */
+#define EILSEQ 84 /* Illegal byte sequence */
+#define ERESTART 85 /* Interrupted system call should be restarted */
+#define ESTRPIPE 86 /* Streams pipe error */
+#define EUSERS 87 /* Too many users */
+#define ENOTSOCK 88 /* Socket operation on non-socket */
+#define EDESTADDRREQ 89 /* Destination address required */
+#define EMSGSIZE 90 /* Message too long */
+#define EPROTOTYPE 91 /* Protocol wrong type for socket */
+#define ENOPROTOOPT 92 /* Protocol not available */
+#define EPROTONOSUPPORT 93 /* Protocol not supported */
+#define ESOCKTNOSUPPORT 94 /* Socket type not supported */
+#define EOPNOTSUPP 95 /* Operation not supported on transport endpoint */
+#define EPFNOSUPPORT 96 /* Protocol family not supported */
+#define EAFNOSUPPORT 97 /* Address family not supported by protocol */
+#define EADDRINUSE 98 /* Address already in use */
+#define EADDRNOTAVAIL 99 /* Cannot assign requested address */
+#define ENETDOWN 100 /* Network is down */
+#define ENETUNREACH 101 /* Network is unreachable */
+#define ENETRESET 102 /* Network dropped connection because of reset */
+#define ECONNABORTED 103 /* Software caused connection abort */
+#define ECONNRESET 104 /* Connection reset by peer */
+#define ENOBUFS 105 /* No buffer space available */
+#define EISCONN 106 /* Transport endpoint is already connected */
+#define ENOTCONN 107 /* Transport endpoint is not connected */
+#define ESHUTDOWN 108 /* Cannot send after transport endpoint shutdown */
+#define ETOOMANYREFS 109 /* Too many references: cannot splice */
+#define ETIMEDOUT 110 /* Connection timed out */
+#define ECONNREFUSED 111 /* Connection refused */
+#define EHOSTDOWN 112 /* Host is down */
+#define EHOSTUNREACH 113 /* No route to host */
+#define EALREADY 114 /* Operation already in progress */
+#define EINPROGRESS 115 /* Operation now in progress */
+#define ESTALE 116 /* Stale file handle */
+#define EUCLEAN 117 /* Structure needs cleaning */
+#define ENOTNAM 118 /* Not a XENIX named type file */
+#define ENAVAIL 119 /* No XENIX semaphores available */
+#define EISNAM 120 /* Is a named type file */
+#define EREMOTEIO 121 /* Remote I/O error */
+#define EDQUOT 122 /* Quota exceeded */
+
+#define ENOMEDIUM 123 /* No medium found */
+#define EMEDIUMTYPE 124 /* Wrong medium type */
+#define ECANCELED 125 /* Operation Canceled */
+#define ENOKEY 126 /* Required key not available */
+#define EKEYEXPIRED 127 /* Key has expired */
+#define EKEYREVOKED 128 /* Key has been revoked */
+#define EKEYREJECTED 129 /* Key was rejected by service */
+
+/* for robust mutexes */
+#define EOWNERDEAD 130 /* Owner died */
+#define ENOTRECOVERABLE 131 /* State not recoverable */
+
+#define ERFKILL 132 /* Operation not possible due to RF-kill */
+
+#define EHWPOISON 133 /* Memory page has hardware error */
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 2 3 4
+# 1 "/usr/include/linux/errno.h" 2 3 4
+# 25 "/usr/include/x86_64-linux-gnu/bits/errno.h" 2 3 4
+
+/* Linux has no ENOTSUP error code.  */
+#define ENOTSUP EOPNOTSUPP
+
+/* Older Linux versions also had no ECANCELED error code.  */
+
+
+
+
+/* Support for error codes to support robust mutexes was added later, too.  */
+# 49 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+/* Function to get address of global `errno' variable.  */
+extern int *__errno_location (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+
+
+/* When using threads, errno is a per-thread value.  */
+#define errno (*__errno_location ())
+# 36 "<stdin>" 2
+#undef __need_Emath
+
+
+
+
+# 40 "<stdin>"
+/* Declare the `errno' variable, unless it's defined as a macro by
+   bits/errno.h.  This is the case in GNU, where it is a per-thread
+   variable.  This redeclaration using the macro still works, but it
+   will be a function declaration without a prototype and may trigger
+   a -Wstrict-prototypes warning.  */
+# 58 "<stdin>"
+
+
+
+
+/* The Hurd <bits/errno.h> defines `error_t' as an enumerated type so
+   that printing `error_t' values in the debugger shows the names.  We
+   might need this definition sometimes even if this file was included
+   before.  */

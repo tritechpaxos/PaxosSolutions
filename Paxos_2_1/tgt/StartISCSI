@@ -1,0 +1,23 @@
+#!/bin/bash -x
+
+
+TARGET=paxos201
+TARGET_NAME=iqn.2001-03.jp.tritech:tgtd-pss
+DEVICE=c
+DIR=/mnt/pss_1
+if [ $# -ge 2 ]
+then
+TARGET=$1
+TARGET_NAME=$2
+DEVICE=d
+DIR=/mnt/pss_2
+fi
+
+echo $TARGET $TARGET_NAME
+
+# sudo /etc/init.d/iscsi restart
+sudo /usr/bin/iscsiadm --mode=discovery --type=sendtargets  -p $TARGET
+sudo /usr/bin/iscsiadm --mode=node --login --targetname $TARGET_NAME
+sleep 2
+ls /dev/sd*
+#sudo mount /dev/sd$DEVICE $DIR
