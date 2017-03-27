@@ -31,12 +31,14 @@ GCC	= gcc $(CFLAGS)
 AR	= ar
 RANLIB	= ranlib
 
+PAXOS_VER=Paxos_2_1
+
 G	= ../../../NWGadget/
-P	= ../../../Paxos_2/paxos/
-S	= ../../../Paxos_2/session/
-ST	= ../../../Paxos_2/status/
-CA	= ../../../Paxos_2/cache/
-PF	= ../../../Paxos_2/PFS/
+P	= ../../../$(PAXOS_VER)/paxos/
+S	= ../../../$(PAXOS_VER)/session/
+ST	= ../../../$(PAXOS_VER)/status/
+CA	= ../../../$(PAXOS_VER)/cache/
+PF	= ../../../$(PAXOS_VER)/PFS/
 H = $(PF)/h/
 LIB = $(PF)/lib/
 

@@ -130,14 +130,8 @@ popd
 install_tmp_pip() {
   mkdir -p ${TMP_DIR}/pip/.local/lib/python${python_ver}/site-packages
   pushd ${TMP_DIR}/pip
-  tar xzf ${ARC_DIR}/setuptools-22.0.5.tar.gz
-  pushd setuptools-22.0.5
-  env PYTHONUSERBASE=${TMP_DIR}/pip/.local python setup.py install --user
-  popd
-  tar xzf ${ARC_DIR}/pip-8.1.2.tar.gz
-  pushd pip-8.1.2
-  env PYTHONUSERBASE=${TMP_DIR}/pip/.local python setup.py install --user
-  popd
+  curl -O https://bootstrap.pypa.io/get-pip.py
+  env PYTHONUSERBASE=${TMP_DIR}/pip/.local python get-pip.py --user
   popd
   pip_cmd="env PYTHONUSERBASE=${TMP_DIR}/pip/.local ${TMP_DIR}/pip/.local/bin/pip"
   $pip_cmd install virtualenv --user

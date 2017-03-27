@@ -3,6 +3,7 @@
 setup() {
 ROOT_DIR=`pwd`
 PAXOS_DIR=${ROOT_DIR}/../../..
+PAXOS_VER=Paxos_2_1
 DIST_DIR=${ROOT_DIR}/dist
 PKGS_DIR=${ROOT_DIR}/pkgs
 ARC_DIR=${ROOT_DIR}/arc
@@ -33,8 +34,8 @@ build_paxos()
 {
 pushd ${PAXOS_DIR}
 build NWGadget
-build Paxos_2 clean
-build Paxos_2/RAS
+build ${PAXOS_VER} clean
+build ${PAXOS_VER}/RAS
 popd
 }
 
@@ -51,51 +52,51 @@ make_dist_core() {
   pushd ${TMP_DIR}/build_core
   mkdir -p core/bin core/lib core/include
   install -t core/bin/ \
-	${PAXOS_DIR}/Paxos_2/xjPing/bin/xjPingPaxos \
-	${PAXOS_DIR}/Paxos_2/PFS/bin/PFSServer \
-	${PAXOS_DIR}/Paxos_2/VV/bin/LVServer
+	${PAXOS_DIR}/${PAXOS_VER}/xjPing/bin/xjPingPaxos \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/bin/PFSServer \
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/LVServer
   install -s -t core/bin/ \
-	${PAXOS_DIR}/Paxos_2/paxos/bin/PaxosAdmin \
-	${PAXOS_DIR}/Paxos_2/session/bin/PaxosSessionProbe \
-	${PAXOS_DIR}/Paxos_2/session/bin/PaxosSessionShutdown \
-	${PAXOS_DIR}/Paxos_2/session/bin/PaxosSessionChangeMember \
-	${PAXOS_DIR}/Paxos_2/PFS/bin/PFSProbe \
-	${PAXOS_DIR}/Paxos_2/PFS/bin/PFSRasActive \
-	${PAXOS_DIR}/Paxos_2/PFS/bin/PFSRasCluster \
-	${PAXOS_DIR}/Paxos_2/PFS/bin/PFSRasMonitor \
-	${PAXOS_DIR}/Paxos_2/VV/bin/LVProbe \
+	${PAXOS_DIR}/${PAXOS_VER}/paxos/bin/PaxosAdmin \
+	${PAXOS_DIR}/${PAXOS_VER}/session/bin/PaxosSessionProbe \
+	${PAXOS_DIR}/${PAXOS_VER}/session/bin/PaxosSessionShutdown \
+	${PAXOS_DIR}/${PAXOS_VER}/session/bin/PaxosSessionChangeMember \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/bin/PFSProbe \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/bin/PFSRasActive \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/bin/PFSRasCluster \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/bin/PFSRasMonitor \
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/LVProbe \
 	${PAXOS_DIR}/NWGadget/bin/LogFiles \
 	${PAXOS_DIR}/NWGadget/bin/LogPrint \
-	${PAXOS_DIR}/Paxos_2/PFS/bin/PFSClient \
-	${PAXOS_DIR}/Paxos_2/paxos/bin/PaxosIsActive \
-	${PAXOS_DIR}/Paxos_2/xjPing/bin/xjSqlPaxos \
-	${PAXOS_DIR}/Paxos_2/xjPing/bin/xjListPaxos
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/bin/PFSClient \
+	${PAXOS_DIR}/${PAXOS_VER}/paxos/bin/PaxosIsActive \
+	${PAXOS_DIR}/${PAXOS_VER}/xjPing/bin/xjSqlPaxos \
+	${PAXOS_DIR}/${PAXOS_VER}/xjPing/bin/xjListPaxos
   install -t core/lib/ \
 	${PAXOS_DIR}/NWGadget/lib/libNWGadget.a \
-	${PAXOS_DIR}/Paxos_2/paxos/lib/libPaxos.a \
-	${PAXOS_DIR}/Paxos_2/session/lib/libPaxosSession.a \
-	${PAXOS_DIR}/Paxos_2/xjPing/lib/libneo2.a \
-	${PAXOS_DIR}/Paxos_2/PFS/lib/libPaxosPFS.a \
-	${PAXOS_DIR}/Paxos_2/cache/lib/libCache.a \
-	${PAXOS_DIR}/Paxos_2/cache/lib/libCacheDlg.a \
-	${PAXOS_DIR}/Paxos_2/cache/lib/libCacheBlock.a \
-	${PAXOS_DIR}/Paxos_2/status/lib/libStatus.a
+	${PAXOS_DIR}/${PAXOS_VER}/paxos/lib/libPaxos.a \
+	${PAXOS_DIR}/${PAXOS_VER}/session/lib/libPaxosSession.a \
+	${PAXOS_DIR}/${PAXOS_VER}/xjPing/lib/libneo2.a \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/lib/libPaxosPFS.a \
+	${PAXOS_DIR}/${PAXOS_VER}/cache/lib/libCache.a \
+	${PAXOS_DIR}/${PAXOS_VER}/cache/lib/libCacheDlg.a \
+	${PAXOS_DIR}/${PAXOS_VER}/cache/lib/libCacheBlock.a \
+	${PAXOS_DIR}/${PAXOS_VER}/status/lib/libStatus.a
   install -t core/include/ \
 	${PAXOS_DIR}/NWGadget/h/*.h \
-	${PAXOS_DIR}/Paxos_2/paxos/h/*.h \
-	${PAXOS_DIR}/Paxos_2/session/h/*.h \
-	${PAXOS_DIR}/Paxos_2/xjPing/h/*.h \
-	${PAXOS_DIR}/Paxos_2/PFS/h/*.h \
-	${PAXOS_DIR}/Paxos_2/cache/h/*.h \
-	${PAXOS_DIR}/Paxos_2/status/h/*.h
+	${PAXOS_DIR}/${PAXOS_VER}/paxos/h/*.h \
+	${PAXOS_DIR}/${PAXOS_VER}/session/h/*.h \
+	${PAXOS_DIR}/${PAXOS_VER}/xjPing/h/*.h \
+	${PAXOS_DIR}/${PAXOS_VER}/PFS/h/*.h \
+	${PAXOS_DIR}/${PAXOS_VER}/cache/h/*.h \
+	${PAXOS_DIR}/${PAXOS_VER}/status/h/*.h
   mkdir -p vv/bin
   install -t vv/bin/ \
-	${PAXOS_DIR}/Paxos_2/VV/bin/tgtdVV \
-	${PAXOS_DIR}/Paxos_2/VV/bin/InitDB.sh
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/tgtdVV \
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/InitDB.sh
   install -s -t vv/bin/ \
-	${PAXOS_DIR}/Paxos_2/VV/bin/tgtadm \
-	${PAXOS_DIR}/Paxos_2/VV/bin/VVAdmin \
-	${PAXOS_DIR}/Paxos_2/VV/bin/VVProbe
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/tgtadm \
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/VVAdmin \
+	${PAXOS_DIR}/${PAXOS_VER}/VV/bin/VVProbe
   mkdir -p .install
   grep paxos_core ${ROOT_DIR}/VERSION > .install/paxos_core
 
@@ -107,9 +108,9 @@ make_dist_ras_binary() {
   mkdir -p ${TMP_DIR}/build_ras_bin ${TMP_DIR}/build_ras
   pushd ${TMP_DIR}/build_ras_bin
   mkdir -p ras/bin
-  cp ${PAXOS_DIR}/Paxos_2/RAS/bin/RasEye ras/bin
-  cp ${PAXOS_DIR}/Paxos_2/RAS/bin/RasEyeAdm ras/bin
-  cp ${PAXOS_DIR}/Paxos_2/RAS/bin/RasMail ras/bin
+  cp ${PAXOS_DIR}/${PAXOS_VER}/RAS/bin/RasEye ras/bin
+  cp ${PAXOS_DIR}/${PAXOS_VER}/RAS/bin/RasEyeAdm ras/bin
+  cp ${PAXOS_DIR}/${PAXOS_VER}/RAS/bin/RasMail ras/bin
 
   tar czf ${TMP_DIR}/build_ras/paxos-ras-binary.${pkg_name}.tar.gz .
   popd
@@ -128,14 +129,8 @@ install_tmp_pip() {
   python_ver=`python --version |& cut -f2 -d\  | cut -f1,2 -d.`
   mkdir -p ${TMP_DIR}/pip/.local/lib/python${python_ver}/site-packages
   pushd ${TMP_DIR}/pip
-  tar xzf ${ARC_DIR}/setuptools-22.0.5.tar.gz
-  pushd setuptools-22.0.5
-  env PYTHONUSERBASE=${TMP_DIR}/pip/.local python setup.py install --user
-  popd
-  tar xzf ${ARC_DIR}/pip-8.1.2.tar.gz
-  pushd pip-8.1.2
-  env PYTHONUSERBASE=${TMP_DIR}/pip/.local python setup.py install --user
-  popd
+  curl -O https://bootstrap.pypa.io/get-pip.py
+  env PYTHONUSERBASE=${TMP_DIR}/pip/.local python get-pip.py --user
   popd
   pip_cmd="env PYTHONUSERBASE=${TMP_DIR}/pip/.local ${TMP_DIR}/pip/.local/bin/pip"
   env PYTHONUSERBASE=${TMP_DIR}/pip/.local $pip_cmd install --user virtualenv
@@ -194,11 +189,11 @@ make_cmdb_client_dev() {
   pushd ${TMP_DIR}/build_cmdb_dev
   mkdir -p paxos/lib paxos/include
   cp ${PAXOS_DIR}/NWGadget/h/*.h paxos/include/
-  cp ${PAXOS_DIR}/Paxos_2/xjPing/h/*.h paxos/include/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/xjPing/h/*.h paxos/include/
   cp ${PAXOS_DIR}/NWGadget/lib/libNWGadget.a paxos/lib/
-  cp ${PAXOS_DIR}/Paxos_2/paxos/lib/libPaxos.a paxos/lib/
-  cp ${PAXOS_DIR}/Paxos_2/session/lib/libPaxosSession.a paxos/lib/
-  cp ${PAXOS_DIR}/Paxos_2/xjPing/lib/libneo2.a paxos/lib/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/paxos/lib/libPaxos.a paxos/lib/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/session/lib/libPaxosSession.a paxos/lib/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/xjPing/lib/libneo2.a paxos/lib/
   tar czf ${DIST_DIR}/cmdb_client-dev.tar.gz .
   popd
 }
@@ -208,14 +203,14 @@ make_css_client_dev() {
   pushd ${TMP_DIR}/build_css_dev
   mkdir -p paxos/lib paxos/include
   cp ${PAXOS_DIR}/NWGadget/h/*.h paxos/include/
-  cp ${PAXOS_DIR}/Paxos_2/PFS/h/*.h paxos/include/
-  cp ${PAXOS_DIR}/Paxos_2/cache/h/FileCache.h paxos/include/
-  cp ${PAXOS_DIR}/Paxos_2/session/h/*.h paxos/include/
-  cp ${PAXOS_DIR}/Paxos_2/paxos/h/* paxos/include/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/PFS/h/*.h paxos/include/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/cache/h/FileCache.h paxos/include/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/session/h/*.h paxos/include/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/paxos/h/* paxos/include/
   cp ${PAXOS_DIR}/NWGadget/lib/libNWGadget.a paxos/lib/
-  cp ${PAXOS_DIR}/Paxos_2/paxos/lib/libPaxos.a paxos/lib/
-  cp ${PAXOS_DIR}/Paxos_2/session/lib/libPaxosSession.a paxos/lib/
-  cp ${PAXOS_DIR}/Paxos_2/PFS/lib/libPaxosPFS.a paxos/lib/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/paxos/lib/libPaxos.a paxos/lib/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/session/lib/libPaxosSession.a paxos/lib/
+  cp ${PAXOS_DIR}/${PAXOS_VER}/PFS/lib/libPaxosPFS.a paxos/lib/
   tar czf ${DIST_DIR}/css_client-dev.tar.gz .
   popd
 }

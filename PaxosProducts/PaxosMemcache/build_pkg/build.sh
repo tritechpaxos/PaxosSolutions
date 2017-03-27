@@ -15,7 +15,7 @@ build_tools() {
 }
 
 make_pkg() {
-    pushd Paxos_2
+    pushd Paxos_2_1
 
     mkdir -p ${pkg_tmp}/bin
     install -t ${pkg_tmp}/bin/ paxos/bin/PaxosAdmin \
@@ -56,8 +56,8 @@ mkdir -p ${pkg_dir}
 
 pushd ${paxos_dir}
 build_source_tree NWGadget
-build_source_tree Paxos_2
-build_source_tree Paxos_2/memcache
+build_source_tree Paxos_2_1
+build_source_tree Paxos_2_1/memcache
 
 build_tools
 
