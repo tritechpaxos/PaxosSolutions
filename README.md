@@ -9,6 +9,9 @@
 が公開されています。  
   
 １、PAXOS COREのセットアップ方法  
+・準備
+  PAXOS/Products/CellConfig/README の記述に従い必要なパッケージをインストール
+  する
 ・ビルド  
 　$ cd PaxosProducts/CellConfig/  
 　$ ./build_pkg.sh  
