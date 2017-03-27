@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 init() {
 TMP_DIR=`mktemp --tmpdir -d paxos.XXXXXXXXXX`
@@ -157,7 +157,8 @@ popd
 fetch_virtualenv() {
 mkdir -p ${TMP_DIR}/dist/virtualenv/
 pushd ${TMP_DIR}/dist/virtualenv
-$pip_cmd download setuptools pip
+$pip_cmd download --no-binary :all: pip
+curl -L -o setuptools-34.3.3.tar.gz https://github.com/pypa/setuptools/archive/v34.3.3.tar.gz
 $pip_cmd download virtualenv
 popd
 }

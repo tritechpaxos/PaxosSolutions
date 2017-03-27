@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 setup() {
 ROOT_DIR=`pwd`
@@ -140,7 +140,8 @@ install_tmp_pip() {
 fetch_python_pkgs() {
   mkdir -p ${TMP_DIR}/build_ras
   pushd ${TMP_DIR}/build_ras
-  $pip_cmd download setuptools pip
+  $pip_cmd download --no-binary :all: pip
+  curl -L -o setuptools-34.3.3.tar.gz https://github.com/pypa/setuptools/archive/v34.3.3.tar.gz
   $pip_cmd download virtualenv
   popd
 }

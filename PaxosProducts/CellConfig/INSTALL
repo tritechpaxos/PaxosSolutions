@@ -27,7 +27,7 @@
   4. セル管理の実行
 
       % cd ~/PAXOS/manager
-      % bin/gunicorn -c conf/gunicorn.conf cellconfig:app
+      % bin/gunicorn -c conf/gunicorn.conf cellconfig.ui.web:app
 
       webブラウザで http://127.0.0.1:7000/ にアクセスし、セル管理の画面
       が表示されていることを確認して下さい。
