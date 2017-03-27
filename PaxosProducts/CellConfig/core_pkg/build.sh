@@ -140,7 +140,7 @@ install_tmp_pip() {
 fetch_python_pkgs() {
   mkdir -p ${TMP_DIR}/build_ras
   pushd ${TMP_DIR}/build_ras
-  $pip_cmd download --no-binary :all: setuptools pip
+  $pip_cmd download setuptools pip
   $pip_cmd download virtualenv
   popd
 }

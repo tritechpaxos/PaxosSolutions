@@ -1,7 +1,5 @@
 #!/bin/bash
 
-REP_ADDR=saule.tritech.co.jp
-
 init() {
 TMP_DIR=`mktemp --tmpdir -d paxos.XXXXXXXXXX`
 trap '/bin/rm -rf ${TMP_DIR}' EXIT
@@ -159,7 +157,7 @@ popd
 fetch_virtualenv() {
 mkdir -p ${TMP_DIR}/dist/virtualenv/
 pushd ${TMP_DIR}/dist/virtualenv
-$pip_cmd download --no-binary :all: setuptools pip
+$pip_cmd download setuptools pip
 $pip_cmd download virtualenv
 popd
 }
