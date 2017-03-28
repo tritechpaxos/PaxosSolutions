@@ -1,0 +1,28 @@
+[ファイル構成]
+  README             このファイル
+  pkg-build/         Paxosのパッケージを作成するスクリプトを収めたディレクトリ
+    build.sh         Paxosのパッケージのビルドスクリプト
+    Dockerfile       Paxosのパッケージのビルドする作業環境のDockerイメージ
+  paxos/             Paxosコンテナを実行するためのファイル類を収めたディレクトリ
+    cellconfig/
+      Dockerfile     Paxosのセル管理コンテナのDockerfile
+    node/
+      Dockerfile     Paxosのノード用のコンテナ（デモ用）
+    docker-compose.yml  Paxosのデモ構成を起動するための docker-compose.yml
+
+[準備]
+事前の準備としてPaxosのパッケージを作成します。
+以下のコマンドを実行してください。
+
+  % ( pkg-build && ./build.sh )
+
+
+[デモ環境の起動]
+docker-compose(https://docs.docker.com/compose/)を利用することで、デモ環境
+を起動できます。
+
+  % cd paxos
+  % docker-compose up -d
+
+ブラウザからhttp://localhost:7000/ にアクセスすることでセル管理にアクセス
+出来ます。
