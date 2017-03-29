@@ -88,15 +88,15 @@ $(BIN)FdEvent: FdEvent.c $(LIB)libNWGadget.a
 	$(GCC) -o $(BIN)FdEvent $(INC) FdEvent.c $(LIBS)
 
 clean:
-	rm $(BIN)skl_mem*
-	rm $(BIN)Hash*
-	rm $(BIN)DHash*
-	rm $(BIN)timer*
-	rm $(BIN)BTree*
-	rm $(BIN)Msg*
-	rm $(BIN)GurdedElement*
-	rm $(BIN)Cksum*
-	rm $(BIN)Queue*
-	rm $(BIN)FdEvent*
-	rm $(BIN)LogPrint*
-	rm $(BIN)LogFiles*
+	rm -f $(BIN)skl_mem*
+	rm -f $(BIN)Hash*
+	rm -f $(BIN)DHash*
+	rm -f $(BIN)timer*
+	rm -f $(BIN)BTree*
+	rm -f $(BIN)Msg*
+	rm -f $(BIN)GurdedElement*
+	rm -f $(BIN)Cksum*
+	rm -f $(BIN)Queue*
+	rm -f $(BIN)FdEvent*
+	rm -f $(BIN)LogPrint*
+	rm -f $(BIN)LogFiles*

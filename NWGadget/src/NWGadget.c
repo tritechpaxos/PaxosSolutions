@@ -101,14 +101,11 @@ LogPrintf( FILE* pFile, char *pBuf )
 			a[i++]	= (uintptr_t)pBuf;
 			L	= (int)strlen( pBuf );
 			pBuf	+= (L+1+sizeof(int)-1)/sizeof(int)*sizeof(int);
-#ifdef	ZZZ
-#else
 		} else if( c == 'S' ) {
 			a[i++]	= (uintptr_t)pBuf;
 			L	= (int)wcslen( (wchar_t*)pBuf );
 			pBuf	+= ((L+1)*sizeof(wchar_t)+sizeof(int)-1)
 						/sizeof(int)*sizeof(int);
-#endif
 		} else if( c == 'p' ) {
 			a[i++]	= *((uintptr_t*)pBuf);
 			pBuf	+= sizeof(void*);
@@ -167,10 +164,7 @@ Log( Log_t* pLog, int Level, char* pFmt, ... )
 	va_list	ap;
 	char	*pS, c;
 	void*	p;
-#ifdef	ZZZ
-#else
 	wchar_t	*pW;
-#endif
 	int		L;
 	char	Buf[1024];
 	if( Level > pLog->l_Level )	return( 0 );
@@ -196,15 +190,12 @@ Log( Log_t* pLog, int Level, char* pFmt, ... )
 			L = (int)strlen( pS );
 			strcpy( pBuf, pS );
 			pBuf	+= (L+1+sizeof(int)-1)/sizeof(int)*sizeof(int);
-#ifdef	ZZZ
-#else
 		} else if( c == 'S' ) {
 			pW	= va_arg( ap, wchar_t *);
 			L	= (int)wcslen( pW );
 			memcpy( pBuf, pW, (L+1)*sizeof(wchar_t) );
 			pBuf	+= ((L+1)*sizeof(wchar_t)+sizeof(int)-1)
 						/sizeof(int)*sizeof(int);
-#endif
 		} else if( c == 'p' ) {
 			p = va_arg( ap, void*);
 			*((void**)pBuf)	= p;
@@ -2893,11 +2884,6 @@ void* _TimerCancel( Timer_t* pTimer, TimerEvent_t* pEvent );
 
 	/* purge events */
 	do {
-#ifdef	ZZZ
-		pEvent	= (TimerEvent_t*)HashIsExist( &pTimer->t_Hash );
-
-		if( pEvent )	_TimerCancel( pTimer, pEvent );
-#else
 		HashItem_t	*pItem;
 
 		pEvent = NULL;
@@ -2906,7 +2892,6 @@ void* _TimerCancel( Timer_t* pTimer, TimerEvent_t* pEvent );
 			pEvent	= (TimerEvent_t*)pItem->i_pValue;
 			_TimerCancel( pTimer, pEvent );
 		}
-#endif
 
 	} while( pEvent );
 
@@ -3347,8 +3332,6 @@ MsgPopFunc( Msg_t *pMsg )
 	return( fFunc );
 }
 
-#ifdef	ZZZ
-#else
 int
 MsgSendByFd( int Fd, Msg_t *pMsg )
 {
@@ -3369,7 +3352,6 @@ MsgSendByFd( int Fd, Msg_t *pMsg )
 err:
 	return( -1 );
 }
-#endif
 
 static	int
 IOFileRead( void* This, void *pBuf, int Len )
@@ -3767,8 +3749,6 @@ GElmLoop( GElmCtrl_t *pGE, list_t *pHead, int off, void *pVoid )
 	return( Ret );
 }
 
-#ifdef	ZZZ
-#else
 int
 GElmFlush( GElmCtrl_t *pGE, list_t *pHead, int off, void *pVoid, bool_t bSave )
 {
@@ -3804,7 +3784,7 @@ err:
 	MtxUnlock( &pGE->ge_Mtx );
 	return( Ret );
 }
-#endif
+
 /*
  *	Fdevent
  */
@@ -4147,36 +4127,6 @@ err1:
 	return( -1 );
 }
 
-#ifdef	ZZZ
-int
-FdEventMod( FdEvent_t *pEv )
-{
-	FdEventCtrl_t	*pFdEvCt;
-
-	pFdEvCt	= pEv->fd_pFdEvCt;
-
-	MtxLock( &pFdEvCt->ct_Mtx );
-
-	if( event_del( &pEv->fd_Event ) < 0 ) {
-		pEv->fd_errno	= errno;
-		goto err1;
-	}
-	event_assign( &pEv->fd_Event, pFdEvCt->ct_pEvBase, 
-				pEv->fd_Fd, pEv->fd_Events|EV_PERSIST, 
-				_FdEvHandler, pEv );
-	if( event_add( &pEv->fd_Event , NULL ) ) {
-		pEv->fd_errno	= errno;
-		goto err1;
-	}
-
-	MtxUnlock( &pFdEvCt->ct_Mtx );
-	return( 0 );
-err1:
-	MtxUnlock( &pFdEvCt->ct_Mtx );
-	return( -1 );
-}
-#endif
-
 int
 FdEventDel( FdEvent_t *pEv )
 {
@@ -4279,30 +4229,6 @@ err:
 	return( -1 );
 }
 
-#ifdef	ZZZ
-/* Synchronous timeout read */
-int
-FdEventReadWithTimeout( FdEventCtrl_t *pFdEvCt, FdEvent_t FdEvent,
-		struct timeval *pTimeout )
-{
-	pEv->fd_pFdEvCt			= pFdEvCt;
-
-	MtxLock( &pFdEvCt->ct_Mtx );
-
-	ASSERT( !HashListGet( &pFdEvCt->ct_HashLnk, &Key64) );
-
-	event_assign( &pEv->fd_Event, pFdEvCt->ct_pEvBase, 
-				pEv->fd_Fd, pEv->fd_Events, 
-				_FdEvHandler, pEv );
-	if( event_add( &pEv->fd_Event , pTimeout ) ) {
-		pEv->fd_errno	= errno;
-		goto err1;
-	}
-
-	MtxUnlock( &pFdEvCt->ct_Mtx );
-}
-#endif
-
 #endif	// _NOT_LIBEVENT__
 
 
@@ -4355,11 +4281,7 @@ in_sum64( void *pAddr, int nleft, int r )
 		pw		+= r1;
 		sum64	= *(uint64_t*)&c64;
 	}
-#ifdef	ZZZ
-	bound	= pw - (char*)0;
-#else
 	bound	= (long)(uintptr_t)pw;
-#endif
 	while( nleft > 0 ) {
 
 		if( nleft >= 8) {
@@ -4399,11 +4321,7 @@ in_cksum64( void *pAddr, int nleft, int r )
 uint16_t
 in_cksum( uint16_t *pAddr, int nleft )
 {
-#ifdef	ZZZ
-	long		bound = ((char*)pAddr-(char*)0);
-#else
 	long		bound = (long)(uintptr_t)pAddr;
-#endif
 	char		*pw = (char*)pAddr;
 	uint32_t	sum32 = 0;
 	uint32_t	w32 = 0;

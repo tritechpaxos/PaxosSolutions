@@ -42,10 +42,7 @@
 #include	<assert.h>
 #include	<pthread.h>
 #include	<signal.h>
-#ifdef	ZZZ
-#else
 #include	<wchar.h>
-#endif
 
 #ifdef	VISUAL_CPP
 #include	<winsock2.h>
@@ -98,13 +95,8 @@ typedef	long long		int64_t;
 typedef	unsigned long long	uint64_t;
 #endif
 
-#ifdef	ZZZ
-#define	PNT_UINT32( pnt )	(uint32_t)((void*)(pnt)-(void*)0)
-#define	PNT_INT32( pnt )	(int32_t)((void*)(pnt)-(void*)0)
-#else
 #define	PNT_UINT32( pnt )	(uint32_t)(uintptr_t)(pnt)
 #define	PNT_INT32( pnt )	(int32_t)(intptr_t)(pnt)
-#endif
 
 #define	UINT32_PNT( u )	(void*)(uintptr_t)(u)
 
@@ -733,30 +725,21 @@ typedef	struct Queue {
 	Dlnk_t	q_entry;
 	int		q_cnt;
 	int		q_abrt;
-#ifdef	ZZZ
-#else
+
 #define	QUEUE_SUSPEND	0x1
 	int		q_flg;
 	int		q_max;
 	int		q_omitted;
 	int		q_waiter;
-#endif
 } Queue_t;
 
 static inline	void	
 QueueInit( Queue_t* qp )
 {
-#ifdef	ZZZ
-#else
 	memset( qp, 0, sizeof(*qp) );
-#endif
 	MtxInit( &qp->q_mtx );
 	CndInit( &qp->q_cnd );
 	dlInit( &qp->q_entry );
-#ifdef	ZZZ
-	qp->q_cnt	= 0;
-	qp->q_abrt	= 0;
-#endif
 }
 
 static inline	void
@@ -777,18 +760,10 @@ QueueTimedWait( Queue_t* ep, Dlnk_t** ppEntry, int ms )
 
 	MtxLock( &ep->q_mtx );
 
-#ifdef	ZZZ
-	ep->q_cnt--;
-#else
 	ep->q_waiter++;
-#endif
 	if( ms >= 0 ) {	TIMESPEC( Now ); TIMEOUT( Now, ms, Timeout );}
 
-#ifdef	ZZZ
-	while( !(pEntry = dlHead( &ep->q_entry ) ) ) {
-#else
 	while( ep->q_flg || !(pEntry = dlHead( &ep->q_entry ) ) ) {
-#endif
 
 		if( ep->q_abrt ) {
 			ret = errno = ep->q_abrt;
@@ -798,26 +773,18 @@ QueueTimedWait( Queue_t* ep, Dlnk_t** ppEntry, int ms )
 		else			ret = CndWait(&ep->q_cnd, &ep->q_mtx);
 		if( ret )	goto err;
 	}
-#ifdef	ZZZ
-	if( pEntry )	dlRemove( pEntry );
-#else
 	if( pEntry ) {
 		dlRemove( pEntry );
 		ep->q_cnt--;
 	}
 	ep->q_waiter--;
-#endif
 
 	*ppEntry	= pEntry;
 
 	MtxUnlock( &ep->q_mtx );
 	return( 0 );
 err:
-#ifdef	ZZZ
-	ep->q_cnt++;
-#else
 	ep->q_waiter--;
-#endif
 	MtxUnlock( &ep->q_mtx );
 	return( ret );
 }
@@ -825,17 +792,10 @@ err:
 static inline	int	
 QueuePost( Queue_t* ep, Dlnk_t* qp )
 {
-#ifdef	ZZZ
-#else
 	int	Ret;
-#endif
 	MtxLock( &ep->q_mtx );
 
 	dlInit( qp );
-#ifdef	ZZZ
-	dlInsert( qp, &ep->q_entry );
-	ep->q_cnt++;
-#else
 	if( ep->q_max && ep->q_cnt >= ep->q_max ) {
 		ep->q_omitted++;
 		Ret = -1;
@@ -844,15 +804,10 @@ QueuePost( Queue_t* ep, Dlnk_t* qp )
 		ep->q_cnt++;
 		Ret = 0;
 	}
-#endif
 	CndSignal( &ep->q_cnd );
 
 	MtxUnlock( &ep->q_mtx );
-#ifdef	ZZZ
-	return( 0 );
-#else
 	return( Ret );
-#endif
 }
 
 static inline	int	
@@ -869,8 +824,6 @@ QueueAbort( Queue_t* ep, int Abrt )
 	return( 0 );
 }
 
-#ifdef	ZZZ
-#else
 static inline	int
 QueueSuspend( Queue_t *ep )
 {
@@ -919,8 +872,6 @@ QueueOmitted( Queue_t* ep )
 	/* atomic */
 	return( ep->q_omitted );
 }
-
-#endif
 
 #define	queue_entry(ptr, type, member)	container_of(ptr, type, member)
 
@@ -1561,10 +1512,7 @@ extern	char*	MsgNext( Msg_t *pM );
 extern	int		MsgLen( Msg_t *pM );
 extern	char*	MsgTrim( Msg_t *pM, int h );
 extern	uint64_t	MsgCksum64( Msg_t *pM, int Start, int N, int *pR );
-#ifdef	ZZZ
-#else
 extern	int		MsgSendByFd( int Fd, Msg_t *pMsg );
-#endif
 
 /*
  *	スタックを使用せずに、関数列で実行する手法
@@ -1757,11 +1705,8 @@ extern	int	GElmPutByKey( GElmCtrl_t*, void* pKey, bool_t bFree, bool_t bSave );
 #define	GElmCtrlCndBroadcast( pGE )	CndBroadcast( &(pGE)->ge_Cnd )
 
 extern	int GElmLoop( GElmCtrl_t *pGE, list_t *pHead, int off, void* pVoid);
-#ifdef	ZZZ
-#else
 extern	int GElmFlush( GElmCtrl_t *pGE, list_t *pHead, int off, 
 								void* pVoid, bool_t bSave );
-#endif
 
 extern	GElm_t* _GElmAlloc( GElmCtrl_t *pGE );
 extern	void _GElmFree( GElmCtrl_t *pGE, GElm_t *pElm );
@@ -1865,9 +1810,6 @@ extern	int	FdEventCtrlDestroy( FdEventCtrl_t* );
 extern	int	FdEventInit( FdEvent_t* pEv, int Type, int Fd, int Events,
 			void* pArg, int (*fHandler)(FdEvent_t *pEv, FdEvMode_t Mode) );
 extern	int FdEventAdd( FdEventCtrl_t*, uint64_t Key, FdEvent_t* );
-#ifdef	ZZZ
-extern	int FdEventMod( FdEvent_t* );
-#endif
 extern	int FdEventDel( FdEvent_t* );
 
 extern	int	FdEventSuspend( FdEventCtrl_t* );
@@ -1925,9 +1867,6 @@ typedef struct {
 
 #endif	//_IN_CKSUM_
 
-#ifdef	ZZZ
-#else
-
 #ifndef	_MD5__
 #define	_MD5__
 
@@ -1957,5 +1896,3 @@ MD5HashStr( unsigned char *pBuff, long Size, unsigned char *pHash )
 
 #endif	//_MD5_
 
-
-#endif

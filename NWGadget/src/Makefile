@@ -43,4 +43,4 @@ $(LIB)libNWGadget.a:	$(H)NWGadget.h NWGadget.c Makefile
 	rm *.o
 
 clean:
-	rm $(LIB)libNWGadget.a
+	rm -f $(LIB)libNWGadget.a
