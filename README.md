@@ -24,14 +24,14 @@ Docker関連のファイルについてはPaxosProducts/CellConfig-Docker/README
 と。
 
 ### それ以外の場合
-1. PAXOS/Products/CellConfig/README の記述に従い必要なパッケージをインストールする
+1. PaxosProducts/CellConfig/README の記述に従い必要なパッケージをインストールする
 2. 以下のコマンドを実行してビルドを行う
 ```
 　$ cd PaxosProducts/CellConfig/  
 　$ ./build_pkg.sh  
 ``` 
 3. ビルドに成功するとdist配下にアーカイブが作成される  
-4. INSTALLファイルを参照して環境構築する  
+4. PaxosProducts/CellConfig/INSTALLファイルを参照して環境構築する  
 
 ## PAXOS memcacheのセットアップ方法
 以下の手順でビルドを行うとpkgs配下にアーカイブが作成される。
