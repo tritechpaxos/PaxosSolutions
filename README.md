@@ -9,25 +9,19 @@
   
 ## PAXOS COREのセットアップ方法
 ### Dockerを利用する場合
-以下のコマンドを実行してPaxosのセル管理コンテナイメージを作成する。（dockerが実行できることを前提としている）
-```
- $ cd PaxosProducts/CellConfig-Docker/pkg-build
- $ ./build.sh
- $ cd ../paxos
- $ docker build -t paxos_cellconfig cellconfig
-```
-
-コンテナを実行する。
+以下のコマンドを実行してPaxosセル管理のコンテナを起動する。
 ```
  $ export HOSTPORT=7000
- $ docker run -d -p $HOSTPORT:7000 paxos_cellconfig
+ $ docker run -d -p $HOSTPORT:7000 tritechpaxos/paxos-cellconfig
 ```
 HOSTPORTの値は必要に応じて変更すること。
 
 ブラウザから http://localhost:$HOSTPORT/ にアクセスすることでPaxosのセル管理を利用できる。
 他ホストからアクセスする場合はlocalhostの部分を適切なホスト名またはIPアドレスに変更すること。
 
-デモ用環境の構築手順についてはPaxosProducts/CellConfig-Docker/READMEを参照のこと。
+コンテナイメージのビルド手順については
+PaxosProducts/CellConfig-Docker/paxos/cellconfig/README.md
+を参照のこと。
 
 ### それ以外の場合
 1. PAXOS/Products/CellConfig/README の記述に従い必要なパッケージをインストールする
