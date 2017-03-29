@@ -19,9 +19,13 @@
 
 コンテナを実行する。
 ```
- $ docker run -d -p 7000:7000 paxos_cellconfig
+ $ export HOSTPORT=7000
+ $ docker run -d -p $HOSTPORT:7000 paxos_cellconfig
 ```
-ブラウザから http://(ホスト名):7000/ にアクセスすることでPaxosのセル管理を利用できる。
+HOSTPORTの値は必要に応じて変更すること。
+
+ブラウザから http://localhost:$HOSTPORT/ にアクセスすることでPaxosのセル管理を利用できる。
+他ホストからアクセスする場合はlocalhostの部分を適切なホスト名またはIPアドレスに変更すること。
 
 デモ用環境の構築手順についてはPaxosProducts/CellConfig-Docker/READMEを参照のこと。
 
