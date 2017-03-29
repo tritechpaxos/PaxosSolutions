@@ -16,12 +16,12 @@
 ```
 HOSTPORTの値は必要に応じて変更すること。
 
-ブラウザから http://localhost:$HOSTPORT/ にアクセスすることでPaxosのセル管理を利用できる。
-他ホストからアクセスする場合はlocalhostの部分を適切なホスト名またはIPアドレスに変更すること。
+ブラウザから http://localhost:$HOSTPORT/ にアクセスすることでPaxosのセル管理を
+利用できる。 他ホストからアクセスする場合はlocalhostの部分を適切なホスト名また
+はIPアドレスに変更すること。
 
-コンテナイメージのビルド手順については
-PaxosProducts/CellConfig-Docker/paxos/cellconfig/README.md
-を参照のこと。
+Docker関連のファイルについてはPaxosProducts/CellConfig-Docker/READMEを参照のこ
+と。
 
 ### それ以外の場合
 1. PAXOS/Products/CellConfig/README の記述に従い必要なパッケージをインストールする

@@ -5,6 +5,7 @@
     Dockerfile       Paxosのパッケージのビルドする作業環境のDockerイメージ
   paxos/             Paxosコンテナを実行するためのファイル類を収めたディレクトリ
     cellconfig/
+      README.md      セル管理コンテナイメージのビルド手順
       Dockerfile     Paxosのセル管理コンテナのDockerfile
     node/
       Dockerfile     Paxosのノード用のコンテナ（デモ用）
