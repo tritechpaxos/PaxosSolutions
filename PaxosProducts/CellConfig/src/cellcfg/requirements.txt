@@ -1,7 +1,7 @@
 blinker==1.4
 cmdbpeewee==0.2.1
 Fabric3==1.11.1.post1
-Flask==1.0
+Flask==2.3.2
 future==0.15.2
 gevent==1.1.1
 peewee==2.8.0
